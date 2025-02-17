@@ -28,22 +28,6 @@ function getUniqueKeys(data: number[]): number[] {
     return Array.from(filA.keys()).filter((ind) => filA[ind] !== 0);
 }
 
-function mergeSeaRes(ele: SeaR[][]): SeaR[] {
-    let numI = 0;
-    for (const sea of ele) {
-        numI += sea.length;
-    }
-    const results = new Array<SeaR>(numI);
-    numI = 0;
-    for (const sea of ele) {
-        for (const resEl of sea) {
-            results[numI] = resEl;
-            numI++;
-        }
-    }
-    return results;
-}
-
 function isOneStrain(data: SeaR[]): boolean {
     const index = new Set();
     for (const [strId] of data) {
@@ -66,10 +50,13 @@ class SeaTable {
 
     private static readonly argLen: number = 3000;
 
+    private results: SeaR[];
+
     constructor(apiCall: ApiChanInt) {
         this.apiCall = apiCall;
         this.foundCnt = 0;
         this.fetchedCnt = 0;
+        this.results = [];
     }
 
     private static detectRange(args: number[], start: number): number {
@@ -115,8 +102,9 @@ class SeaTable {
         args: string
     ): void {
         this.fetchedCnt = 0;
+        this.results = [];
         cha.prog(0);
-        const resTab: Promise<SeaR[]>[] = [];
+        const resTab: Promise<void>[] = [];
         let [cnt, cntEl] = [0, 0];
         const sortedJson = jsonId.sort((fir, sec) => fir - sec);
         while (cnt < jsonId.length) {
@@ -152,9 +140,10 @@ class SeaTable {
         cha: ViewChanInt,
         api: string,
         ind: number,
-        resTab: Promise<SeaR[]>[]
+        resTab: Promise<void>[]
     ): void {
         const call = this.apiCall.createApiCall(`${api}${ind}`);
+        this.results = [];
         resTab.push(
             new Promise((res) => {
                 setTimeout(
@@ -199,13 +188,12 @@ class SeaTable {
 
     private awaitRes(
         cha: ViewChanInt,
-        resTab: Promise<SeaR[]>[],
+        resTab: Promise<void>[],
         api: string,
         args: string
     ): void {
         Promise.all(resTab)
-            .then((ele) => mergeSeaRes(ele))
-            .then((res) => {
+            .then(() => {
                 if (this.fetchedCnt !== this.foundCnt) {
                     onPrError(
                         new KnownLostWarnError(
@@ -214,6 +202,7 @@ class SeaTable {
                         )
                     );
                 }
+                const res = this.results;
                 if (isOneStrain(res)) {
                     const strId = res[0] ? `${res[0][0]}` : '';
                     this.wrapToPass(cha, api, args, strId);
@@ -228,10 +217,17 @@ class SeaTable {
             });
     }
 
-    private getRes(cha: ViewChanInt, json: SeaR[]): SeaR[] {
+    private async getRes(cha: ViewChanInt, json: SeaR[]): Promise<void> {
         this.fetchedCnt += json.length;
         cha.prog(Math.min(Math.round((100 * this.fetchedCnt) / this.foundCnt), 100));
-        return json;
+        for (let cnt = 0; cnt < json.length; cnt += 1000) {
+            await new Promise((res) => {
+                setTimeout(
+                    () => { res(this.results.push(...json.slice(cnt, cnt + 1000))); },
+                    10
+                );
+            });
+        }
     }
 
     private static onStop(cha: ViewChanInt): void {
