@@ -50,14 +50,22 @@ function disableLoader(): void {
 const SIDE_STATUS = 'active';
 const SIDE_ID = 'side_bar_status_id';
 
-function enableSideBar(): void {
-    const side = document.getElementById(SIDE_ID);
-    const sideBar = side ?? {
-        classList: new DOMTokenList(),
-    };
-    if (!sideBar.classList.contains(SIDE_STATUS)) {
-        window.style.toggleSidebar(side ?? undefined);
+function customToggleSideBar(enable: boolean): void {
+    const sideBar = document.getElementById(SIDE_ID);
+    if (
+        sideBar !== null &&
+        Math.abs(Number(sideBar.classList.contains(SIDE_STATUS)) - Number(enable))
+    ) {
+        window.style.toggleSidebar(sideBar);
     }
+}
+
+function enableSideBar(): void {
+    customToggleSideBar(true);
+}
+
+function disableSideBar(): void {
+    customToggleSideBar(false);
 }
 
 function toggleSideBar(side?: HTMLElement): void {
@@ -78,6 +86,7 @@ export {
     disableLoader,
     reInitCStyle,
     enableSideBar,
+    disableSideBar,
     toggleSideBar,
     SIDE_ID,
     enableLoader,

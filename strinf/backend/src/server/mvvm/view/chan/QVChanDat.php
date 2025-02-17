@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\chan;
 
-use straininfo\server\shared\mvvm\view\api\VersionE;
-use straininfo\server\interfaces\mvvm\view\chan\QVIntDat;
-use straininfo\server\interfaces\mvvm\controller\chan\QCIntDat;
-
-use function Safe\preg_replace;
-use function Safe\preg_match_all;
 use function Safe\preg_match;
+use function Safe\preg_match_all;
+use function Safe\preg_replace;
+
+use straininfo\server\interfaces\mvvm\controller\chan\QCIntDat;
+use straininfo\server\interfaces\mvvm\view\chan\QVIntDat;
+use straininfo\server\shared\mvvm\view\api\VersionE;
 
 final class QVChanDat implements QVIntDat
 {

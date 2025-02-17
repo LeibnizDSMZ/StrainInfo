@@ -150,9 +150,9 @@ function checkApi(): boolean {
 
 function prepareDrive(): void {
     const driveTour = driver();
-    enableSideBar();
     window.scrollTo(0, 0);
     routeUri(UIApiCon.service, '');
+    enableSideBar();
     let cnt = 0;
     const awaitApi = setInterval(() => {
         if (checkApi()) {
