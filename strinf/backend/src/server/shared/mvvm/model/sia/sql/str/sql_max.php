@@ -37,10 +37,10 @@ function get_sql_pub(): string
             ON culture.strain_id = strain.id
         INNER JOIN designation
             ON culture.designation_id = designation.id
-        INNER JOIN culture_publication
-            ON culture.id = culture_publication.cul_id
+        INNER JOIN literature_strain
+            ON culture.designation_id = literature_strain.des_id
         INNER JOIN literature
-            ON literature.id = culture_publication.lit_id
+            ON literature.id = literature_strain.lit_id
         LEFT JOIN culture_collection_number
             ON culture.ccno_id=culture_collection_number.id
         LEFT JOIN culture_collection
