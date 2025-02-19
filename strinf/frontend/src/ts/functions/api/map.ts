@@ -9,7 +9,7 @@ import {
     SR_STR_ID,
     SR_TAX,
 } from '@strinf/ts/constants/api/sea_reg';
-import THESAURUS_MAP from '@strinf/ts/constants/api/thes_api';
+import THESAURUS_MAP, { getShortText } from '@strinf/ts/constants/api/thes_api';
 import Known500Error from '@strinf/ts/errors/known/500';
 import type {
     DetT,
@@ -37,6 +37,7 @@ import type {
     SerSeaAllJ,
 } from '@strinf/ts/interfaces/api/maped';
 import type { JSX } from 'preact';
+import { isSlimScreen } from '../misc/screen';
 
 const SEA_INPUT_COMB: SeaInputCombEl[] = [
     {
@@ -724,7 +725,11 @@ function mapDetails2DetT(data: DetailsR): DetT {
 }
 
 function getApiToStr(api: string): string {
-    return THESAURUS_MAP.get(api) ?? 'unknown';
+    const label = THESAURUS_MAP.get(api) ?? 'unknown';
+    if (isSlimScreen()) {
+        return getShortText(label);
+    }
+    return label;
 }
 
 function toArrSerSeaRes(data: unknown): SeaR {

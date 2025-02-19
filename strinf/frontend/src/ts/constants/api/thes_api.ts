@@ -29,6 +29,12 @@ enum StatTags {
     all_strains = 'All strains',
 }
 
+const THESAURUS_SH_L: [string, string][] = [
+    [StatTags.sea_tax_nam, 'Tax.'],
+    [StatTags.sea_brc, 'CC'],
+    [StatTags.sea_str_des, 'Str. des.'],
+];
+
 const THESAURUS_L: [string, string][] = [
     [QApiCon.cntStr, StatTags.st_str],
     [QApiCon.cntTStr, StatTags.st_typ_str],
@@ -61,6 +67,11 @@ const THESAURUS_L: [string, string][] = [
     ...createComb([QApiCon.seaCulBrc, QApiCon.seaCulTaxName], StatTags.sea_tax_brc),
 ];
 const THESAURUS_MAP = new Map<string, string>(THESAURUS_L);
+const THESAURUS_SHORT_MAP = new Map<string, string>(THESAURUS_SH_L);
+
+function getShortText(text: string): string {
+    return THESAURUS_SHORT_MAP.get(text) ?? text;
+}
 
 export default THESAURUS_MAP;
-export { StatTags };
+export { StatTags, getShortText };
