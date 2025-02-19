@@ -16,6 +16,7 @@ import { render } from 'preact';
 import crAlert from '@strinf/ts/mvc/vdom/fun/alert/alert';
 import ErrType from '@strinf/ts/constants/type/ErrT';
 import type { JSX } from 'preact';
+import { isSmallScreen } from '@strinf/ts/functions/misc/screen';
 
 function createElement(ele: Element | null): { element?: Element } {
     if (ele == null) {
@@ -247,7 +248,7 @@ function YouTubeI(): JSX.Element {
 
 function ApiTourVD(): JSX.Element {
     let tourS = <TourS />;
-    if (document.body.clientHeight < 600 || document.body.clientWidth < 800) {
+    if (isSmallScreen()) {
         tourS = (
             <p>
                 The tour is available only for displays with at least 800x600 resolution.

@@ -28,6 +28,7 @@ import TableCon from '@strinf/ts/mvc/vdom/dyn/table/Table';
 import formatCultureTT from '@strinf/ts/mvc/vdom/fun/pass/culture';
 import { strNumSort, defaultSort } from '@strinf/ts/functions/arr/sort';
 import linkSty from '@strinf/css/mods/link.module.css';
+import { isSlimScreen } from '@strinf/ts/functions/misc/screen';
 
 type Events = [() => void, string, Element][];
 
@@ -386,7 +387,7 @@ class SeqTypeFilter extends Component<SeqTFilProps, object> {
 
     public render(): JSX.Element | null {
         this.updateObjState();
-        if (document.body.clientWidth < 720) {
+        if (isSlimScreen()) {
             return this.slimScreen();
         }
         return this.wideScreen();

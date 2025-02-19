@@ -39,6 +39,7 @@ import { trackDownload } from '@strinf/ts/mvc/vdom/fun/mat/track';
 import { getCurFullPathWithArgs } from '@strinf/ts/functions/http/http';
 import DownloadBlobVD from '@strinf/ts/mvc/vdom/dyn/misc/DownloadVD';
 import { LightsSmVD } from '@strinf/ts/mvc/vdom/dyn/misc/StrainStatus';
+import { isSmallScreen } from '@strinf/ts/functions/misc/screen';
 
 interface SeaTProps {
     res: SeaR[];
@@ -516,7 +517,7 @@ function SearchFilter({
     let download: JSX.Element | null = (
         <DownloadBtn data={data} view={view} term={term} />
     );
-    if (document.body.clientHeight < 600 || document.body.clientWidth < 800) {
+    if (isSmallScreen()) {
         download = null;
     }
     return (
@@ -694,7 +695,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
         const claB = `${Mar.tN15} ${Dis.dFlex} ${Align.js} ${Align.jb}`;
         const claT = `${Mar.bN10} ${Dis.dFlex} ${Align.js} ${Align.jb}`;
         let perPag = this.renderWindow();
-        if (document.body.clientHeight < 600 || document.body.clientWidth < 800) {
+        if (isSmallScreen()) {
             perPag = null;
         }
         return (

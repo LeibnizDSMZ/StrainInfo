@@ -3,6 +3,7 @@ import type { RefObject } from 'preact';
 import { HIDE } from '@strinf/ts/constants/style/AtHtml';
 import type { TTSrcTVInt } from '@strinf/ts/interfaces/dom/tooltip';
 import onPrError from '@strinf/ts/functions/err/async';
+import { isSmallScreen } from '@strinf/ts/functions/misc/screen';
 
 function ttShow(src: Element, tooltip: HTMLElement, aro: HTMLElement): void {
     tooltip.removeAttribute(HIDE);
@@ -131,7 +132,7 @@ function crToolTip<T extends Element>(
     failCnt = 0,
     timeout: [number, number] = [500, 300]
 ): void {
-    if (document.body.clientHeight >= 600 && document.body.clientWidth >= 800) {
+    if (!isSmallScreen()) {
         assignToolTip(tar_con, upSel, upEve, failCnt, timeout);
     }
 }

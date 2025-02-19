@@ -15,6 +15,7 @@ import {
 import IdAcrTagCon from '@strinf/ts/constants/acr/id_acr';
 import { type Driver, driver, type DriveStep, type PopoverDOM } from 'driver.js';
 import type { JSX } from 'preact';
+import { isNotWideScreen, isSmallScreen } from '@strinf/ts/functions/misc/screen';
 
 function crTour(driverTour: Driver): DriveStep[] {
     return [
@@ -302,7 +303,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 onPopoverRender: (popover: PopoverDOM) => {
                     window.scrollTo(0, 0);
                     createButtons(driverTour, popover, true, true, false);
-                    if (document.body.clientWidth < 1200) {
+                    if (isNotWideScreen()) {
                         const htmlDiv = document.createElement('div');
                         render(<p>Sidebar is hidden on small screens.</p>, htmlDiv);
                         popover.description.appendChild(htmlDiv);
@@ -325,7 +326,7 @@ function MainTourVD(): JSX.Element {
         <p>Here you can get more information about the Website and its functions.</p>
     );
 
-    if (document.body.clientHeight < 600 || document.body.clientWidth < 800) {
+    if (isSmallScreen()) {
         return (
             <div>
                 {desc}

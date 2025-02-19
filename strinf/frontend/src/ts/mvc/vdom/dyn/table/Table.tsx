@@ -12,6 +12,7 @@ import { Component } from 'preact';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
 import onPrError from '@strinf/ts/functions/err/async';
 import type { JSX } from 'preact';
+import { isSlimScreen } from '@strinf/ts/functions/misc/screen';
 
 interface TableProps<T> {
     res: T[];
@@ -539,7 +540,7 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
 
     protected renderInfo(): JSX.Element | null {
         const { view, page, window } = this.state;
-        if (document.body.clientWidth < 800) {
+        if (isSlimScreen()) {
             return null;
         }
         if (view.length <= window) {
