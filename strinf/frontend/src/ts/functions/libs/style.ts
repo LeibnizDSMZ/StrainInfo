@@ -9,13 +9,8 @@ function enableLoader(): void {
     LOAD_STATE.enabled = true;
     setTimeout(() => {
         if (LOAD_STATE.enabled) {
-            const body = document.getElementsByTagName('body')[0] ?? {
-                classList: [],
-                className: '',
-            };
-            if (body.classList.length === 1) {
-                body.className = `${ClHtml.sideSM} ${scSty.disable}`;
-            }
+            const {body} = document;
+            body.classList.add(scSty.disable);
             const [loader] = document.getElementsByClassName(ClHtml.ld);
             if (loader !== undefined) {
                 loader.classList.add(ClHtml.show);
@@ -25,22 +20,13 @@ function enableLoader(): void {
 }
 
 function enableScroll(): void {
-    const body = document.getElementsByTagName('body')[0] ?? {
-        classList: [],
-        className: '',
-    };
-    body.className = ClHtml.sideSM;
+    document.body.classList.add(ClHtml.sideSM);
 }
 
 function disableLoader(): void {
     LOAD_STATE.enabled = false;
-    const body = document.getElementsByTagName('body')[0] ?? {
-        classList: [],
-        className: '',
-    };
-    if (body.classList.length > 1) {
-        body.className = ClHtml.sideSM;
-    }
+    const {body} = document;
+    body.classList.remove(scSty.disable);
     const [loader] = document.getElementsByClassName(ClHtml.ld);
     if (loader !== undefined) {
         loader.classList.remove(ClHtml.show);
