@@ -1,11 +1,5 @@
 @charset "UTF-8";
 
-button.menu::after {
-    font-family: 'Phosphor' !important;
-    content: '\e2f0' !important;
-    color: var(--primary-color) !important;
-}
-
 ul.bread li::before {
     font-family: 'Phosphor' !important;
     content: '\e13a' !important;

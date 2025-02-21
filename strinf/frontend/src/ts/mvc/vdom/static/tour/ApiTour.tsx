@@ -10,7 +10,6 @@ import {
     getEndPointPath,
     openEndPointPath,
 } from '@strinf/ts/mvc/vdom/static/tour/api_end_points';
-import { enableSideBar } from '@strinf/ts/functions/libs/style';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
 import { render } from 'preact';
 import crAlert from '@strinf/ts/mvc/vdom/fun/alert/alert';
@@ -153,7 +152,6 @@ function prepareDrive(): void {
     const driveTour = driver();
     window.scrollTo(0, 0);
     routeUri(UIApiCon.service, '');
-    enableSideBar();
     let cnt = 0;
     const awaitApi = setInterval(() => {
         if (checkApi()) {

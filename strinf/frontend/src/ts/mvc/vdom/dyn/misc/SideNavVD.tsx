@@ -1,5 +1,5 @@
 import type { JSX } from 'preact';
-import { useContext, useRef, useState } from 'preact/hooks';
+import { useContext, useEffect, useRef, useState } from 'preact/hooks';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 import SideT from '@strinf/ts/constants/type/HeadT';
 import type { BreadCrumbsS } from '@strinf/ts/interfaces/dom/global';
@@ -56,7 +56,7 @@ function SideEl({ act, key, ele, tId }: SideTProps): JSX.Element {
         >
             {' '}
             <i className={ele[1]} />
-            {ele[0]}
+            <label className={ClHtml.lab}>{ele[0]}</label>
         </a>
     );
 }
@@ -184,13 +184,17 @@ function SideNavVD(): JSX.Element {
         }
         return null;
     };
+    const clT = `${ClHtml.tit} ${ClHtml.hidS}`;
+    useEffect(() => {
+        window.style.initSmallSidebar();
+    }, []);
     return (
         <>
-            <h5 className={ClHtml.tit}>Content</h5>
+            <h5 className={clT}>Content</h5>
             {NAV_CON_CNT.map(mapper)}
             <h5 className={ClHtml.tit}>Information</h5>
             {NAV_CON_INF.map(mapper)}
-            <h5 className={ClHtml.tit}>About us</h5>
+            <h5 className={ClHtml.tit}>About&nbsp;us</h5>
             {NAV_CON_ABU.map(mapper)}
         </>
     );

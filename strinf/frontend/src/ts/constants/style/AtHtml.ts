@@ -68,6 +68,10 @@ const HIDE_ATTR = {
 
 const HIDE = 'hidden';
 
+const SIDE_SMALL = {
+    'data-sidebar-size': 'small',
+};
+
 export {
     HIDE,
     HIDE_ATTR,
@@ -82,6 +86,7 @@ export {
     ACC_LC,
     ACC_M,
     DD_B,
+    SIDE_SMALL,
 };
 
 export type { DefAttr };

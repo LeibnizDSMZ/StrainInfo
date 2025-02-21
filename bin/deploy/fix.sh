@@ -29,7 +29,9 @@ mkdir -p "$ROOT/$EXTRA_STYLE"
 if [ ! "$(ls -A "$ROOT/$EXTRA_STYLE")" ] &&
     wget -q -O /tmp/style_container "$IN_STYLE" >/dev/null &&
     [[ "$IN_STYLE" == *"$VERSION_EX_STYLE"* ]]; then
-    unzip /tmp/style_container -d "$ROOT/$EXTRA_STYLE"
+    unzip /tmp/style_container -d /tmp/style
+    echo "$ROOT/$EXTRA_STYLE"
+    mv "/tmp/style/dist/"* "$ROOT/$EXTRA_STYLE/"
     sed -i -E 's/fill:%23006eb7/fill:%23ECAF00/g' "$ROOT/$EXTRA_STYLE/css/digidive.css"
     sed -i -E "s/(font-family\\s*:\\s*['\"].*['\"]\\s*;)/\\1\\n\\tfont-display: swap;/g" "$ROOT/$EXTRA_STYLE/css/digidive.css"
     sed -i -E 's/max-width:\s*var\(150rem\);//g' "$ROOT/$EXTRA_STYLE/css/digidive.css"

@@ -4,7 +4,7 @@ import { disableSideBar } from '@strinf/ts/functions/libs/style';
 function defaultRouteBeh(): void {
     unFocus();
     const anchor = window.location.hash;
-    if (window.innerWidth < 991) {
+    if (document.body.clientWidth <= 992) {
         disableSideBar();
     }
     if (anchor === '') {

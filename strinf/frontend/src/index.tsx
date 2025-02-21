@@ -17,6 +17,7 @@ import { createPreloadBanner } from '@strinf/ts/functions/files/image';
 import { Helmet } from 'react-helmet';
 import CONFIG from '@strinf/ts/configs/config';
 import type { JSX } from 'preact';
+import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 
 hidePrivateInfo();
 const pBE: JSX.Element = (
@@ -28,13 +29,13 @@ if (CONFIG.statistic.enable) {
 }
 
 render(
-    <>
+    <body className={ClHtml.sideSM}>
         <Helmet>
             {pBE}
             {pST}
         </Helmet>
         {createPreloadBanner()}
         <MainVD />
-    </>,
-    document.body
+    </body>,
+    document.body.parentNode ?? document.body
 );

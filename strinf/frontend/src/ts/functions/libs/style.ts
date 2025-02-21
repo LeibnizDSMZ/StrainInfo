@@ -13,8 +13,8 @@ function enableLoader(): void {
                 classList: [],
                 className: '',
             };
-            if (body.classList.length === 0) {
-                body.className = scSty.disable;
+            if (body.classList.length === 1) {
+                body.className = `${ClHtml.sideSM} ${scSty.disable}`;
             }
             const [loader] = document.getElementsByClassName(ClHtml.ld);
             if (loader !== undefined) {
@@ -29,7 +29,7 @@ function enableScroll(): void {
         classList: [],
         className: '',
     };
-    body.className = '';
+    body.className = ClHtml.sideSM;
 }
 
 function disableLoader(): void {
@@ -38,8 +38,8 @@ function disableLoader(): void {
         classList: [],
         className: '',
     };
-    if (body.classList.length > 0) {
-        body.className = '';
+    if (body.classList.length > 1) {
+        body.className = ClHtml.sideSM;
     }
     const [loader] = document.getElementsByClassName(ClHtml.ld);
     if (loader !== undefined) {
@@ -47,21 +47,18 @@ function disableLoader(): void {
     }
 }
 
-const SIDE_STATUS = 'active';
 const SIDE_ID = 'side_bar_status_id';
 
 function customToggleSideBar(enable: boolean): void {
     const sideBar = document.getElementById(SIDE_ID);
     if (
-        sideBar !== null &&
-        Math.abs(Number(sideBar.classList.contains(SIDE_STATUS)) - Number(enable))
+        sideBar != null &&
+        Math.abs(
+            Number(!document.body.classList.contains(ClHtml.sideSM)) - Number(enable)
+        )
     ) {
         window.style.toggleSidebar(sideBar);
     }
-}
-
-function enableSideBar(): void {
-    customToggleSideBar(true);
 }
 
 function disableSideBar(): void {
@@ -85,7 +82,6 @@ export {
     enableScroll,
     disableLoader,
     reInitCStyle,
-    enableSideBar,
     disableSideBar,
     toggleSideBar,
     SIDE_ID,
