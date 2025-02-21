@@ -31,7 +31,7 @@ function Logos(): JSX.Element {
                 target="_blank"
                 rel="noreferrer"
             >
-                <LogoHubDsmzVD height="90" full={false} />
+                <LogoHubDsmzVD height="90" full={true} />
             </a>
         </div>
     );
