@@ -13,10 +13,10 @@ use function Safe\preg_replace;
 function split_three_groups(string $pattern, string $designation): array
 {
     if (preg_match($pattern, $designation, $matches) === 0 || $matches === null) {
-        return ['', '',''];
+        return ['', '', ''];
     }
     /** @var array<string> $matches */
-    [,$pre, $core, $suf] = $matches;
+    [, $pre, $core, $suf] = $matches;
     return [
         strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $pre)),
         preg_replace("/^\D+|\D+$/", '', $core),
@@ -36,6 +36,6 @@ function create_designation_triplet(array $designations): array
             static fn (string $des): array => split_three_groups($three_groups, $des),
             $designations
         ),
-        static fn (array $tri): bool => $tri[1] !== ''
+        static fn (array $tri): bool => $tri[1] !== '' and $tri[0] !== ''
     );
 }
