@@ -184,13 +184,12 @@ function SideNavVD(): JSX.Element {
         }
         return null;
     };
-    const clT = `${ClHtml.tit} ${ClHtml.hidS}`;
     useEffect(() => {
         window.style.initSmallSidebar();
     }, []);
     return (
         <>
-            <h5 className={clT}>Content</h5>
+            <h5 className={ClHtml.tit}>Content</h5>
             {NAV_CON_CNT.map(mapper)}
             <h5 className={ClHtml.tit}>Information</h5>
             {NAV_CON_INF.map(mapper)}
