@@ -26,13 +26,13 @@
         "typescript": "^5.7.3"
     },
     "devDependencies": {
-        "@types/bun": "^1.2.2",
-        "@types/node": "^22.13.4",
+        "@types/bun": "^1.2.3",
+        "@types/node": "^22.13.5",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "^3.3.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.4.3",
-        "prettier": "^3.5.1",
+        "prettier": "^3.5.2",
         "shellcheck": "^3.1.0"
     },
     "scripts": {

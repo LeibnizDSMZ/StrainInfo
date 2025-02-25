@@ -27,7 +27,7 @@ interface TeamT {
     children: JSX.Element[];
 }
 function TeamWr({ children }: TeamT): JSX.Element {
-    const teamR = `${ClHtml.row} ${ClHtml.rowEq}  ${Hei.f}`;
+    const teamR = `${ClHtml.row} ${ClHtml.rowEq} ${Hei.f}`;
     return <div className={teamR}>{children}</div>;
 }
 
