@@ -102,7 +102,6 @@ class SeaTable {
         args: string
     ): void {
         this.fetchedCnt = 0;
-        this.results = [];
         cha.prog(0);
         const resTab: Promise<void>[] = [];
         let [cnt, cntEl] = [0, 0];
@@ -143,7 +142,6 @@ class SeaTable {
         resTab: Promise<void>[]
     ): void {
         const call = this.apiCall.createApiCall(`${api}${ind}`);
-        this.results = [];
         resTab.push(
             new Promise((res) => {
                 setTimeout(
@@ -221,11 +219,11 @@ class SeaTable {
         this.fetchedCnt += json.length;
         cha.prog(Math.min(Math.round((100 * this.fetchedCnt) / this.foundCnt), 100));
         for (let cnt = 0; cnt < json.length; cnt += 1000) {
-            await new Promise((res) => {
-                setTimeout(
-                    () => { res(this.results.push(...json.slice(cnt, cnt + 1000))); },
-                    10
-                );
+            await new Promise<void>((res) => {
+                setTimeout(() => {
+                    this.results.push(...json.slice(cnt, cnt + 1000));
+                    res();
+                }, 1);
             });
         }
     }
@@ -394,6 +392,7 @@ class SeaTable {
             QApiCon.seaStrCulId,
             QApiCon.seaStrAll,
         ];
+        this.results = [];
         if (cApi === QApiCon.seaStrAll) {
             cha.load.map((ele: LoadFS) => {
                 ele(LoadT.STA);

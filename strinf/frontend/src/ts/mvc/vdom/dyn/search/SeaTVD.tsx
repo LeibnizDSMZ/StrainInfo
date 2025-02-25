@@ -57,7 +57,7 @@ interface FilterProps {
 }
 
 interface DownloadProps {
-    data: MOD_SEA_T[];
+    worker: Worker;
     view: number[];
     term: string;
 }
@@ -392,62 +392,53 @@ function checkEmptyFilter(filOpt: FILTER_CON): boolean {
     return true;
 }
 
-function joinCSV(data: MOD_SEA_T): string {
-    const cul = data[1].join(';');
-    const sta = String(convertStrainStatusToEnum(data[5]));
-    const country = parseCountryCode(DEC.decode(data[4]));
-    return `${data[0]},${cul},${data[2]},${data[3]},${country},${sta}`;
-}
-
 async function createCSV(
-    data: MOD_SEA_T[],
-    index: number[],
+    worker: Worker,
+    indices: number[],
     term: string
 ): Promise<[string, string]> {
-    let counter = 0;
-    let [res, lInd] = [getSeaResTuple(true).join(',') + '\n', 0];
-    while (counter < index.length) {
-        const indSl = index.slice(counter, counter + 1000);
-        counter += indSl.length;
-        const curSl = index.slice(lInd, lInd + 1000);
-        for (const lineInd of curSl) {
-            const line = data[lineInd];
-            if (line !== undefined) {
-                res += joinCSV(line) + '\n';
+    const workerP = new Promise<[string, string]>((resolve) => {
+        worker.postMessage({ type: 'request', data: indices });
+        worker.onmessage = (eve) => {
+            if (typeof eve.data === 'string') {
+                var jsonBlob: Blob = new Blob([eve.data], {
+                    type: 'text/plain;charset=utf-8',
+                });
+                trackDownload(
+                    getCurFullPathWithArgs(
+                        `view=${indices.length}&results=${eve.data.length}`
+                    ),
+                    jsonBlob.size
+                );
+            } else {
+                jsonBlob = new Blob([''], { type: 'text/plain;charset=utf-8' });
             }
-        }
-        lInd += curSl.length;
-        await new Promise((resolve) => setTimeout(resolve, 10));
-    }
-
-    const jsonBlob = new Blob([res], { type: 'text/plain;charset=utf-8' });
-    trackDownload(
-        getCurFullPathWithArgs(`view=${index.length}&results=${data.length}`),
-        jsonBlob.size
-    );
-    return [URL.createObjectURL(jsonBlob), `${term}.csv`];
+            resolve([URL.createObjectURL(jsonBlob), `${term}.csv`]);
+        };
+    });
+    return workerP;
 }
 
 function activeLink(
-    data: MOD_SEA_T[],
+    worker: Worker,
     index: number[],
     term: string
 ): (eve: Event) => Promise<[string, string]> {
     const name = term === '' ? 'StrainInfo' : term;
     const callback = async (eve: Event) => {
         eve.stopPropagation();
-        return createCSV(data, index, name);
+        return createCSV(worker, index, name);
     };
     return callback;
 }
 
-function DownloadBtn({ data, view, term }: DownloadProps): JSX.Element {
+function DownloadBtn({ worker, view, term }: DownloadProps): JSX.Element {
     const btnC = `${ClHtml.btn} ${ClHtml.pri} ${Mar.lN5} ${ClHtmlSt.mask}`;
     return (
         <DownloadBlobVD
             btnC={btnC}
             ico={ClHtmlI.downlF}
-            callBack={activeLink(data, view, term)}
+            callBack={activeLink(worker, view, term)}
             ancC={linkSty.linkmain}
             label="Save all filtered results"
             emptyLoad={false}
@@ -504,6 +495,7 @@ function FilterWrapper({ data, filter }: FilterProps): JSX.Element {
 
 function SearchFilter({
     data,
+    worker,
     filter,
     view,
     term,
@@ -515,7 +507,7 @@ function SearchFilter({
         [data]
     );
     let download: JSX.Element | null = (
-        <DownloadBtn data={data} view={view} term={term} />
+        <DownloadBtn worker={worker} view={view} term={term} />
     );
     if (isSmallScreen()) {
         download = null;
@@ -606,10 +598,16 @@ interface SeaTableProps extends TableProps<MOD_SEA_T> {
 
 class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
     private readonly codeMap: [string, Uint8Array][];
+    private readonly worker: Worker;
 
     constructor(props: SeaTableProps) {
         super(props);
         const { res } = props;
+        this.worker = new Worker(
+            new URL('@strinf/ts/functions/files/worker_si_csv', import.meta.url),
+            { type: 'module' }
+        );
+        this.worker.postMessage({ type: 'init', data: res });
         const uCodes = new Set<string>();
         for (const [, , , , code] of res) {
             uCodes.add(DEC.decode(code));
@@ -620,6 +618,10 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
             this.codeMap[ind] = [parseCountryCode(code).toLowerCase(), ENC.encode(code)];
             ind++;
         }
+    }
+
+    public override componentWillUnmount(): void {
+        this.worker.terminate();
     }
 
     protected override sort(index: number, sort: number): number[] {
@@ -718,6 +720,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
         const { term } = this.props;
         return (
             <SearchFilter
+                worker={this.worker}
                 data={this.data}
                 view={view}
                 term={term}
