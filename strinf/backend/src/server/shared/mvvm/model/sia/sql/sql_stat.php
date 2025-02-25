@@ -65,7 +65,10 @@ function get_des_cnt(): string
 {
     return <<<EOF
     SELECT COUNT(DISTINCT designation.id)
-    FROM designation;
+    FROM designation
+        LEFT JOIN culture ON culture.designation_id = designation.id 
+        LEFT JOIN culture_relation ON culture_relation.des_id = designation.id 
+        WHERE culture_relation.des_id is not NULL or culture.designation_id is not NULL;
     EOF;
 }
 
