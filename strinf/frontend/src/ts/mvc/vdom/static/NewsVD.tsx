@@ -7,7 +7,12 @@ import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 
 import News from '@strinf/md/news/news.mdx';
 import HeadT from '@strinf/ts/constants/type/HeadT';
-import { type NewsT, UListWr, factoryNewsDateWr } from '@strinf/ts/functions/md/wrapper';
+import {
+    type NewsT,
+    TableWr,
+    UListWr,
+    factoryNewsDateWr,
+} from '@strinf/ts/functions/md/wrapper';
 import { Helmet } from 'react-helmet';
 import { getCurFullPath } from '@strinf/ts/functions/http/http';
 
@@ -29,6 +34,7 @@ function NewsM(): JSX.Element {
                 components={{
                     h2: factoryNewsDateWr(({ children }: NewsT) => <h2>{children}</h2>),
                     ul: UListWr,
+                    table: TableWr,
                 }}
             />
         </>
