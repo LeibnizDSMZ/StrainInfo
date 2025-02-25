@@ -167,6 +167,8 @@ interface PassR {
     archive: ArcT[];
     allStrIds: number[];
     altStrIds: number[];
+
+    clear: () => void;
 }
 
 interface SeaIndR {

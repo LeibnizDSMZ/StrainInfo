@@ -144,6 +144,7 @@ class SearchVD<T> extends Component<T, SearchState> {
         this.hooks.load.map((ele: LoadFS) => {
             ele(LoadT.INI);
         });
+        this.state.tab.splice(0, this.state.tab.length);
     }
     public render(): JSX.Element | null {
         const ctx: CTX | undefined = this.context;

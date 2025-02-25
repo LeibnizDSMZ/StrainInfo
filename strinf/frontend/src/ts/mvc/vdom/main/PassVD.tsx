@@ -78,6 +78,7 @@ class PassVD extends Component<PassProps, PassState> {
         this.hooks.load.map((ele: LoadFS) => {
             ele(LoadT.INI);
         });
+        this.state.tab?.clear();
     }
 
     public override shouldComponentUpdate(

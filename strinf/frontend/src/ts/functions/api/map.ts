@@ -590,6 +590,16 @@ function toArrPassRes(data: unknown): PassR {
         archive: createArcCon(data),
         allStrIds: createAllStrIds(data),
         altStrIds: createAltStrIds(data),
+        clear: function () {
+            this.overview.splice(0, this.overview.length);
+            this.relations.splice(0, this.relations.length);
+            this.designations.splice(0, this.designations.length);
+            this.sequences.splice(0, this.sequences.length);
+            this.publications.splice(0, this.publications.length);
+            this.archive.splice(0, this.archive.length);
+            this.allStrIds.splice(0, this.allStrIds.length);
+            this.altStrIds.splice(0, this.altStrIds.length);
+        },
     };
 }
 

@@ -199,6 +199,15 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
         }
     }
 
+    public override componentWillUnmount(): void {
+        this.data.splice(0, this.data.length);
+        this.head.splice(0, this.head.length);
+        this.sortSt.splice(0, this.sortSt.length);
+        this.filterBuffer.splice(0, this.filterBuffer.length);
+        this.searchState = { previous: '', next: '' };
+        this.filterState = { previous: [], next: [] };
+    }
+
     private updateObjState(): void {
         const { res, head } = this.props;
         const baseChanged =
