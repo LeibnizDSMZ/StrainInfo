@@ -32,4 +32,5 @@ jobs:
             - name: lint and test
               run: |
                   make dev
+                  export GITHUB_WORKER='true'
                   make runChecks

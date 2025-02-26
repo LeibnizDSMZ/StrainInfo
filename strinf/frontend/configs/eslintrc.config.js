@@ -7,6 +7,7 @@ import pl_react_hooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import * as tsResolver from 'eslint-import-resolver-typescript';
+import process from 'node:process';
 
 export default [
     conf_js.configs.recommended,
@@ -84,6 +85,14 @@ export default [
             complexity: ['error', { max: 12 }],
             '@typescript-eslint/no-base-to-string': 'warn',
             '@typescript-eslint/no-unsafe-type-assertion': 'warn',
+            'import-x/no-unresolved': [
+                'error',
+                process.env['GITHUB_WORKER'] !== undefined
+                    ? {
+                          ignore: ['^@extra/straininfo/.+', '^digidive(/.+)?'],
+                      }
+                    : {},
+            ],
         },
         settings: {
             'import-x/resolver': {
