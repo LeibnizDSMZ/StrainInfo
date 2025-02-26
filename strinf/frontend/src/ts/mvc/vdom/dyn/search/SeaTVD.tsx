@@ -607,11 +607,6 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
             new URL('@strinf/ts/functions/files/worker_si_csv', import.meta.url),
             { type: 'module' }
         );
-        this.worker.onmessage = (eve) => {
-            if (typeof eve.data === 'boolean') {
-                this.worker.terminate();
-            }
-        };
         this.worker.postMessage({ type: 'init', data: res });
         const uCodes = new Set<string>();
         for (const [, , , , code] of res) {
@@ -626,7 +621,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
     }
 
     public override componentWillUnmount(): void {
-        this.worker.postMessage({ type: 'stop' });
+        this.worker.terminate();
         this.codeMap.splice(0, this.codeMap.length);
         super.componentWillUnmount();
     }

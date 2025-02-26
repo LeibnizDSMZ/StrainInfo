@@ -33,10 +33,6 @@ interface Request {
     data: number[];
 }
 
-interface Stop {
-    type: 'stop';
-}
-
 function createBuffer(data: MOD_SEA_T[]): void {
     for (let ind = 0; ind < data.length; ind++) {
         const dat = data[ind];
@@ -46,14 +42,11 @@ function createBuffer(data: MOD_SEA_T[]): void {
     }
 }
 
-onmessage = (eve: MessageEvent<Init | Request | Stop>) => {
+onmessage = (eve: MessageEvent<Init | Request>) => {
     if (eve.data.type === 'init') {
         createBuffer(eve.data.data);
-    } else if (eve.data.type === 'request') {
+    } else {
         const csv = createCSV(eve.data.data);
         postMessage(csv);
-    } else {
-        ALL_DATA.clear();
-        postMessage(true);
     }
 };
