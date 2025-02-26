@@ -40,10 +40,11 @@ if [ ! "$(ls -A "$ROOT/$EXTRA_STYLE")" ] &&
     sed -i -E 's/\.ttf/\.woff2/g' "$ROOT/$EXTRA_STYLE/css/digidive.css"
     echo "window.style = digidive;" >>"$ROOT/$EXTRA_STYLE/js/digidive.js"
     cp "$ROOT/assets/patch/style.d.ts" "$ROOT/$EXTRA_STYLE/js/digidive.d.ts"
-    echo "{\"name\": \"digidive\",\"private\": true,\"author\": \"Julia Koblitz\",\"license\": \"MIT\",\"version\": \"$VERSION_EX_STYLE\",\"main\": \"js/digidive.js\"}" >"$ROOT/$EXTRA_STYLE/package.json"
     find "$ROOT/$EXTRA_STYLE/css/" -name "*.ttf" -exec woff2_compress {} \;
     find "$ROOT/$EXTRA_STYLE/css/" -name "*.otf" -exec woff2_compress {} \;
 fi
+echo "{\"name\": \"digidive\",\"private\": true,\"author\": \"Julia Koblitz\",\"license\": \"MIT\",\"version\": \"$VERSION_EX_STYLE\",\"main\": \"js/digidive.js\"}" >"$ROOT/$EXTRA_STYLE/package.json"
+
 echo "fetching logos"
 mkdir -p "$ROOT/$EXTRA_ASSETS"
 if [ ! "$(ls -A "$ROOT/$EXTRA_ASSETS")" ] &&
@@ -53,5 +54,6 @@ if [ ! "$(ls -A "$ROOT/$EXTRA_ASSETS")" ] &&
     rm -rf "${ROOT:?}/$EXTRA_ASSETS/strinfassets-main"
     rm -f "${ROOT:?}/$EXTRA_ASSETS/out.tar.gz"
 fi
+echo "{\"name\": \"@extra/straininfo\",\"private\": true,\"author\": \"Artur Lissin\",\"version\": \"0.0.0\"}" >"$ROOT/$EXTRA_ASSETS/package.json"
 
 echo "preparation finished"

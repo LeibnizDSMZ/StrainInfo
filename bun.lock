@@ -7,7 +7,7 @@
         "typescript": "^5.7.3",
       },
       "devDependencies": {
-        "@types/bun": "^1.2.3",
+        "@types/bun": "^1.2.4",
         "@types/node": "^22.13.5",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "^3.3.0",
@@ -27,10 +27,12 @@
     "strinf/frontend": {
       "name": "@straininfo/frontend",
       "dependencies": {
+        "@extra/straininfo": "file:../../extra/straininfo",
         "@floating-ui/dom": "^1.6",
         "@phosphor-icons/web": "^2.1",
         "d3": "^7.9",
         "d3-sankey": "^0.12",
+        "digidive": "file:../../extra/style",
         "driver.js": "^1.3",
         "highlight.js": "^11.11",
         "js-yaml": "4.1",
@@ -54,7 +56,6 @@
         "@typescript-eslint/eslint-plugin": "^8.21",
         "@typescript-eslint/parser": "^8.21",
         "browserslist": "^4.24",
-        "digidive": "file:../../extra/style",
         "eslint": "^9.18",
         "eslint-import-resolver-typescript": "^3.7",
         "eslint-plugin-import-x": "^4.6",
@@ -410,13 +411,13 @@
 
     "@redocly/ajv": ["@redocly/ajv@8.11.2", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "json-schema-traverse": "^1.0.0", "require-from-string": "^2.0.2", "uri-js-replace": "^1.0.1" } }, "sha512-io1JpnwtIcvojV7QKDUSIuMN/ikdOUd1ReEnUnMKGfDVridQZ31J0MmIuqwuRjWDZfmvr+Q0MqCcfHM2gTivOg=="],
 
-    "@redocly/cli": ["@redocly/cli@1.31.1", "", { "dependencies": { "@opentelemetry/api": "1.9.0", "@opentelemetry/exporter-trace-otlp-http": "0.53.0", "@opentelemetry/resources": "1.26.0", "@opentelemetry/sdk-trace-node": "1.26.0", "@opentelemetry/semantic-conventions": "1.27.0", "@redocly/openapi-core": "1.31.1", "@redocly/respect-core": "1.31.1", "abort-controller": "^3.0.0", "chokidar": "^3.5.1", "colorette": "^1.2.0", "core-js": "^3.32.1", "dotenv": "^16.4.7", "form-data": "^4.0.0", "get-port-please": "^3.0.1", "glob": "^7.1.6", "handlebars": "^4.7.6", "mobx": "^6.0.4", "pluralize": "^8.0.0", "react": "^17.0.0 || ^18.2.0 || ^19.0.0", "react-dom": "^17.0.0 || ^18.2.0 || ^19.0.0", "redoc": "2.4.0", "semver": "^7.5.2", "simple-websocket": "^9.0.0", "styled-components": "^6.0.7", "yargs": "17.0.1" }, "bin": { "redocly": "bin/cli.js", "openapi": "bin/cli.js" } }, "sha512-9bsnA3Z6MqdhL5Qw2CeAZZX55F7TIpMkEJtB8ayx+/2nSnv85tGzDk+H2KmdLn6vu2w2ebuIT/Hi2zFU5BowXA=="],
+    "@redocly/cli": ["@redocly/cli@1.31.2", "", { "dependencies": { "@opentelemetry/api": "1.9.0", "@opentelemetry/exporter-trace-otlp-http": "0.53.0", "@opentelemetry/resources": "1.26.0", "@opentelemetry/sdk-trace-node": "1.26.0", "@opentelemetry/semantic-conventions": "1.27.0", "@redocly/openapi-core": "1.31.2", "@redocly/respect-core": "1.31.2", "abort-controller": "^3.0.0", "chokidar": "^3.5.1", "colorette": "^1.2.0", "core-js": "^3.32.1", "dotenv": "^16.4.7", "form-data": "^4.0.0", "get-port-please": "^3.0.1", "glob": "^7.1.6", "handlebars": "^4.7.6", "mobx": "^6.0.4", "pluralize": "^8.0.0", "react": "^17.0.0 || ^18.2.0 || ^19.0.0", "react-dom": "^17.0.0 || ^18.2.0 || ^19.0.0", "redoc": "2.4.0", "semver": "^7.5.2", "simple-websocket": "^9.0.0", "styled-components": "^6.0.7", "yargs": "17.0.1" }, "bin": { "redocly": "bin/cli.js", "openapi": "bin/cli.js" } }, "sha512-xs3QLwfVmsmZCaL9sMSH+JgPaCwZoR2LVDCLnzQ4pDZTXK64CEUfjMrfCZZLmLqGWfxOeMQoi4VM+N2KRkr6Pg=="],
 
-    "@redocly/config": ["@redocly/config@0.20.3", "", {}, "sha512-Nyyv1Bj7GgYwj/l46O0nkH1GTKWbO3Ixe7KFcn021aZipkZd+z8Vlu1BwkhqtVgivcKaClaExtWU/lDHkjBzag=="],
+    "@redocly/config": ["@redocly/config@0.21.0", "", {}, "sha512-JBtrrjBIURTnzb7KUIWOF46vSgpfC3rO6Mm8LjtRjtTNCLTyB+mOuU7HrTkVcvUCEBuSuzkivlTHMWT4JETz9A=="],
 
-    "@redocly/openapi-core": ["@redocly/openapi-core@1.31.1", "", { "dependencies": { "@redocly/ajv": "^8.11.2", "@redocly/config": "^0.20.1", "colorette": "^1.2.0", "https-proxy-agent": "^7.0.5", "js-levenshtein": "^1.1.6", "js-yaml": "^4.1.0", "minimatch": "^5.0.1", "pluralize": "^8.0.0", "yaml-ast-parser": "0.0.43" } }, "sha512-FoTmi+iA6NGXk6rZpX6QvmEqbApbJgYC6soLj3zfx0f/1M4vUff5GuOEC24GWj7rN0vNx5E6eUx59h0M4sjRnQ=="],
+    "@redocly/openapi-core": ["@redocly/openapi-core@1.31.2", "", { "dependencies": { "@redocly/ajv": "^8.11.2", "@redocly/config": "^0.21.0", "colorette": "^1.2.0", "https-proxy-agent": "^7.0.5", "js-levenshtein": "^1.1.6", "js-yaml": "^4.1.0", "minimatch": "^5.0.1", "pluralize": "^8.0.0", "yaml-ast-parser": "0.0.43" } }, "sha512-HScpiSuluLic9+QpsI2JWaegeDuRn3hximPBpiUpy4WdXf74Ev094kpUgjhiD3xDuP/KpVdchooAkLnzQ0X+vg=="],
 
-    "@redocly/respect-core": ["@redocly/respect-core@1.31.1", "", { "dependencies": { "@faker-js/faker": "^7.6.0", "@redocly/ajv": "8.11.2", "@redocly/openapi-core": "1.31.1", "better-ajv-errors": "^1.2.0", "colorette": "^2.0.20", "concat-stream": "^2.0.0", "cookie": "^0.7.2", "dotenv": "16.4.5", "form-data": "4.0.0", "jest-diff": "^29.3.1", "jest-matcher-utils": "^29.3.1", "js-yaml": "4.1.0", "json-pointer": "^0.6.2", "jsonpath-plus": "^10.0.6", "open": "^10.1.0", "openapi-sampler": "^1.6.1", "outdent": "^0.8.0", "set-cookie-parser": "^2.3.5", "undici": "^6.21.1" } }, "sha512-Vnr/VY0besJ/zCZo6htua+xHbfyJ1balZ/chxzxYCoZZPiVlL8UG7uoQ0Ptw08Ywg3gMcizJKzxaCc1/JdVOMQ=="],
+    "@redocly/respect-core": ["@redocly/respect-core@1.31.2", "", { "dependencies": { "@faker-js/faker": "^7.6.0", "@redocly/ajv": "8.11.2", "@redocly/openapi-core": "1.31.2", "better-ajv-errors": "^1.2.0", "colorette": "^2.0.20", "concat-stream": "^2.0.0", "cookie": "^0.7.2", "dotenv": "16.4.5", "form-data": "4.0.0", "jest-diff": "^29.3.1", "jest-matcher-utils": "^29.3.1", "js-yaml": "4.1.0", "json-pointer": "^0.6.2", "jsonpath-plus": "^10.0.6", "open": "^10.1.0", "openapi-sampler": "^1.6.1", "outdent": "^0.8.0", "set-cookie-parser": "^2.3.5", "undici": "^6.21.1" } }, "sha512-DJHLTmDvwasTQH42ODIXwUTItke0UaBLLEa/35yaOkEvFRBXEr5LGucEFdxVr5y0/kZBpiSJaAz0GsjYglNjhg=="],
 
     "@rollup/pluginutils": ["@rollup/pluginutils@5.1.4", "", { "dependencies": { "@types/estree": "^1.0.0", "estree-walker": "^2.0.2", "picomatch": "^4.0.2" }, "peerDependencies": { "rollup": "^1.20.0||^2.0.0||^3.0.0||^4.0.0" }, "optionalPeers": ["rollup"] }, "sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ=="],
 
@@ -2451,6 +2452,8 @@
     "@rollup/pluginutils/estree-walker": ["estree-walker@2.0.2", "", {}, "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w=="],
 
     "@snyk/github-codeowners/commander": ["commander@4.1.1", "", {}, "sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA=="],
+
+    "@straininfo/frontend/@extra/straininfo": ["@extra/straininfo@file:extra/straininfo", {}],
 
     "@straininfo/frontend/digidive": ["digidive@file:extra/style", {}],
 

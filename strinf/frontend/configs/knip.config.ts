@@ -9,7 +9,6 @@ export default {
         /^@typescript-eslint\/.+/,
         /^typescript-plugin.+/,
         /^@?eslint.*/,
-        /^@extra\/straininfo\/.+$/,
     ],
     ignoreBinaries: ['knip', 'eslint', 'tsc', 'vite'],
     compilers: {
