@@ -6,11 +6,11 @@ items:
     properties:
         strain:
             type: object
-            required: ['si_id', 'type_strain', 'designations']
+            required: ['siID', 'typeStrain', 'designations']
             allOf:
-                - $ref: ./str_cul/taxon.yaml
+                - $ref: ./v2_str_dep/taxon.yaml
             properties:
-                si_id:
+                siID:
                     type: integer
                     minimum: 1
                     examples: [1]
@@ -21,10 +21,13 @@ items:
                         type: integer
                         minimum: 1
                         examples: [2]
-                type_strain:
+                typeStrain:
                     type: boolean
+                bdID:
+                    type: integer
+                    minimum: 1
                 sample:
-                    $ref: './str_cul/sample.yaml'
+                    $ref: './v2_str_dep/sam_min.yaml'
                 designations:
                     type: array
                     minItems: 1
@@ -81,36 +84,36 @@ items:
                 type: object
                 required:
                     [
-                        'si_dp',
+                        'siDP',
                         'designation',
-                        'type_strain',
-                        'data_source',
-                        'last_update',
+                        'typeStrain',
+                        'dataSource',
+                        'lasUpdate',
                         'registration',
                     ]
                 allOf:
-                    - $ref: ./str_cul/taxon.yaml
+                    - $ref: ./v2_str_dep/taxon.yaml
                 properties:
-                    si_dp:
+                    siDP:
                         type: integer
                         minimum: 1
                         examples: [1]
                     designation:
                         type: string
                         minLength: 1
-                    type_strain:
+                    typeStrain:
                         type: boolean
                     history:
-                        $ref: ./culture/history_arc.yaml
-                    culture_collection:
+                        $ref: ./v2_deposit/hist.yaml
+                    cultureCollection:
                         type: object
-                        required: ['cc_id', 'country_code', 'name']
+                        required: ['ccID', 'countryCode', 'name']
                         properties:
-                            cc_id:
+                            ccID:
                                 type: integer
                                 minimum: 1
                                 examples: [1]
-                            country_code:
+                            countryCode:
                                 type: string
                                 examples: [DE]
                                 minLength: 2
@@ -130,9 +133,9 @@ items:
                                 examples: ['2023-02-03']
                                 format: date
                             submitter:
-                                $ref: ./str_cul/entity.yaml
+                                $ref: ./v2_str_dep/entities.yaml
                             supervisor:
-                                $ref: ./str_cul/entity.yaml
+                                $ref: ./v2_str_dep/entities.yaml
                     deposition:
                         type: object
                         properties:
@@ -145,14 +148,14 @@ items:
                                 type: string
                                 minLength: 1
                             depositor:
-                                $ref: ./str_cul/entity.yaml
+                                $ref: ./v2_str_dep/entities.yaml
                     isolation:
                         type: object
                         properties:
                             sample:
                                 type: object
                                 allOf:
-                                    - $ref: './str_cul/sample.yaml'
+                                    - $ref: './v2_str_dep/sam_min.yaml'
                                 properties:
                                     date:
                                         type: string
@@ -165,12 +168,12 @@ items:
                                             minLength: 1
                                             examples: [Germany]
                             isolator:
-                                $ref: ./str_cul/entity.yaml
-                    last_update:
+                                $ref: ./v2_str_dep/entities.yaml
+                    lastUpdate:
                         type: string
                         examples: ['2023-02-03']
                         format: date
-                    data_source:
+                    dataSource:
                         type: array
                         minItems: 1
                         items:

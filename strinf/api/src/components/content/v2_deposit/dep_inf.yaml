@@ -5,7 +5,7 @@ required:
     - typeStrain
     - lastUpdate
 allOf:
-    - $ref: ./data_source.yaml
+    - $ref: ./data_src.yaml
 properties:
     catalogue:
         type: object

@@ -8,6 +8,3 @@ items:
         encoded:
             type: string
             minLength: 1
-        data_source:
-            type: string
-            minLength: 1

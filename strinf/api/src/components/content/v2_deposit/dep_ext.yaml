@@ -7,7 +7,7 @@ properties:
             minLength: 1
             examples: [DSM 20543]
     history:
-        $ref: ./history.yaml
+        $ref: ./hist.yaml
     bdID:
         type: array
         items:

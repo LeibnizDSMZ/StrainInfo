@@ -3,11 +3,8 @@ items:
     type: object
     required: [encoded]
     allOf:
-        - $ref: ./data_source.yaml
+        - $ref: ./data_src.yaml
     properties:
         encoded:
-            type: string
-            minLength: 1
-        dataSource:
             type: string
             minLength: 1
