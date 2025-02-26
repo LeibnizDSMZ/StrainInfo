@@ -7,8 +7,6 @@ on:
 
 jobs:
     lin_lint:
-        env:
-            CU_HOME: /home/custom
         strategy:
             fail-fast: false
         runs-on: ubuntu-latest
@@ -27,9 +25,9 @@ jobs:
                   fetch-depth: 0
             - name: Install dependencies
               run: |
-                  sudo mkdir -p $CU_HOME &&
-                  sudo mkdir -p $CU_HOME/.local/bin
-                  sudo chown runner -R $CU_HOME
+                  sudo mkdir -p $HOME &&
+                  sudo mkdir -p $HOME/.local/bin
+                  sudo chown runner -R $HOME
                   sudo apt install -y curl git-lfs
             - name: lint and test
               run: |
