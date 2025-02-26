@@ -86,7 +86,8 @@ function loadApiSpec(
             if (update) {
                 getSpec(res.private, CONFIG.backend, ver)
                     .then((resSpec) => {
-                        setSpec(resSpec);
+                        // TODO remove timeout when rapi-doc is loaded smoother
+                        setTimeout(() => { setSpec(resSpec); }, 800);
                     })
                     .catch(onPrError);
             }
@@ -249,6 +250,13 @@ interface RapiDocProps {
     setVer: (ver: ApiVer) => void;
 }
 
+async function loadSpec(docu: Element, specUrl: unknown): Promise<void> {
+    if (hasProp('loadSpec', docu) && typeof docu.loadSpec === 'function') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        await docu.loadSpec(specUrl);
+    }
+}
+
 function RapDoc({
     spec: [specUrl, serverUrl],
     anc,
@@ -258,13 +266,10 @@ function RapDoc({
     useEffect(() => {
         const [docu] = document.getElementsByTagName('rapi-doc');
         docu?.classList.add(Dis.dNone);
-        if (
-            docu !== undefined &&
-            hasProp('loadSpec', docu) &&
-            typeof docu.loadSpec === 'function'
-        ) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            docu.loadSpec(specUrl);
+        if (docu !== undefined) {
+            new Promise((res) => {
+                res(loadSpec(docu, specUrl));
+            }).catch(onPrError);
         }
         if (docu !== undefined && docu instanceof HTMLElement) {
             docu.addEventListener('spec-loaded', addStyle);
