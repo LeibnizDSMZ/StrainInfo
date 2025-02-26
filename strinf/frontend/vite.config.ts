@@ -8,7 +8,6 @@ import RemImg from 'remark-images';
 import RehHig from 'rehype-highlight';
 import rollupPluginLicense from 'rollup-plugin-license';
 import fs from 'node:fs';
-import legacy from '@vitejs/plugin-legacy';
 import { visualizer } from 'rollup-plugin-visualizer';
 import type { OutgoingHttpHeaders } from 'node:http';
 import { PurgeCSS } from 'purgecss';
@@ -355,9 +354,10 @@ function createShared(build: boolean): UserConfig {
                 remarkPlugins: [RemGfm, RemImg],
                 rehypePlugins: [RehHig],
             }),
-            legacy({
-                targets: ['last 2 versions, not dead, > 0.2%'],
-            }),
+            // TODO readd when workers are supported
+            //legacy({
+            //    targets: ['last 2 versions, not dead, > 0.2%'],
+            //}),
             {
                 name: 'purgecss',
                 async closeBundle() {
