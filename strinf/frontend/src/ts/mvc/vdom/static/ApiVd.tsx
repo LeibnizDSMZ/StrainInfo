@@ -87,7 +87,9 @@ function loadApiSpec(
                 getSpec(res.private, CONFIG.backend, ver)
                     .then((resSpec) => {
                         // TODO remove timeout when rapi-doc is loaded smoother
-                        setTimeout(() => { setSpec(resSpec); }, 800);
+                        setTimeout(() => {
+                            setSpec(resSpec);
+                        }, 800);
                     })
                     .catch(onPrError);
             }

@@ -20,6 +20,7 @@ declare global {
         keydownHandler: (event: Event) => void;
         bindInputValue: (inputElement: Element) => void;
         callBindInputValueForAttachment: (event: Event) => void;
+        initSmallSidebar: () => void;
     }
 }
 

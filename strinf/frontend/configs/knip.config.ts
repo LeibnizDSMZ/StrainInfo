@@ -1,7 +1,7 @@
 export default {
     entry: ['src/index.tsx'],
     project: ['**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,md}'],
-    ignore: ['configs/**', 'assets/**'],
+    ignore: ['configs/**', 'assets/**', 'src/**/worker*.ts'],
     ignoreDependencies: [
         'sharp',
         'svgo',
