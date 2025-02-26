@@ -1,4 +1,5 @@
 import scSty from '@strinf/css/mods/scroll.module.css';
+import { SIDE_HIDDEN } from '@strinf/ts/constants/style/AtHtml';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 
 const LOAD_STATE = {
@@ -9,7 +10,7 @@ function enableLoader(): void {
     LOAD_STATE.enabled = true;
     setTimeout(() => {
         if (LOAD_STATE.enabled) {
-            const {body} = document;
+            const { body } = document;
             body.classList.add(scSty.disable);
             const [loader] = document.getElementsByClassName(ClHtml.ld);
             if (loader !== undefined) {
@@ -25,7 +26,7 @@ function enableScroll(): void {
 
 function disableLoader(): void {
     LOAD_STATE.enabled = false;
-    const {body} = document;
+    const { body } = document;
     body.classList.remove(scSty.disable);
     const [loader] = document.getElementsByClassName(ClHtml.ld);
     if (loader !== undefined) {
@@ -37,12 +38,18 @@ const SIDE_ID = 'side_bar_status_id';
 
 function customToggleSideBar(enable: boolean): void {
     const sideBar = document.getElementById(SIDE_ID);
-    if (
-        sideBar != null &&
-        Math.abs(
-            Number(!document.body.classList.contains(ClHtml.sideSM)) - Number(enable)
-        )
-    ) {
+    let active = false;
+    if (document.documentElement.clientWidth > 992) {
+        active = Boolean(
+            Math.abs(
+                Number(!document.body.classList.contains(ClHtml.sideSM)) - Number(enable)
+            )
+        );
+    } else {
+        const [pgWr] = document.getElementsByClassName(ClHtml.pgWr);
+        active = !(pgWr?.hasAttribute(SIDE_HIDDEN[0]) ?? false);
+    }
+    if (sideBar != null && active) {
         window.style.toggleSidebar(sideBar);
     }
 }

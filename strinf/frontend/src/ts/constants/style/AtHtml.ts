@@ -71,6 +71,7 @@ const HIDE = 'hidden';
 const SIDE_SMALL = {
     'data-sidebar-size': 'small',
 };
+const SIDE_HIDDEN: [string, string] = ['data-sidebar-hidden', 'hidden'];
 
 export {
     HIDE,
@@ -87,6 +88,7 @@ export {
     ACC_M,
     DD_B,
     SIDE_SMALL,
+    SIDE_HIDDEN,
 };
 
 export type { DefAttr };
