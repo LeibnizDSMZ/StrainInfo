@@ -23,16 +23,16 @@
         "fullstack"
     ],
     "dependencies": {
-        "typescript": "^5.7.3"
+        "typescript": "^5.8.2"
     },
     "devDependencies": {
         "@types/bun": "^1.2.4",
-        "@types/node": "^22.13.5",
+        "@types/node": "^22.13.8",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "^3.3.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.4.3",
-        "prettier": "^3.5.2",
+        "prettier": "^3.5.3",
         "shellcheck": "^3.1.0"
     },
     "scripts": {
