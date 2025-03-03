@@ -20,7 +20,6 @@ import type { TT_GL_TYPE } from '@strinf/ts/interfaces/dom/tooltip';
 import type { ServerStatusInt } from '@strinf/ts/interfaces/api/maped';
 import CONFIG from '@strinf/ts/configs/config';
 import initMat from '@strinf/ts/mvc/vdom/fun/mat/init';
-import { SIDE_SMALL } from '@strinf/ts/constants/style/AtHtml';
 
 type OnErrorArg = [
     Event | string,
@@ -181,7 +180,6 @@ class MainVD extends Component<Record<string, never>, { panic: boolean }> {
                     <div
                         ref={this.wrapper}
                         className={`${ClHtml.pgWr} ${getActiveWrapperCookies().join(' ')}`}
-                        {...SIDE_SMALL}
                     >
                         <HeadVD />
                         <div className={ClHtml.cntWr}>
