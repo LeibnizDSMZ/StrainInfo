@@ -3,7 +3,7 @@ import pl_ts from '@typescript-eslint/eslint-plugin';
 import * as pa_ts from '@typescript-eslint/parser';
 import pl_jsx from 'eslint-plugin-jsx-a11y';
 import pl_react from 'eslint-plugin-react';
-import pl_react_hooks from 'eslint-plugin-react-hooks';
+import * as pl_react_hooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import * as tsResolver from 'eslint-import-resolver-typescript';
