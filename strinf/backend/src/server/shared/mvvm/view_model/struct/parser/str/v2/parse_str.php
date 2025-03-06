@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view_model\struct\parser\str\v2;
 
-use function straininfo\server\shared\arr\rem_null_rec;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
-use straininfo\server\shared\mvvm\model\struct\StrainStatus;
-
+use straininfo\server\shared\mvvm\view_model\struct\json\v2\StRelDepositE;
 use straininfo\server\shared\mvvm\view_model\data\ParStr;
+use straininfo\server\shared\mvvm\model\struct\StrainStatus;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
+
+use function straininfo\server\shared\arr\rem_null_rec;
 
 /**
  * @template TV
@@ -85,7 +86,7 @@ function create_max(array $val): ParStr
         arc: rem_null_rec(get_avg_arr_arc($val)),
         rel_des: rem_null_rec(get_avg_rel_des_str($val)),
         rel_cul: rem_null_rec(get_min_arr_rel_cul($val)),
-        str: rem_null_rec(get_avg_arr_str($val, count($cultures))),
+        str: rem_null_rec(get_avg_arr_str($val, $cultures)),
         tax: rem_null_rec(get_min_arr_tax($val))
     );
 }
@@ -105,7 +106,7 @@ function create_avg(array $val): ParStr
         arc: rem_null_rec(get_avg_arr_arc($val)),
         rel_des: rem_null_rec(get_avg_rel_des_str($val)),
         rel_cul: $cultures,
-        str: rem_null_rec(get_avg_arr_str($val, count($cultures))),
+        str: rem_null_rec(get_avg_arr_str($val, $cultures)),
         tax: rem_null_rec(get_min_arr_tax($val))
     );
 }
@@ -125,7 +126,7 @@ function create_min(array $val): ParStr
         pub: [],
         seq: [],
         rel_cul: $cultures,
-        str: rem_null_rec(get_min_arr_str($val, count($cultures))),
+        str: rem_null_rec(get_min_arr_str($val, $cultures)),
         tax: rem_null_rec(get_min_arr_tax($val))
     );
 }

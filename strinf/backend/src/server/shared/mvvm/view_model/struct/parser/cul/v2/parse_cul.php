@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2;
 
-use function straininfo\server\shared\arr\rem_null_rec;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructCulE;
-use straininfo\server\shared\mvvm\model\struct\DataCon;
-
 use straininfo\server\shared\mvvm\view_model\data\ParCul;
+use straininfo\server\shared\mvvm\model\struct\DataCon;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructCulE;
+
+use function straininfo\server\shared\arr\rem_null_rec;
 
 /**
  * @template TV
@@ -77,7 +77,7 @@ function parse_min_arr(array $arr): array
  */
 function create_max(array $val): ParCul
 {
-    $cultures = rem_null_rec(get_avg_rel_des(
+    $rel_cul = rem_null_rec(get_avg_rel_des(
         $val,
         DataCon::R_DES_C->value,
         create_rel_cul_con(...)
@@ -89,11 +89,11 @@ function create_max(array $val): ParCul
             DataCon::R_DES_S->value,
             create_rel_str_con(...)
         )),
-        rel_des_cul:$cultures,
+        rel_des_cul:$rel_cul,
         rel_cul: rem_null_rec(get_max_arr_rel_cul($val)),
         pub: rem_null_rec(get_max_arr_pub($val)),
         seq: rem_null_rec(get_max_arr_seq($val)),
-        str: rem_null_rec(get_max_arr_str($val, count($cultures))),
+        str: rem_null_rec(get_max_arr_str($val, count($rel_cul) + 1)),
         reg: rem_null_rec(get_avg_arr_reg($val)),
         iso: rem_null_rec(get_avg_arr_iso($val)),
         dep: rem_null_rec(get_avg_arr_dep($val)),
