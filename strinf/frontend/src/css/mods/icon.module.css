@@ -34,15 +34,15 @@
 }
 
 .stpub {
-    background-color: var(--color-logo-green);
+    background-color: #0072b2;
 }
 
 .stdep {
-    background-color: var(--color-warm-yellow);
+    background-color: #f0e442;
 }
 
 .stina {
-    background-color: var(--color-warm-red);
+    background-color: #d55e00;
 }
 
 .load i {
