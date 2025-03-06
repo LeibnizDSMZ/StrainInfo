@@ -19,6 +19,7 @@ import CONFIG from '@strinf/ts/configs/config';
 import type { JSX } from 'preact';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 import { SIDE_SMALL } from '@strinf/ts/constants/style/AtHtml';
+import { ErrorBoundary, LocationProvider, useLocation } from 'preact-iso';
 
 hidePrivateInfo();
 const pBE: JSX.Element = (
@@ -29,14 +30,28 @@ if (CONFIG.statistic.enable) {
     pST = <link rel="preconnect" href={createUrlStr(CONFIG.statistic.matomo, '')} />;
 }
 
-render(
-    <body className={ClHtml.sideSM} {...SIDE_SMALL}>
-        <Helmet>
-            {pBE}
-            {pST}
-        </Helmet>
-        {createPreloadBanner()}
-        <MainVD />
-    </body>,
-    document.body.parentNode ?? document.body
-);
+function LocationWrapper(): JSX.Element {
+    const location = useLocation();
+    return (
+        <ErrorBoundary>
+            <Helmet>
+                {pBE}
+                {pST}
+            </Helmet>
+            {createPreloadBanner()}
+            <MainVD location={location} />
+        </ErrorBoundary>
+    );
+}
+
+function IndexBody(): JSX.Element {
+    return (
+        <body className={ClHtml.sideSM} {...SIDE_SMALL}>
+            <LocationProvider>
+                <LocationWrapper />
+            </LocationProvider>
+        </body>
+    );
+}
+
+render(<IndexBody />, document.body.parentNode ?? document.body);

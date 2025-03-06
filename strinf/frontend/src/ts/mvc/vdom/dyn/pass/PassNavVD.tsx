@@ -18,6 +18,8 @@ import type { GlobVersionGet } from '@strinf/ts/interfaces/dom/global';
 import type { RelDataT } from '@strinf/ts/interfaces/dom/sea_rel';
 import linkSty from '@strinf/css/mods/link.module.css';
 import { callSearch } from '@strinf/ts/functions/http/sea';
+import type { LocationHook } from 'preact-iso';
+import { useLocation } from 'preact-iso';
 
 interface NavProps {
     anc: AncT;
@@ -33,7 +35,11 @@ interface SpeNavProps {
     taxN: string;
 }
 
-function createNamNav(str: RelDataT, ctx: InValStInt | undefined): JSX.Element[] {
+function createNamNav(
+    str: RelDataT,
+    ctx: InValStInt | undefined,
+    location: LocationHook
+): JSX.Element[] {
     const res = [];
     const grCul: Record<number, string[]> = {};
     for (const { id, cultures } of str.strains) {
@@ -48,7 +54,7 @@ function createNamNav(str: RelDataT, ctx: InValStInt | undefined): JSX.Element[]
                 type="button"
                 onClick={() => {
                     updateHrefVal(`${IdAcrTagCon.strId} ${key}`, ctx);
-                    callSearch(`${IdAcrTagCon.strId} ${key}`);
+                    callSearch(`${IdAcrTagCon.strId} ${key}`, location);
                     return true;
                 }}
             >
@@ -82,7 +88,8 @@ function crTitle(strN: number, taxN: string): JSX.Element {
 
 function SpeNav({ str, taxN }: SpeNavProps): JSX.Element | null {
     const ctx: InValStInt | undefined = useContext(MainConGl);
-    const res: JSX.Element[] = createNamNav(str, ctx);
+    const location = useLocation();
+    const res: JSX.Element[] = createNamNav(str, ctx, location);
     if (str.count === 0) {
         return null;
     }

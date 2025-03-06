@@ -13,7 +13,7 @@ function isPropInObj(obj2Test: object, propList: [string, IsTypeCheck][]): boole
     return true;
 }
 
-function isArrayStr<T>(arr2Test: T[]): boolean {
+function isArrayStr(arr2Test: unknown[]): boolean {
     for (const ele of arr2Test) {
         if (typeof ele !== 'string') {
             return false;

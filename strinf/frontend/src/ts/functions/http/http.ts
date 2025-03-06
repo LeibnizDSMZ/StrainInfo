@@ -1,13 +1,13 @@
-import { route } from 'preact-router';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import Known500Error from '@strinf/ts/errors/known/500';
 import type { ConfLinkT } from '@strinf/ts/interfaces/misc/configs';
+import type { LocationHook } from 'preact-iso';
 
-function routeUri(uri: string, replace: string): void {
+function routeUri(uri: string, replace: string, location: LocationHook): void {
     if (uri.length === 0) {
         throw new Known500Error('uri is empty');
     }
-    route(uri, replace.length > 0);
+    location.route(uri, replace.length > 0);
 }
 
 function scrollToId(aId: string): void {

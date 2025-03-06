@@ -20,6 +20,7 @@ import type { TT_GL_TYPE } from '@strinf/ts/interfaces/dom/tooltip';
 import type { ServerStatusInt } from '@strinf/ts/interfaces/api/maped';
 import CONFIG from '@strinf/ts/configs/config';
 import initMat from '@strinf/ts/mvc/vdom/fun/mat/init';
+import type { LocationHook } from 'preact-iso';
 
 type OnErrorArg = [
     Event | string,
@@ -29,7 +30,10 @@ type OnErrorArg = [
     Error | undefined,
 ];
 
-class MainVD extends Component<Record<string, never>, { panic: boolean }> {
+interface LOC_PROP {
+    location: LocationHook;
+}
+class MainVD extends Component<LOC_PROP, { panic: boolean }> {
     private errCr: boolean;
 
     private seaVGl: string;
@@ -40,8 +44,12 @@ class MainVD extends Component<Record<string, never>, { panic: boolean }> {
 
     private readonly stat: JSX.Element | null;
 
-    constructor(props: Record<string, never>) {
+    private readonly location: LocationHook;
+
+    constructor(props: LOC_PROP) {
         super(props);
+        const { location } = props;
+        this.location = location;
         this.stat = initMat(CONFIG.statistic);
         this.errCr = false;
         this.state = { panic: false };
@@ -86,7 +94,11 @@ class MainVD extends Component<Record<string, never>, { panic: boolean }> {
         }
         if (this.errCr) {
             const errM = this.glStateCon.errS[0].replace(/\s/g, '_');
-            routeUri(`${UIApiCon.error}?${this.glStateCon.errT}=${errM}`, UIApiCon.index);
+            routeUri(
+                `${UIApiCon.error}?${this.glStateCon.errT}=${errM}`,
+                UIApiCon.index,
+                this.location
+            );
         }
     }
 

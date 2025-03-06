@@ -11,6 +11,8 @@ import SeaIndexCtrl from '@strinf/ts/mvc/ctrl/SeaIndexCtrl';
 import type { SeaIndR } from '@strinf/ts/interfaces/api/maped';
 import type { GlobVersionGet } from '@strinf/ts/interfaces/dom/global';
 import CONFIG from '@strinf/ts/configs/config';
+import type { LocationHook } from 'preact-iso';
+import { useLocation } from 'preact-iso';
 
 interface InputMProps {
     callB: () => RefObject<HTMLInputElement>;
@@ -33,25 +35,26 @@ interface BtnProps {
     callB: () => RefObject<HTMLInputElement>;
     upD: () => void;
     reset: () => void;
+    location: LocationHook;
 }
 
 type KeyEvent = JSX.TargetedKeyboardEvent<HTMLInputElement>;
 
-function clickEvent({ callB, upD, reset }: BtnProps) {
+function clickEvent({ callB, upD, reset, location }: BtnProps) {
     const ref = callB();
     reset();
     upD();
-    callSearch(ref.current?.value ?? '');
+    callSearch(ref.current?.value ?? '', location);
 }
 
-function seaEvent({ callB, upD, reset }: BtnProps, eve?: KeyEvent): void {
+function seaEvent({ callB, upD, reset, location }: BtnProps, eve?: KeyEvent): void {
     const called =
         eve === undefined ||
         eve.key === 'Enter' ||
         eve.key === 'Accept' ||
         eve.key === 'Tab';
     if (called) {
-        clickEvent({ callB, upD, reset });
+        clickEvent({ callB, upD, reset, location });
     }
 }
 
@@ -70,7 +73,7 @@ function seaIndEvent(
     }
 }
 
-function SeaBtn({ callB, upD, reset }: BtnProps): JSX.Element {
+function SeaBtn({ callB, upD, reset, location }: BtnProps): JSX.Element {
     const btnCl = `${ClHtml.btn}  ${ClHtml.pri} ${btnSty.center}`;
     return (
         <div className={ClHtml.igp}>
@@ -79,7 +82,7 @@ function SeaBtn({ callB, upD, reset }: BtnProps): JSX.Element {
                 aria-label="Search"
                 className={btnCl}
                 onClick={() => {
-                    clickEvent({ callB, upD, reset });
+                    clickEvent({ callB, upD, reset, location });
                 }}
             >
                 <i className={ClHtmlI.search} />
@@ -89,6 +92,7 @@ function SeaBtn({ callB, upD, reset }: BtnProps): JSX.Element {
 }
 
 function InputWr({ val, callB, upD, reset, onInput, len }: InWrProps): JSX.Element {
+    const location = useLocation();
     return (
         <div className={ClHtml.ig}>
             <input
@@ -100,11 +104,11 @@ function InputWr({ val, callB, upD, reset, onInput, len }: InWrProps): JSX.Eleme
                 autoComplete="off"
                 placeholder="search in database"
                 onKeyPress={(event) => {
-                    seaEvent({ callB, upD, reset }, event);
+                    seaEvent({ callB, upD, reset, location }, event);
                 }}
                 onInput={onInput}
             />
-            <SeaBtn callB={callB} upD={upD} reset={reset} />
+            <SeaBtn callB={callB} upD={upD} reset={reset} location={location} />
         </div>
     );
 }

@@ -30,6 +30,7 @@ import HubSeaVD from '@strinf/ts/mvc/vdom/static/HubSeaVD';
 import type { TT_GL_TYPE } from '@strinf/ts/interfaces/dom/tooltip';
 import { TT_ID_SIM } from '@strinf/ts/mvc/vdom/dyn/tooltip/TTSimVD';
 import Loading from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
+import type { LocationHook } from 'preact-iso';
 
 type CTX = GlobVersionGet & LoadSet & LoadStMInt & BreadCrumbsG & TTHookG<TT_GL_TYPE>;
 interface SearchState {
@@ -47,7 +48,7 @@ StrainInfo results for the search term ${sTerm}.
 ${getApiToStr(sApi)} was/were used as search queries.
 `;
 
-class SearchVD<T> extends Component<T, SearchState> {
+class SearchVD<T extends { location: LocationHook }> extends Component<T, SearchState> {
     private time: number;
 
     private load: LoadT;
@@ -56,8 +57,12 @@ class SearchVD<T> extends Component<T, SearchState> {
 
     private sea: [string, string];
 
+    private readonly location: LocationHook;
+
     constructor(props: T) {
         super(props);
+        const { location } = props;
+        this.location = location;
         this.hooks = new SeaSt();
         this.load = LoadT.INI;
         this.state = { tab: [], toPassStr: '', toPassCul: '', stage: LoadT.INI };
@@ -134,7 +139,12 @@ class SearchVD<T> extends Component<T, SearchState> {
                 toPassCul !== nextContext.toPassCul) &&
             nextContext.toPassStr !== ''
         ) {
-            callPass(nextContext.toPassStr, nextContext.toPassCul, UIApiCon.index);
+            callPass(
+                nextContext.toPassStr,
+                nextContext.toPassCul,
+                UIApiCon.index,
+                this.location
+            );
             return false;
         }
         return true;
@@ -207,8 +217,5 @@ class SearchVD<T> extends Component<T, SearchState> {
 }
 
 SearchVD.contextType = MainConGl;
-SearchVD.defaultProps = {
-    path: '',
-};
 
 export default SearchVD;

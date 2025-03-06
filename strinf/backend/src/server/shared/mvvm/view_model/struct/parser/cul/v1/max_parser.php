@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view_model\struct\parser\cul\v1;
 
+use function straininfo\server\shared\arr\check_kt_arr_id;
+use function straininfo\server\shared\arr\check_kt_bool;
+use function straininfo\server\shared\arr\check_kt_f_str;
+use function straininfo\server\shared\arr\check_kt_int;
+use function straininfo\server\shared\arr\check_kt_str;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructArcE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructPubE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructRelCulE;
@@ -15,17 +20,12 @@ use straininfo\server\shared\mvvm\model\struct\StrainStatus;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StArcE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StCulE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StPubE;
+
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StRelCulE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StRelDesE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StSeqE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StStrE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StTaxE;
-
-use function straininfo\server\shared\arr\check_kt_arr_id;
-use function straininfo\server\shared\arr\check_kt_bool;
-use function straininfo\server\shared\arr\check_kt_f_str;
-use function straininfo\server\shared\arr\check_kt_int;
-use function straininfo\server\shared\arr\check_kt_str;
 
 function get_strain_status(?int $type_cul, ?int $cul_on, int $cul_cnt): StrainStatus
 {

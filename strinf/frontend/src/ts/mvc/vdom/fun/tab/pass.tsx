@@ -38,9 +38,9 @@ function appendTitleRow(
     );
 }
 
-function createStrainTitleBar<T>(
+function createStrainTitleBar(
     headers: (string | JSX.Element)[],
-    values: T[],
+    values: unknown[],
     exCl: string[]
 ): JSX.Element[] {
     const con = [];

@@ -1,5 +1,4 @@
-import type { RouterOnChangeArgs } from 'preact-router';
-import Router from 'preact-router';
+import { Router, Route, lazy, useLocation } from 'preact-iso';
 import { useContext } from 'preact/hooks';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import type { BreadCrumbsG } from '@strinf/ts/interfaces/dom/global';
@@ -7,8 +6,6 @@ import { trackPageV } from '@strinf/ts/mvc/vdom/fun/mat/track';
 import defaultRouteBeh from '@strinf/ts/mvc/vdom/fun/route/default';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import Redirect from '@strinf/ts/mvc/vdom/fun/route/Redirect';
-import { Suspense, lazy } from 'preact/compat';
-import { crEmptyContCon } from '@strinf/ts/mvc/vdom/fun/content/content';
 import type { JSX } from 'preact';
 
 const INDEX_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/IndexVD'));
@@ -44,42 +41,37 @@ function onRouteChange(path: string): void {
     }
 }
 
-const ROUTES: (() => JSX.Element)[] = [
-    () => <ERROR_VD path={UIApiCon.error} />,
-    () => <INDEX_VD path={UIApiCon.index} />,
-    () => <Redirect path={UIApiCon.indexFull} to={UIApiCon.index} />,
-    () => <SEA_VD path={UIApiCon.search} />,
-    () => <SEA_VD path={UIApiCon.pass} />,
-    () => <PASS_VD path={PATH_STRAIN} />,
-    () => <ABOUT_PVD path={UIApiCon.about} />,
-    () => <CONTACT_VD path={UIApiCon.contact} />,
-    () => <TEAM_VD path={UIApiCon.team} />,
-    () => <STR_REG_VD path={UIApiCon.strReg} />,
-    () => <NEWS_VD path={UIApiCon.news} />,
-    () => <DOCS_VD path={UIApiCon.manual} />,
-    () => <IMP_VD path={UIApiCon.imprint} />,
-    () => <API_VD path={UIApiCon.service} />,
-    () => <EMPTY_VD path="/:path*" />,
-];
-
 function ContentVD({ panic }: { panic: boolean }): JSX.Element | null {
     const ctx: BreadCrumbsG | undefined = useContext(MainConGl);
-    let routes = ROUTES;
+    const location = useLocation();
     if (ctx === undefined) {
         return null;
     }
+    if (panic) {
+        return <PANIC_VD />;
+    }
     return (
-        <Suspense fallback={crEmptyContCon()}>
-            <Router
-                onChange={(args: RouterOnChangeArgs) => {
-                    if (!panic) {
-                        onRouteChange(args.path ?? '');
-                    }
-                }}
-            >
-                {panic ? <PANIC_VD path="/:path*" /> : routes.map((ele) => ele())}
-            </Router>
-        </Suspense>
+        <Router
+            onRouteChange={(path) => {
+                onRouteChange(path);
+            }}
+        >
+            <Route path={UIApiCon.error} component={ERROR_VD} />
+            <Route path={UIApiCon.index} component={INDEX_VD} />
+            <Route path={UIApiCon.indexFull} to={UIApiCon.index} component={Redirect} />
+            <Route path={UIApiCon.search} component={SEA_VD} location={location} />
+            <Route path={UIApiCon.pass} component={SEA_VD} location={location} />
+            <Route path={PATH_STRAIN} component={PASS_VD} location={location} />
+            <Route path={UIApiCon.about} component={ABOUT_PVD} />
+            <Route path={UIApiCon.contact} component={CONTACT_VD} />
+            <Route path={UIApiCon.team} component={TEAM_VD} />
+            <Route path={UIApiCon.strReg} component={STR_REG_VD} />
+            <Route path={UIApiCon.news} component={NEWS_VD} />
+            <Route path={UIApiCon.manual} component={DOCS_VD} />
+            <Route path={UIApiCon.imprint} component={IMP_VD} />
+            <Route path={UIApiCon.service} component={API_VD} />
+            <Route path="/:path*" component={EMPTY_VD} />
+        </Router>
     );
 }
 

@@ -10,7 +10,7 @@ function isEmptyStr(val: unknown): boolean {
     return false;
 }
 
-function containsArrNoEmptyStr<T>(val: T[], chI: number[]): boolean {
+function containsArrNoEmptyStr(val: unknown[], chI: number[]): boolean {
     let colI = 0;
     for (const valEl of val) {
         if (typeof valEl === 'string' && chI.includes(colI) && valEl.length === 0) {

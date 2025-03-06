@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view_model\struct\parser\str\v1;
 
-use straininfo\server\shared\mvvm\view_model\struct\json\v1\StTaxE;
-use straininfo\server\shared\mvvm\view_model\struct\json\v1\StStrE;
-use straininfo\server\shared\mvvm\view_model\struct\json\v1\StRelCulE;
-use straininfo\server\shared\mvvm\model\struct\DataCon;
+use function straininfo\server\shared\arr\check_kt_arr_id;
+use function straininfo\server\shared\arr\check_kt_bool;
+use function straininfo\server\shared\arr\check_kt_f_str;
+use function straininfo\server\shared\arr\check_kt_int;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructTaxE;
 
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
-use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v1\get_strain_status;
+use straininfo\server\shared\mvvm\model\struct\DataCon;
+use straininfo\server\shared\mvvm\view_model\struct\json\v1\StRelCulE;
+use straininfo\server\shared\mvvm\view_model\struct\json\v1\StStrE;
+use straininfo\server\shared\mvvm\view_model\struct\json\v1\StTaxE;
 use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v1\get_max_arr_rel_cul;
-use function straininfo\server\shared\arr\check_kt_int;
-use function straininfo\server\shared\arr\check_kt_f_str;
-
-use function straininfo\server\shared\arr\check_kt_bool;
-use function straininfo\server\shared\arr\check_kt_arr_id;
+use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v1\get_strain_status;
 
 /**
  * @template TV
@@ -56,9 +55,7 @@ function get_min_arr_str(array $val, array $strain): array
     $type_cul = check_kt_int($val, $db::TYP_CUL->value);
     $cul_on = check_kt_int($val, $db::STR_STA_ON->value);
     $cul_cnt = count(
-        $strain[StStrE::CON-> value]
-            [StRelCulE::REL_CON->value]
-            [StRelCulE::REL_CUL_CON->value]
+        $strain[StStrE::CON->value][StRelCulE::REL_CON->value][StRelCulE::REL_CUL_CON->value]
     );
     return [
         StStrE::CON->value => [

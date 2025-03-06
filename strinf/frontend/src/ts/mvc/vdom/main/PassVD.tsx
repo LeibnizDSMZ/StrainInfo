@@ -25,12 +25,14 @@ import DetailCtrl from '@strinf/ts/mvc/ctrl/DetailCtrl';
 import { getCurFullPath, routeUri } from '@strinf/ts/functions/http/http';
 import Loading from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
+import type { LocationHook } from 'preact-iso';
 
 type CTX = GlobVersionGet & LoadSet & LoadStMInt & BreadCrumbsG;
 
 interface PassProps {
     id?: string;
     path?: string;
+    location: LocationHook;
 }
 interface PassState {
     tab?: PassR;
@@ -55,8 +57,12 @@ class PassVD extends Component<PassProps, PassState> {
 
     private pageView: boolean;
 
+    private readonly location: LocationHook;
+
     constructor(props: PassProps) {
         super(props);
+        const { location } = props;
+        this.location = location;
         this.hooks = new PassSt();
         this.load = LoadT.INI;
         this.state = {};
@@ -99,7 +105,7 @@ class PassVD extends Component<PassProps, PassState> {
         const ctx: CTX | undefined = this.context;
         const { tab } = this.state;
         if (ctx !== undefined) {
-            this.initCtrl(ctx);
+            this.initCtrl(ctx, this.location);
         }
         if (this.load !== LoadT.FIN) {
             return <Loading />;
@@ -148,25 +154,25 @@ class PassVD extends Component<PassProps, PassState> {
         }
     }
 
-    private difSea(): boolean {
+    private difSea(location: LocationHook): boolean {
         const { id } = this.props;
         if (id === undefined) {
             return false;
         }
         if (parseInt(id, 10) < 1) {
-            routeUri(UIApiCon.index, '');
+            routeUri(UIApiCon.index, '', location);
             return false;
         }
         const { tab } = this.state;
         return !(tab?.allStrIds.includes(parseInt(id, 10)) ?? false);
     }
 
-    private initCtrl(ctx: CTX): void {
+    private initCtrl(ctx: CTX, location: LocationHook): void {
         ctx.loadSet('PASS')((load: LoadT) => {
             this.load = load;
         });
         this.hooks.setLoad(() => ctx.load);
-        if (this.difSea() && this.load !== LoadT.STA) {
+        if (this.difSea(location) && this.load !== LoadT.STA) {
             this.load = LoadT.INI;
             this.startPass(ctx);
         }
@@ -175,7 +181,6 @@ class PassVD extends Component<PassProps, PassState> {
 
 PassVD.contextType = MainConGl;
 PassVD.defaultProps = {
-    path: '',
     id: '0',
 };
 

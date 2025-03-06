@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view_model\struct\parser\str\v2;
 
-use straininfo\server\shared\mvvm\view_model\struct\json\v2\StStrE;
+use function straininfo\server\shared\arr\check_kt_arr_id;
 use straininfo\server\shared\mvvm\model\struct\DataCon;
 
-use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\get_max_arr_seq;
-use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\get_max_arr_arc;
-use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\get_avg_rel_des;
+use straininfo\server\shared\mvvm\view_model\struct\json\v2\StStrE;
 use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\create_rel_str_con;
-use function straininfo\server\shared\arr\check_kt_arr_id;
+use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\get_avg_rel_des;
+use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\get_max_arr_arc;
+use function straininfo\server\shared\mvvm\view_model\struct\parser\cul\v2\get_max_arr_seq;
 
 /**
  * @template TV

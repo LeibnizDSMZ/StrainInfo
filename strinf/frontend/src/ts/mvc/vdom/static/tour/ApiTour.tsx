@@ -16,6 +16,8 @@ import crAlert from '@strinf/ts/mvc/vdom/fun/alert/alert';
 import ErrType from '@strinf/ts/constants/type/ErrT';
 import type { JSX } from 'preact';
 import { isSmallScreen } from '@strinf/ts/functions/misc/screen';
+import type { LocationHook } from 'preact-iso';
+import { useLocation } from 'preact-iso';
 
 function createElement(ele: Element | null): { element?: Element } {
     if (ele == null) {
@@ -24,7 +26,7 @@ function createElement(ele: Element | null): { element?: Element } {
     return { element: ele };
 }
 
-function createTour(driverTour: Driver): DriveStep[] {
+function createTour(driverTour: Driver, location: LocationHook): DriveStep[] {
     const tour: DriveStep[] = [
         {
             element: `#${IdHtmlTour.apiHead}`,
@@ -33,7 +35,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 description: `The documentation for the StrainInfo web service
                 can be found under the "Web service" category.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, false, true, false);
+                    createButtons(driverTour, popover, [false, true, false], location);
                 },
             },
         },
@@ -44,7 +46,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 description: `StrainInfo's web API provides several different endpoints,
                 that requests can be send to.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -55,7 +57,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 description: `On the documentation page they are listed with short
                 explanations and the option to test them.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -66,7 +68,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 description: `More information on each endpoint 
                 can be found by opening up its section.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -77,7 +79,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 description: `An example request to the server,
                 can be made by clicking the "TRY" button.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, false, true, false);
+                    createButtons(driverTour, popover, [false, true, false], location);
                     openEndPointPath();
                 },
             },
@@ -90,7 +92,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 the server is shown in the curl command,
                 which can be used to make the request via a Unix command line.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, false, true, false);
+                    createButtons(driverTour, popover, [false, true, false], location);
                     let cnt = 0;
                     getApiRequest(true);
                     const awaitApi = setInterval(() => {
@@ -111,7 +113,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 in this case, contains just one number: the number of strains 
                 in the StrainInfo database.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -122,7 +124,7 @@ function createTour(driverTour: Driver): DriveStep[] {
                 We encourage you to experiment with the API
                 here before using it in production.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -130,7 +132,7 @@ function createTour(driverTour: Driver): DriveStep[] {
             popover: {
                 description: 'We hope this tour was helpful to you.',
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, false, true);
+                    createButtons(driverTour, popover, [true, false, true], location);
                 },
             },
         },
@@ -148,18 +150,18 @@ function checkApi(): boolean {
     return true;
 }
 
-function prepareDrive(): void {
+function prepareDrive(location: LocationHook): void {
     const driveTour = driver();
     window.scrollTo(0, 0);
-    routeUri(UIApiCon.service, '');
+    routeUri(UIApiCon.service, '', location);
     let cnt = 0;
     const awaitApi = setInterval(() => {
         if (checkApi()) {
             driveTour.setConfig({
                 ...TOUR_OPTIONS,
-                steps: createTour(driveTour),
+                steps: createTour(driveTour, location),
                 onCloseClick: () => {
-                    onClose(driveTour);
+                    onClose(driveTour, location);
                 },
             });
             driveTour.drive();
@@ -173,10 +175,13 @@ function prepareDrive(): void {
     }, 200);
 }
 function TourS(): JSX.Element {
+    const location = useLocation();
     return (
         <button
             type="button"
-            onClick={prepareDrive}
+            onClick={() => {
+                prepareDrive(location);
+            }}
             className={`${ClHtml.btn} ${ClHtml.pri}`}
             aria-label="Web service tour"
         >

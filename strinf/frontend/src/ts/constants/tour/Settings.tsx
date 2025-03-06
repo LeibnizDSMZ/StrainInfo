@@ -6,6 +6,7 @@ import type { Config, Driver, PopoverDOM } from 'driver.js';
 import '@strinf/css/adhoc/driver.css';
 import { render } from 'preact';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
+import type { LocationHook } from 'preact-iso';
 
 const TOUR_OPTIONS: Config = {
     animate: false,
@@ -21,8 +22,8 @@ const TOUR_OPTIONS: Config = {
     showButtons: ['next', 'previous', 'close'],
 };
 
-function onClose(driver: Driver): void {
-    routeUri(UIApiCon.manual, '');
+function onClose(driver: Driver, location: LocationHook): void {
+    routeUri(UIApiCon.manual, '', location);
     driver.destroy();
     enableScroll();
 }
@@ -30,9 +31,8 @@ function onClose(driver: Driver): void {
 function createButtons(
     driver: Driver,
     popover: PopoverDOM,
-    prev: boolean,
-    next: boolean,
-    done: boolean
+    [prev, next, done]: [boolean, boolean, boolean],
+    location: LocationHook
 ): void {
     const main = popover.previousButton.parentNode;
     popover.previousButton.remove();
@@ -61,7 +61,7 @@ function createButtons(
             aria-label="done"
             onClick={() => {
                 driver.destroy();
-                routeUri(UIApiCon.manual, '');
+                routeUri(UIApiCon.manual, '', location);
                 enableScroll();
             }}
         >

@@ -16,8 +16,10 @@ import IdAcrTagCon from '@strinf/ts/constants/acr/id_acr';
 import { type Driver, driver, type DriveStep, type PopoverDOM } from 'driver.js';
 import type { JSX } from 'preact';
 import { isNotWideScreen, isSmallScreen } from '@strinf/ts/functions/misc/screen';
+import type { LocationHook } from 'preact-iso';
+import { useLocation } from 'preact-iso';
 
-function crTour(driverTour: Driver): DriveStep[] {
+function crTour(driverTour: Driver, location: LocationHook): DriveStep[] {
     return [
         {
             element: `#${IdHtmlTour.seaInHead}`,
@@ -28,8 +30,8 @@ function crTour(driverTour: Driver): DriveStep[] {
                 use the header search bar 
                 that is directly accessible from almost all pages.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, false, true, false);
-                    routeUri(UIApiCon.index, '');
+                    createButtons(driverTour, popover, [false, true, false], location);
+                    routeUri(UIApiCon.index, '', location);
                 },
             },
         },
@@ -39,7 +41,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 side: 'top' as const,
                 description: 'Or use the large search bar on the home page',
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -49,7 +51,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 side: 'left' as const,
                 description: 'You can search for:',
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                     const htmlDiv = document.createElement('div');
                     render(
                         <ul className={`${ClHtml.lis} ${Pad.N15}`}>
@@ -84,8 +86,8 @@ function crTour(driverTour: Driver): DriveStep[] {
                         <i>Eubacterium</i> in the StrainInfo
                         database.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, false, true, false);
-                    callSearch('Eubacterium');
+                    createButtons(driverTour, popover, [false, true, false], location);
+                    callSearch('Eubacterium', location);
                 },
             },
         },
@@ -97,7 +99,7 @@ function crTour(driverTour: Driver): DriveStep[] {
             all strains belonging to the searched genus or species.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     window.scrollTo(0, 0);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -108,7 +110,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `The table can be filtered using 
                                     the "search in table" input field.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -119,7 +121,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `The table can be sorted using the 
                 arrows in the table header.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -128,8 +130,8 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `Now let's continue with the strain page by searching the
             culture collection number 'DSM 20543'.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    callPass('34969', '134886', UIApiCon.index);
-                    createButtons(driverTour, popover, false, true, false);
+                    callPass('34969', '134886', UIApiCon.index, location);
+                    createButtons(driverTour, popover, [false, true, false], location);
                 },
             },
         },
@@ -139,7 +141,7 @@ function crTour(driverTour: Driver): DriveStep[] {
             all known deposits of the strain with deposit-specific information,
             sequence accessions, literature and the strain archive.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -149,7 +151,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `Basic information on the strain can be found on the 
             left side of the page header.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -160,7 +162,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `The right side lists further sources 
             with detailed information about the strain.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -172,7 +174,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 for the strain are decided by a majority voting algorithm on
                 the possibly conflicting deposit information.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -182,7 +184,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `Here you can also find the DOI for the whole strain.
                 By clicking on the DOI icon the full URL is copied to your clipboard.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -193,7 +195,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `As well as the current status of the whole strain.
                 Hover over the circle to get more information about the status.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -203,7 +205,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 side: 'top' as const,
                 description: 'Known deposits of the strain are represented as tiles.',
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -214,7 +216,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 description: `Details of the deposit tile highlighted in yellow are 
                 presented here.`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -226,7 +228,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 is generated here.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     window.scrollTo(0, 0);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -240,7 +242,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 of the deposit are displayed.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     window.scrollTo(0, 400);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -252,7 +254,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 in a searchable and sortable table.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     scrollToId(PassAncId.seq);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -264,7 +266,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 listed in a similar table.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     scrollToId(PassAncId.pub);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -277,7 +279,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 All versions are listed with their DOI, title and date of creation.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     scrollToId(PassAncId.arc);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -289,7 +291,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 strains can be referenced and cited. 
                 Which also significantly improves the traceability of such strains`,
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                 },
             },
         },
@@ -302,7 +304,7 @@ function crTour(driverTour: Driver): DriveStep[] {
                 of the same species or taxon name.`,
                 onPopoverRender: (popover: PopoverDOM) => {
                     window.scrollTo(0, 0);
-                    createButtons(driverTour, popover, true, true, false);
+                    createButtons(driverTour, popover, [true, true, false], location);
                     if (isNotWideScreen()) {
                         const htmlDiv = document.createElement('div');
                         render(<p>Sidebar is hidden on small screens.</p>, htmlDiv);
@@ -315,7 +317,7 @@ function crTour(driverTour: Driver): DriveStep[] {
             popover: {
                 description: 'We hope this tour was helpful to you.',
                 onPopoverRender: (popover: PopoverDOM) => {
-                    createButtons(driverTour, popover, true, false, true);
+                    createButtons(driverTour, popover, [true, false, true], location);
                 },
             },
         },
@@ -325,7 +327,7 @@ function MainTourVD(): JSX.Element {
     const desc = (
         <p>Here you can get more information about the Website and its functions.</p>
     );
-
+    const location = useLocation();
     if (isSmallScreen()) {
         return (
             <div>
@@ -346,9 +348,9 @@ function MainTourVD(): JSX.Element {
                     const tour = driver();
                     tour.setConfig({
                         ...TOUR_OPTIONS,
-                        steps: crTour(tour),
+                        steps: crTour(tour, location),
                         onCloseClick: () => {
-                            onClose(tour);
+                            onClose(tour, location);
                         },
                     });
                     tour.drive();

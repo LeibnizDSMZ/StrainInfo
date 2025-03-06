@@ -12,6 +12,7 @@ import { routeUri } from '@strinf/ts/functions/http/http';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import type { InValStInt } from '@strinf/ts/interfaces/dom/inp';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
+import { useLocation } from 'preact-iso';
 
 interface ErrorWrProps {
     errT: ErrType | undefined;
@@ -92,6 +93,7 @@ function Error503({ msgM, msgFM }: EProps): JSX.Element {
 }
 
 function ErrorWr({ errM, errFM, errT, ctx }: ErrorWrProps): JSX.Element | null {
+    const location = useLocation();
     if (ErrType.E404 === errT) {
         return <Error404 msgM={errM} msgFM={errFM} ctx={ctx} />;
     }
@@ -102,7 +104,7 @@ function ErrorWr({ errM, errFM, errT, ctx }: ErrorWrProps): JSX.Element | null {
         return <Error500 />;
     }
     setTimeout(() => {
-        routeUri(UIApiCon.index, UIApiCon.index);
+        routeUri(UIApiCon.index, UIApiCon.index, location);
     }, 100);
     return null;
 }

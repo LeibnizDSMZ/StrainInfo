@@ -8,7 +8,7 @@
         "d3-sankey": "^0.12",
         "highlight.js": "^11.11",
         "preact": "^10.25",
-        "preact-router": "^4.1",
+        "preact-iso": "^2.9",
         "rapidoc": "^9.3",
         "driver.js": "^1.3",
         "rehype-highlight": "^7.0",

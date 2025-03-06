@@ -1,4 +1,5 @@
 import type { JSX } from 'preact';
+import { memo } from 'preact/compat';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 import errSty from '@strinf/css/mods/error.module.css';
 
@@ -17,4 +18,4 @@ function PanicVD(): JSX.Element {
     );
 }
 
-export default PanicVD as (props: { path: string }) => JSX.Element;
+export default memo(PanicVD);
