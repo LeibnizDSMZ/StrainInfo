@@ -12,7 +12,7 @@ import linkSty from '@strinf/css/mods/link.module.css';
 import dropdown from '@strinf/css/mods/dropdown.module.css';
 import { routeUri } from '@strinf/ts/functions/http/http';
 import { addTagToInput } from '@strinf/ts/mvc/vdom/fun/sea/input';
-import type { LocationHook} from 'preact-iso';
+import type { LocationHook } from 'preact-iso';
 import { useLocation } from 'preact-iso';
 
 function clickEvent(

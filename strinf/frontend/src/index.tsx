@@ -35,7 +35,9 @@ function IndexBody(): JSX.Element {
         <body className={ClHtml.sideSM} {...SIDE_SMALL}>
             <LocationProvider>
                 <ErrorBoundary
-                    onError={(err) => { console.log('detected uncaught error', err.message); }}
+                    onError={(err) => {
+                        console.log('detected uncaught error', err.message);
+                    }}
                 >
                     <Helmet>
                         {pBE}

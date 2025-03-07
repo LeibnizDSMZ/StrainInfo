@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view_model\struct\parser\str\v2;
 
+use straininfo\server\exceptions\mvvm\view_model\KnownViewModelExc;
 use function straininfo\server\shared\arr\check_kt_arr_id;
 use function straininfo\server\shared\arr\check_kt_bool;
 use function straininfo\server\shared\arr\check_kt_f_str;
 use function straininfo\server\shared\arr\check_kt_int;
+use straininfo\server\shared\exc\KEAct;
+use straininfo\server\shared\logger\LogLevE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructTaxE;
 
@@ -40,6 +43,37 @@ function get_min_arr_tax(array $val): array
     ];
 }
 
+function throwableError(): KnownViewModelExc
+{
+    return new KnownViewModelExc(
+        'Unknown strain structure during counting - v2',
+        LogLevE::CRITICAL,
+        KEAct::TERM
+    );
+}
+
+/**
+ * @template TV
+ *
+ * @param array<string, TV> $strain
+ */
+function getDepositCount(array $strain): int
+{
+    $strain_con = $strain[StStrE::CON->value];
+    if (!is_array($strain_con) || !array_key_exists(StRelDepositE::REL_CON->value, $strain_con)) {
+        throw throwableError();
+    }
+    $rel = $strain_con[StRelDepositE::REL_CON->value];
+    if (!is_array($rel) || !array_key_exists(StRelDepositE::REL_DEP_CON->value, $rel)) {
+        throw throwableError();
+    }
+    $dep = $rel[StRelDepositE::REL_DEP_CON->value];
+    if (!is_array($dep)) {
+        throw throwableError();
+    }
+    return count($dep);
+}
+
 /**
  * @template TV
  *
@@ -54,9 +88,7 @@ function get_min_arr_str(array $val, array $strain): array
     $db = DBStructStrE::class;
     $type_cul = check_kt_int($val, $db::TYP_CUL->value);
     $cul_on = check_kt_int($val, $db::STR_STA_ON->value);
-    $cul_cnt = count(
-        $strain[StStrE::CON->value][StRelDepositE::REL_CON->value][StRelDepositE::REL_DEP_CON->value]
-    );
+    $cul_cnt = getDepositCount($strain);
     return [
         StStrE::CON->value => [
             StStrE::SI_ID->value => check_kt_int($val, $db::STRAIN_ID->value),
