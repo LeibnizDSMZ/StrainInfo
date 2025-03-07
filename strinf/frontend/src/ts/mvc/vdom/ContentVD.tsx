@@ -1,5 +1,6 @@
 import { Router, Route, lazy, useLocation } from 'preact-iso';
 import { useContext } from 'preact/hooks';
+import { memo } from 'preact/compat';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import type { BreadCrumbsG } from '@strinf/ts/interfaces/dom/global';
 import { trackPageV } from '@strinf/ts/mvc/vdom/fun/mat/track';
@@ -7,6 +8,7 @@ import defaultRouteBeh from '@strinf/ts/mvc/vdom/fun/route/default';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import Redirect from '@strinf/ts/mvc/vdom/fun/route/Redirect';
 import type { JSX } from 'preact';
+import { routeUri } from '@strinf/ts/functions/http/http';
 
 const INDEX_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/IndexVD'));
 const CONTACT_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ContactVD'));
@@ -41,9 +43,24 @@ function onRouteChange(path: string): void {
     }
 }
 
-function ContentVD({ panic }: { panic: boolean }): JSX.Element | null {
+function ContentVD({
+    panic,
+    error,
+    disable,
+}: {
+    panic: boolean;
+    error: () => boolean;
+    disable: () => void;
+}): JSX.Element | null {
     const ctx: BreadCrumbsG | undefined = useContext(MainConGl);
     const location = useLocation();
+    if (error() && !location.path.startsWith(UIApiCon.error)) {
+        routeUri(UIApiCon.error, '', location);
+        return null;
+    }
+    if (error() && location.path.startsWith(UIApiCon.error)) {
+        disable();
+    }
     if (ctx === undefined) {
         return null;
     }
@@ -70,9 +87,9 @@ function ContentVD({ panic }: { panic: boolean }): JSX.Element | null {
             <Route path={UIApiCon.manual} component={DOCS_VD} />
             <Route path={UIApiCon.imprint} component={IMP_VD} />
             <Route path={UIApiCon.service} component={API_VD} />
-            <Route path="/:path*" component={EMPTY_VD} />
+            <Route default component={EMPTY_VD} />
         </Router>
     );
 }
 
-export default ContentVD;
+export default memo(ContentVD);

@@ -41,6 +41,6 @@ function NewsM(): JSX.Element {
     );
 }
 
-const NewsVD = memo<(props: { path: string }) => JSX.Element>(NewsM);
+const NewsVD = memo(NewsM);
 
 export default NewsVD;

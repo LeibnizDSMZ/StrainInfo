@@ -8,8 +8,6 @@ import GlState, { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import ErrType from '@strinf/ts/constants/type/ErrT';
 import crAlert from '@strinf/ts/mvc/vdom/fun/alert/alert';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
-import { routeUri } from '@strinf/ts/functions/http/http';
-import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import { getActiveWrapperCookies } from '@strinf/ts/functions/cookie/acc';
 import getServerStatus from '@strinf/ts/functions/api/status';
 import Known503Error from '@strinf/ts/errors/known/503';
@@ -20,7 +18,6 @@ import type { TT_GL_TYPE } from '@strinf/ts/interfaces/dom/tooltip';
 import type { ServerStatusInt } from '@strinf/ts/interfaces/api/maped';
 import CONFIG from '@strinf/ts/configs/config';
 import initMat from '@strinf/ts/mvc/vdom/fun/mat/init';
-import type { LocationHook } from 'preact-iso';
 
 type OnErrorArg = [
     Event | string,
@@ -30,10 +27,10 @@ type OnErrorArg = [
     Error | undefined,
 ];
 
-interface LOC_PROP {
-    location: LocationHook;
-}
-class MainVD extends Component<LOC_PROP, { panic: boolean }> {
+class MainVD extends Component<
+    Record<string, never>,
+    { panic: boolean; showErrCnt: number }
+> {
     private errCr: boolean;
 
     private seaVGl: string;
@@ -44,15 +41,11 @@ class MainVD extends Component<LOC_PROP, { panic: boolean }> {
 
     private readonly stat: JSX.Element | null;
 
-    private readonly location: LocationHook;
-
-    constructor(props: LOC_PROP) {
+    constructor(props: Record<string, never>) {
         super(props);
-        const { location } = props;
-        this.location = location;
         this.stat = initMat(CONFIG.statistic);
         this.errCr = false;
-        this.state = { panic: false };
+        this.state = { panic: false, showErrCnt: 0 };
         this.seaVGl = '';
         this.wrapper = createRef<HTMLDivElement>();
         this.glStateCon = this.createGlState();
@@ -93,12 +86,8 @@ class MainVD extends Component<LOC_PROP, { panic: boolean }> {
             crAlert(this.glStateCon.errT, this.glStateCon.errS[1]);
         }
         if (this.errCr) {
-            const errM = this.glStateCon.errS[0].replace(/\s/g, '_');
-            routeUri(
-                `${UIApiCon.error}?${this.glStateCon.errT}=${errM}`,
-                UIApiCon.index,
-                this.location
-            );
+            const { panic, showErrCnt } = this.state;
+            this.setState({ panic, showErrCnt: (showErrCnt % 10) + 1 });
         }
     }
 
@@ -195,7 +184,11 @@ class MainVD extends Component<LOC_PROP, { panic: boolean }> {
                     >
                         <HeadVD />
                         <div className={ClHtml.cntWr}>
-                            <ContentVD panic={panic} />
+                            <ContentVD
+                                panic={panic}
+                                error={() => this.errCr}
+                                disable={() => (this.errCr = false)}
+                            />
                             <FootVD />
                         </div>
                     </div>

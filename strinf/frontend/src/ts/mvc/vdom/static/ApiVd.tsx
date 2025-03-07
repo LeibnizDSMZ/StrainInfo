@@ -381,7 +381,7 @@ function RapDoc({
 
 const RapDocM = memo(RapDoc);
 
-function ApiVD() {
+function ApiVD(): JSX.Element {
     const [spec, setSpec] = useState<[unknown, string] | undefined>();
     const [dys, setDys] = useState<boolean>(isDyslexiaSet());
     const [anc, setAnc] = useState<AncT | undefined>();
@@ -426,4 +426,4 @@ function ApiVD() {
         </>
     );
 }
-export default ApiVD as (props: { path: string }) => JSX.Element;
+export default ApiVD;

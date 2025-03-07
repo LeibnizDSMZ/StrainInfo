@@ -121,4 +121,4 @@ function ErrorVD(): JSX.Element | null {
     );
 }
 
-export default ErrorVD as (props: { path: string }) => JSX.Element | null;
+export default ErrorVD;

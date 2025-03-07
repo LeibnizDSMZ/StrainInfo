@@ -178,6 +178,6 @@ function Docs(): JSX.Element {
     );
 }
 
-const DocsVD = memo<(props: { path: string }) => JSX.Element>(Docs);
+const DocsVD = memo(Docs);
 
 export default DocsVD;

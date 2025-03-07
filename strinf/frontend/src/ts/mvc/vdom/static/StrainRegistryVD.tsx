@@ -30,6 +30,6 @@ function StrRegM(): JSX.Element {
     );
 }
 
-const StrainRegistryVD = memo<(props: { path: string }) => JSX.Element>(StrRegM);
+const StrainRegistryVD = memo(StrRegM);
 
 export default StrainRegistryVD;

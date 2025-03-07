@@ -135,6 +135,6 @@ function Contact(): JSX.Element {
     );
 }
 
-const ContactVD = memo<(props: { path: string }) => JSX.Element>(Contact);
+const ContactVD = memo(Contact);
 
 export default ContactVD;

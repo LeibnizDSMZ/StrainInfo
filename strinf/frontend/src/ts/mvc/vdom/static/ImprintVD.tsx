@@ -69,6 +69,6 @@ function ImprintAll(): JSX.Element {
     );
 }
 
-const ImprintVD = memo<(props: { path: string }) => JSX.Element>(ImprintAll);
+const ImprintVD = memo(ImprintAll);
 
 export default ImprintVD;
