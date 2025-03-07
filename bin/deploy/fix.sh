@@ -55,6 +55,6 @@ if [ ! "$(ls -A "$ROOT/$EXTRA_ASSETS")" ] &&
     rm -rf "${ROOT:?}/$EXTRA_ASSETS/strinfassets-main"
     rm -f "${ROOT:?}/$EXTRA_ASSETS/out.tar.gz"
 fi
-echo "{\"name\": \"@extra/straininfo\",\"private\": true,\"author\": \"Artur Lissin\",\"version\": \"0.0.0\"}" >"$ROOT/$EXTRA_ASSETS/package.json"
+echo "{\"name\": \"@extra/straininfo\",\"private\": true,\"license\": \"UNLICENSED\",\"author\": \"Artur Lissin\",\"version\": \"0.0.0\"}" >"$ROOT/$EXTRA_ASSETS/package.json"
 
 echo "preparation finished"
