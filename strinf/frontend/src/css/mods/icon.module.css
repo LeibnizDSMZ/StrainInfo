@@ -19,30 +19,16 @@
     margin-left: 0.3em;
 }
 
-.circle22 {
-    height: 22px !important;
-    width: 22px !important;
-    min-width: 22px !important;
-    min-height: 22px !important;
-    background-color: var(--color-gray-20);
-    border-radius: 50% !important;
-    content: '';
-}
-
-.circle22:hover {
-    border: 1px solid var(--color-gray-80) !important;
-}
-
 .stpub {
-    background-color: #0072b2;
+    color: var(--color-logo-green);
 }
 
 .stdep {
-    background-color: #f0e442;
+    color: var(--color-warm-yellow);
 }
 
 .stina {
-    background-color: #d55e00;
+    color: var(--color-warm-red);
 }
 
 .load i {

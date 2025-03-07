@@ -30,11 +30,11 @@ interface StatusProps {
 }
 
 const HEAD = getOVTuple();
-type EleT = number | boolean | string;
+type EleT = number | boolean | string | string[] | JSX.Element;
 
 function modBacDive(
     filH: (string | JSX.Element)[],
-    filD: (EleT | JSX.Element)[],
+    filD: EleT[],
     bacDive: number | undefined
 ): void {
     const hid = filH.indexOf(HEAD[3] ?? '');
@@ -45,7 +45,7 @@ function modBacDive(
 
 function modArchive(
     filH: (string | JSX.Element)[],
-    filD: (EleT | JSX.Element)[],
+    filD: EleT[],
     doi: string,
     hook: ToolTipHookInt<TT_GL_TYPE>
 ): void {
@@ -63,7 +63,7 @@ function modArchive(
 
 function modName(
     filH: (string | JSX.Element)[],
-    filD: (EleT | JSX.Element)[],
+    filD: EleT[],
     taxon: [string, number | undefined, number | undefined]
 ): void {
     const [name, lpsnId, ncbiId] = taxon;
@@ -145,10 +145,7 @@ function OverviewVD({ res, dCtrl, rel }: ResProps): JSX.Element | null {
         return null;
     }
     const dataF: EleT[] = [...res.slice(0, 2), res[2][0], ...res.slice(3)] as EleT[];
-    const filD: [(string | JSX.Element)[], (EleT | JSX.Element)[]] = filterArrStr(
-        HEAD,
-        dataF
-    );
+    const filD = filterArrStr(HEAD, dataF);
     modName(filD[0], filD[1], res[2]);
     modBacDive(filD[0], filD[1], res[3]);
     modArchive(filD[0], filD[1], res[4], ttHook);
@@ -156,7 +153,7 @@ function OverviewVD({ res, dCtrl, rel }: ResProps): JSX.Element | null {
     if (res[3] !== undefined) {
         extraCl.splice(filD[1].length - 1, 1, `${Mar.lNAT} ${Dis.dNone} ${Dis.dBM}`);
     }
-    const resTit = createStrainTitleBar<EleT | JSX.Element>(...filD, extraCl);
+    const resTit = createStrainTitleBar(...filD, extraCl);
     if (resTit.length === 0) {
         return null;
     }

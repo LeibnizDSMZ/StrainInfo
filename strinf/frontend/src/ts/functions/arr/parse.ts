@@ -1,4 +1,6 @@
-type EleT = number | boolean | string | string[];
+import type { JSX } from 'preact/jsx-runtime';
+
+type EleT = number | boolean | string | string[] | JSX.Element;
 
 function isEmptyStr(val: unknown): boolean {
     if (val === undefined) {
@@ -46,9 +48,7 @@ function filterArrRowStr<T>(vals: T[], chI: number[]): T[] {
         .slice()
         .filter(
             (elV) =>
-                elV !== undefined &&
-                Array.isArray(elV) &&
-                containsArrNoEmptyStr<T>(elV, chI)
+                elV !== undefined && Array.isArray(elV) && containsArrNoEmptyStr(elV, chI)
         );
 }
 

@@ -11,7 +11,7 @@ import type { TT_GL_TYPE, ToolTipHookInt } from '@strinf/ts/interfaces/dom/toolt
 import IdHtmlTour from '@strinf/ts/constants/tour/IdHtml';
 import StrainStatus from '@strinf/ts/constants/api/data';
 import type { JSX } from 'preact';
-
+import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
 interface TTProps {
     hook: ToolTipHookInt<TT_GL_TYPE>;
     id: StrainStatus;
@@ -134,15 +134,14 @@ function crStatusText(id: StrainStatus): string {
     }
 }
 
-function crStatusIcon(id: StrainStatus): string {
-    const defCl = icoSty.circle22;
+function crStatusIcon(id: StrainStatus): JSX.Element {
     switch (id) {
         case StrainStatus.pubOn:
-            return `${defCl} ${icoSty.stpub}`;
+            return <i className={`${ClHtmlI.depOn} ${icoSty.stpub}`} />;
         case StrainStatus.dep:
-            return `${defCl} ${icoSty.stdep}`;
+            return <i className={`${ClHtmlI.undDep} ${icoSty.stdep}`} />;
         default:
-            return `${defCl} ${icoSty.stina}`;
+            return <i className={`${ClHtmlI.depOff} ${icoSty.stina}`} />;
     }
 }
 
@@ -156,7 +155,9 @@ function TooltipVD({ hook, id, cla }: TTProps): JSX.Element {
             <TooltipWrapper
                 key={lKey}
                 chi={
-                    <div ref={lightR} className={`${Wid.N25} ${crStatusIcon(id)}`}></div>
+                    <div ref={lightR} className={Wid.N25}>
+                        {crStatusIcon(id)}
+                    </div>
                 }
                 srcH={localH}
                 upD={() => {
