@@ -7,7 +7,6 @@ import type { BreadCrumbsG } from '@strinf/ts/interfaces/dom/global';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 
 import { getFormSelValue } from '@strinf/ts/functions/types/html';
-import { crEmptyContCon } from '@strinf/ts/mvc/vdom/fun/content/content';
 
 import CInfo from '@strinf/md/contact/info.mdx';
 import HeadT from '@strinf/ts/constants/type/HeadT';
@@ -115,7 +114,7 @@ ContactWr.defaultProps = {
     children: [],
 };
 
-function Contact(): JSX.Element {
+function Contact(): JSX.Element | null {
     const ctx: BreadCrumbsG | undefined = useContext(MainConGl);
     if (ctx?.bread !== undefined) {
         ctx.bread.map((actF) => {
@@ -123,7 +122,7 @@ function Contact(): JSX.Element {
         });
     }
     if (ctx === undefined) {
-        return crEmptyContCon();
+        return null;
     }
     const WR = CInfo as (props: { mail: string }) => JSX.Element;
     return (

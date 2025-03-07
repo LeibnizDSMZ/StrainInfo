@@ -1,6 +1,6 @@
 {
     "name": "StrainInfo",
-    "version": "2025.02.1",
+    "version": "2025.02.2",
     "description": "StrainInfo is a service developed to provide a resolution of microbial strain identifiers by storing culture collection numbers, their relations, and deposition data.",
     "private": true,
     "workspaces": [

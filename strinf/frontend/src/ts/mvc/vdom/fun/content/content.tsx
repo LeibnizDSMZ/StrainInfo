@@ -27,8 +27,4 @@ function wrapSectionGen(anc: string, head: string, cont: JSX.Element): JSX.Eleme
     );
 }
 
-function crEmptyContCon(): JSX.Element {
-    return <div className={`${ClHtml.cntCon} ${Pad.bN0}`} />;
-}
-
-export { ContentContainer, Container, wrapSectionGen, crEmptyContCon };
+export { ContentContainer, Container, wrapSectionGen };

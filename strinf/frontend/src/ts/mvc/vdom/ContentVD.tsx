@@ -1,5 +1,5 @@
 import { Router, Route, lazy, useLocation } from 'preact-iso';
-import { useContext } from 'preact/hooks';
+import { useContext, useRef } from 'preact/hooks';
 import { memo } from 'preact/compat';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import type { BreadCrumbsG } from '@strinf/ts/interfaces/dom/global';
@@ -9,6 +9,7 @@ import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import Redirect from '@strinf/ts/mvc/vdom/fun/route/Redirect';
 import type { JSX } from 'preact';
 import { routeUri } from '@strinf/ts/functions/http/http';
+import { ClHtml, Pad } from '@strinf/ts/constants/style/ClHtml';
 
 const INDEX_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/IndexVD'));
 const CONTACT_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ContactVD'));
@@ -54,6 +55,7 @@ function ContentVD({
 }): JSX.Element | null {
     const ctx: BreadCrumbsG | undefined = useContext(MainConGl);
     const location = useLocation();
+    const ref = useRef<HTMLDivElement>(null);
     if (error() && !location.path.startsWith(UIApiCon.error)) {
         routeUri(UIApiCon.error, '', location);
         return null;
@@ -68,27 +70,40 @@ function ContentVD({
         return <PANIC_VD />;
     }
     return (
-        <Router
-            onRouteChange={(path) => {
-                onRouteChange(path);
-            }}
-        >
-            <Route path={UIApiCon.error} component={ERROR_VD} />
-            <Route path={UIApiCon.index} component={INDEX_VD} />
-            <Route path={UIApiCon.indexFull} to={UIApiCon.index} component={Redirect} />
-            <Route path={UIApiCon.search} component={SEA_VD} location={location} />
-            <Route path={UIApiCon.pass} component={SEA_VD} location={location} />
-            <Route path={PATH_STRAIN} component={PASS_VD} location={location} />
-            <Route path={UIApiCon.about} component={ABOUT_PVD} />
-            <Route path={UIApiCon.contact} component={CONTACT_VD} />
-            <Route path={UIApiCon.team} component={TEAM_VD} />
-            <Route path={UIApiCon.strReg} component={STR_REG_VD} />
-            <Route path={UIApiCon.news} component={NEWS_VD} />
-            <Route path={UIApiCon.manual} component={DOCS_VD} />
-            <Route path={UIApiCon.imprint} component={IMP_VD} />
-            <Route path={UIApiCon.service} component={API_VD} />
-            <Route default component={EMPTY_VD} />
-        </Router>
+        <>
+            <Router
+                onRouteChange={(path) => {
+                    onRouteChange(path);
+                }}
+                onLoadEnd={() => {
+                    const cur_div = ref.current;
+                    if (cur_div != null) {
+                        cur_div.classList.remove(ClHtml.cntCon);
+                    }
+                }}
+            >
+                <Route path={UIApiCon.error} component={ERROR_VD} />
+                <Route path={UIApiCon.index} component={INDEX_VD} />
+                <Route
+                    path={UIApiCon.indexFull}
+                    to={UIApiCon.index}
+                    component={Redirect}
+                />
+                <Route path={UIApiCon.search} component={SEA_VD} location={location} />
+                <Route path={UIApiCon.pass} component={SEA_VD} location={location} />
+                <Route path={PATH_STRAIN} component={PASS_VD} location={location} />
+                <Route path={UIApiCon.about} component={ABOUT_PVD} />
+                <Route path={UIApiCon.contact} component={CONTACT_VD} />
+                <Route path={UIApiCon.team} component={TEAM_VD} />
+                <Route path={UIApiCon.strReg} component={STR_REG_VD} />
+                <Route path={UIApiCon.news} component={NEWS_VD} />
+                <Route path={UIApiCon.manual} component={DOCS_VD} />
+                <Route path={UIApiCon.imprint} component={IMP_VD} />
+                <Route path={UIApiCon.service} component={API_VD} />
+                <Route default component={EMPTY_VD} />
+            </Router>
+            {<div ref={ref} className={`${ClHtml.cntCon} ${Pad.bN0}`} />}
+        </>
     );
 }
 
