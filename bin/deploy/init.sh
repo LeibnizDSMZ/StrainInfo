@@ -16,7 +16,7 @@ if [[ 'true' = "$FIX_CONFIG" && -f "$ROOT/$CONFIG_STRINF" ]]; then
     echo "running port fix for stage"
     python3 -c 'import json,sys;fr=open(sys.argv[1], "r");dat=json.load(fr);fr.close();fw=open(sys.argv[1], "w");json.dump(dat, fw);fw.close();' "$ROOT/$CONFIG_STRINF"
 
-    sed -i -E "s/(\"frontend\"\\s*:\\s*\\{[^{]*\"web\"\\s*:\\s*\\{[^{]*\"port\"\\s*:)\\s*[0-9]+/\\1 8080/g" "$ROOT/$CONFIG_STRINF"
+    sed -i -E "s/(\"frontend\"\\s*:\\s*\\{[^{]*\"web\"\\s*:\\s*\\{[^{]*\"port\"\\s*:)\\s*[0-9]+/\\1 9002/g" "$ROOT/$CONFIG_STRINF"
     sed -i -E "s/(\"backend\"\\s*:\\s*\\{[^{]*\"web\"\\s*:\\s*\\{[^{]*\"port\"\\s*:)\\s*[0-9]+/\\1 3030/g" "$ROOT/$CONFIG_STRINF"
 fi
 

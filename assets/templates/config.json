@@ -45,7 +45,7 @@
         "web": {
             "domain": "localhost",
             "protocol": "http",
-            "port": 8080,
+            "port": 9002,
             "sitemap": "web-sitemap.xml"
         },
         "statistic": {
@@ -63,9 +63,9 @@
         "web": {
             "domain": "localhost",
             "protocol": "http",
-            "port": 3030,
+            "port": 3002,
             "cors": ["*"],
-            "private": ["localhost:3030"]
+            "private": ["localhost:3002"]
         },
         "statistic": {
             "enable": false,
