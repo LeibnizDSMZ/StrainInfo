@@ -5,12 +5,9 @@ function initF(url: string, id: string): void {
     window._paq.push(['setTrackerUrl', `${url}matomo.php`]);
     window._paq.push(['setSiteId', id]);
     const fId = 'matomo_main_script';
-    const nonce: unknown = window[import.meta.env.VITE_NONCE_NAME];
     document.querySelector(`#${fId}`)?.remove();
     const script = document.createElement('script');
-    if (typeof nonce === 'string') {
-        script.setAttribute('nonce', nonce);
-    }
+    script.setAttribute('nonce', `${import.meta.env.VITE_NONCE_NAME}`);
     script.setAttribute('id', fId);
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', `${url}matomo.js`);
