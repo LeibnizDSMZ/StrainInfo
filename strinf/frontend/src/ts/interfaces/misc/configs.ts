@@ -29,7 +29,7 @@ type ConfLinkT = z_infer<typeof ConfLink>;
 const Stats = strictObject({
     enable: boolean(),
     matomo: ConfLink,
-    domain: array(string().check(minLength(1))),
+    domain: array(string()),
     id: number().check(),
 });
 
