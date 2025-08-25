@@ -101,10 +101,6 @@ abstract class DBSCtrl
         } else {
             $response->getBody()->write($json);
         }
-        $response = $response->withHeader(
-            'Content-Type',
-            'application/json'
-        );
         $this->track($request, $origin);
         return add_default_headers(
             $response,
@@ -112,7 +108,8 @@ abstract class DBSCtrl
                 $origin,
                 $this->cors,
                 $this->charset,
-                $embeddable
+                $embeddable,
+                'application/json'
             )
         );
     }

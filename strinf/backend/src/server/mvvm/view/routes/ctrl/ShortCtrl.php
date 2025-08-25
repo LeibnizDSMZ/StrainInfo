@@ -13,10 +13,13 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 
 final class ShortCtrl
 {
+    private readonly string $charset;
     private readonly Psr17Factory $psr17Factory;
 
-    public function __construct()
+    public function __construct(
+        string $charset)
     {
+        $this->charset = $charset;
         $this->psr17Factory = new Psr17Factory();
     }
 
@@ -40,7 +43,7 @@ final class ShortCtrl
         }
         $newResp = $newResp->withHeader(
             'Content-Type',
-            'text/plain'
+            'text/plain; ' . $this->charset
         );
         $newResp->getBody()->write($bodyShort);
         return $newResp;

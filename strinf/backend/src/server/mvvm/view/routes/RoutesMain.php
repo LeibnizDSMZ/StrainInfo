@@ -161,7 +161,7 @@ final class RoutesMain
 
     private function getShortCtrl(): ShortCtrl
     {
-        $this->s_ctrl ??= new ShortCtrl();
+        $this->s_ctrl ??= new ShortCtrl($this->getWebArgs()->getCharSet());
         return $this->s_ctrl;
     }
 

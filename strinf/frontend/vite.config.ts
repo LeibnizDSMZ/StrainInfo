@@ -522,6 +522,9 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
         ...createBuild(),
         ...server,
         ...preview,
+        define: {
+            'import.meta.env.VITE_NONCE_NAME': JSON.stringify(getNonceSub()),
+        },
     };
     return config;
 });

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view;
 
-use Psr\Http\Message\ResponseInterface;
 use straininfo\server\configs\Config;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @param array<string> $origin
@@ -21,28 +21,16 @@ function contained_in_origin(array $origin, array $to_check): bool
     return false;
 }
 
-function cspHeader(): string
-{
-    return implode(
-        ';',
-        [
-            "img-src 'self'",
-            "object-src 'none'",
-            "style-src 'none'",
-            "default-src 'none'",
-        ]
-    );
-}
 
 function add_default_headers(
     ResponseInterface $response,
     HeadArgs $hArgs
 ): ResponseInterface {
-    $response = $response->withHeader('Encoding', $hArgs->getCharS());
-    $response = $response->withHeader('Cache-Control', '"no-store";');
+    $response = $response->withHeader('Content-Type', $hArgs->getContentType() ."; charset=".$hArgs->getCharS());
+    $response = $response->withHeader('Cache-Control', 'no-store');
     if (Config::isProductionBuild()) {
-        $response = $response->withHeader('Content-Security-Policy', cspHeader());
-        $response = $response->withHeader('Strict-Transport-Security', '"max-age=31536000; includeSubDomains; preload" always');
+        $response = $response->withHeader('X-Content-Type-Options', 'nosniff');
+        $response = $response->withHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
     }
     if ($hArgs->isEmbeddable()) {
         return $response->withHeader('Access-Control-Allow-Origin', '*');

@@ -14,7 +14,8 @@ final class HeadArgs
         private readonly array $origin,
         private readonly array $cors,
         private readonly string $charset,
-        private readonly bool $embeddable
+        private readonly bool $embeddable,
+        private readonly string $contype
     ) {
     }
 
@@ -38,5 +39,10 @@ final class HeadArgs
     public function isEmbeddable(): bool
     {
         return $this->embeddable;
+    }
+
+    public function getContentType(): string
+    {
+        return $this->contype;
     }
 }

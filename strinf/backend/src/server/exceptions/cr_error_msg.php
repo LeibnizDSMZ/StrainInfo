@@ -6,13 +6,13 @@ namespace straininfo\server\exceptions;
 
 use Safe\Exceptions\OutcontrolException;
 use Safe\Exceptions\SimplexmlException;
-use function Safe\json_encode;
+use straininfo\server\configs\Config;
 
+use function Safe\json_encode;
 use function Safe\ob_clean;
 use function Safe\ob_end_flush;
 use function Safe\ob_start;
 use function Safe\simplexml_load_string;
-use straininfo\server\configs\Config;
 
 function print_msg_500(bool $over): void
 {
@@ -38,15 +38,12 @@ function clean_buf(string $message, int $type): void
     http_response_code($type);
     if (Config::isProductionBuild()) {
         header(
-            'Strict-Transport-Security: "max-age=31536000;'
-            . 'includeSubDomains; preload" always'
+            'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload'
         );
-        header('Content-Type: application/json');
     }
     header('Access-Control-Allow-Origin: *');
-    header('Cache-Control: "no-store"');
-    header('Encoding: UTF-8');
-    header('Content-Type: application/json');
+    header('Cache-Control: no-store');
+    header('Content-Type: application/json; charset=UTF-8');
     echo create_error_json($msg, $type);
     ob_end_flush();
 }

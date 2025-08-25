@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl;
 
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use function straininfo\server\exceptions\create_error_json;
-
-use function straininfo\server\shared\mvvm\view\add_default_headers;
 use straininfo\server\shared\mvvm\view\HeadArgs;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+use function straininfo\server\exceptions\create_error_json;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+use Psr\Http\Message\ResponseInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 final class MaintainCtrl
 {
@@ -50,10 +50,6 @@ final class MaintainCtrl
                 $zone = $this->zone->getName();
                 $info = "time: {$time} - zone: {$zone}";
             }
-            $response = $response->withHeader(
-                'Content-Type',
-                'application/json'
-            );
             $response->getBody()->write(create_error_json(
                 'Site is under construction!',
                 503,
@@ -66,7 +62,8 @@ final class MaintainCtrl
                     $request->getHeader('Origin'),
                     $this->cors,
                     $this->charset,
-                    false
+                    false,
+                    "application/json"
                 )
             );
         }

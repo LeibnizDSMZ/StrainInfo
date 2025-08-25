@@ -68,10 +68,6 @@ final class CusErrCtrl extends ErrorHandler
             HttpForbiddenException::class => $this->err403,
             default => $this->err500,
         };
-        $response = $response->withHeader(
-            'Content-Type',
-            'application/json'
-        );
         $response->getBody()->write(create_error_json($message, $error_code));
         $response = $response->withStatus($error_code);
         if ($exception instanceof HttpMethodNotAllowedException) {
@@ -86,7 +82,7 @@ final class CusErrCtrl extends ErrorHandler
                 $request->getHeader('Origin'),
                 $this->cors,
                 $this->charset,
-                false
+                false, 'application/json'
             )
         );
     }

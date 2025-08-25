@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use straininfo\server\shared\mvvm\view\HeadArgs;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
 use function Safe\json_encode;
 
-use function straininfo\server\shared\mvvm\view\add_default_headers;
-use straininfo\server\shared\mvvm\view\HeadArgs;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 final class RootCtrl
 {
@@ -50,17 +50,14 @@ final class RootCtrl
             'maintenance' => $this->createMaintenanceNotice(),
             'version' => $this->version,
         ]));
-        $response = $response->withHeader(
-            'Content-Type',
-            'application/json'
-        );
         return add_default_headers(
             $response,
             new HeadArgs(
                 $request->getHeader('Origin'),
                 [],
                 $this->charset,
-                true
+                true,
+                'application/json'
             )
         );
     }
