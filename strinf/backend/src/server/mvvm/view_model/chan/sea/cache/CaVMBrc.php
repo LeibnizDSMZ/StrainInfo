@@ -18,10 +18,7 @@ final class CaVMBrc extends CaVMChanSea
      */
     public function getResult(array $arg): QDConSea
     {
-        $brc = array_filter(
-            $this->getMChan()->getBrc($arg),
-            static fn (string $val): bool => $val !== ''
-        );
+        $brc = $this->getMChan()->getBrc($arg);
         return new QDConSea(array_diff($arg, array_keys($brc)), $brc);
     }
 

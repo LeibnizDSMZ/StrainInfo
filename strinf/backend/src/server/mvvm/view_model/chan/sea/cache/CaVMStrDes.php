@@ -18,10 +18,7 @@ final class CaVMStrDes extends CaVMChanSea
      */
     public function getResult(array $arg): QDConSea
     {
-        $str_des = array_filter(
-            $this->getMChan()->getStrDes($arg),
-            static fn (string $val): bool => $val !== ''
-        );
+        $str_des =$this->getMChan()->getStrDes($arg);
         return new QDConSea(array_diff($arg, array_keys($str_des)), $str_des);
     }
 

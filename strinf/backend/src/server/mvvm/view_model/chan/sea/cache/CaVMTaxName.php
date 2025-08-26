@@ -18,10 +18,7 @@ final class CaVMTaxName extends CaVMChanSea
      */
     public function getResult(array $arg): QDConSea
     {
-        $name = array_filter(
-            $this->getMChan()->getTaxName($arg),
-            static fn (string $val): bool => $val !== ''
-        );
+        $name = $this->getMChan()->getTaxName($arg);
         return new QDConSea(array_diff($arg, array_keys($name)), $name);
     }
 

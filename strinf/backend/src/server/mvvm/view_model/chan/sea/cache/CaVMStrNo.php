@@ -18,10 +18,7 @@ final class CaVMStrNo extends CaVMChanSea
      */
     public function getResult(array $arg): QDConSea
     {
-        $name = \array_filter(
-            $this->getMChan()->getStrNo($arg),
-            static fn (string $val): bool => $val !== ''
-        );
+        $name =$this->getMChan()->getStrNo($arg);
         return new QDConSea(array_diff($arg, array_keys($name)), $name);
     }
 
