@@ -30,6 +30,18 @@ final class CaVMTaxName extends CaVMChanSea
     {
         if ($sea_con->getToBuf()) {
             $this->getMSetChan()->setTaxName($sea_con->getToBuf());
+        }elseif (count($sea_con->getMisIds()) > 0) {
+            $this->getMSetChan()->setTaxName(
+                array_merge(...array_map(
+                    static function($sid) {
+                        return [
+                            $sid=> []
+                        ];
+                    },
+                    array_filter($sea_con->getMisIds(), static function($seaId) {
+                    return strlen($seaId) < 32;
+                })))
+            );
         }
     }
 }

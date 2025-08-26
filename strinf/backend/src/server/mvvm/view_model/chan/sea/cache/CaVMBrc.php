@@ -20,7 +20,7 @@ final class CaVMBrc extends CaVMChanSea
     {
         $brc = array_filter(
             $this->getMChan()->getBrc($arg),
-            static fn (string $val): bool => $val !== '',
+            static fn (string $val): bool => $val !== ''
         );
         return new QDConSea(array_diff($arg, array_keys($brc)), $brc);
     }
@@ -30,6 +30,19 @@ final class CaVMBrc extends CaVMChanSea
     {
         if ($sea_con->getToBuf()) {
             $this->getMSetChan()->setBrc($sea_con->getToBuf());
+        } elseif (count($sea_con->getMisIds()) > 0) {
+            $this->getMSetChan()->setBrc(
+                array_merge(...array_map(
+                    static function ($sid) {
+                        return [
+                            $sid => [],
+                        ];
+                    },
+                    array_filter($sea_con->getMisIds(), static function ($seaId) {
+                        return strlen($seaId) < 16;
+                    })
+                ))
+            );
         }
     }
 }
