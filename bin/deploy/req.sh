@@ -14,9 +14,9 @@ dnf -y remove php
 dnf -y remove php*
 dnf -y module reset php
 dnf -y module enable php:remi-8.4
-dnf -y install php-cli
+dnf -y install php-cli php-common 
 # extensions
-dnf -y install php-opcache php-zip php-intl \
+dnf -y install php-opcache php-zip php-intl php-pecl-msgpack php-pecl-igbinary \
     php-bcmath php-json php-mbstring php-simplexml php-dom \
     php-pdo php-mysqlnd php-pdo_mysql php-curl php-ctype php-redis
 echo "php installed"
