@@ -33,6 +33,8 @@ class MainVD extends Component<
 
     private seaVGl: string;
 
+    private lastAlert: string;
+
     private readonly glStateCon: GlStInt<TT_GL_TYPE>;
 
     private readonly wrapper: RefObject<HTMLDivElement>;
@@ -40,6 +42,7 @@ class MainVD extends Component<
     constructor(props: Record<string, never>) {
         super(props);
         initMat(CONFIG.statistic);
+        this.lastAlert = '';
         this.errCr = false;
         this.state = { panic: false, showErrCnt: 0 };
         this.seaVGl = '';
@@ -52,28 +55,37 @@ class MainVD extends Component<
                 this.onError();
             }
         };
-        const onErr = () => {
-            this.setState({ panic: true });
-        };
         const sig = { signal: AbortSignal.timeout(60000) };
         this.errHandler();
-        getServerStatus(sta, onErr, sig);
+        getServerStatus(
+            sta,
+            () => {
+                this.glStateCon.errTSet(ErrType.E500);
+                this.errCr = true;
+                this.onError(true);
+            },
+            sig,
+        );
     }
 
     public override componentDidMount(): void {
         reInitCStyle();
     }
 
-    public onError(): void {
-        if (
-            this.glStateCon.errT !== undefined
-            && [ErrType.INWARN, ErrType.FEWARN, ErrType.E404].includes(this.glStateCon.errT)
-        ) {
+    public onError(toPanic: boolean = false): void {
+        const alert
+            = this.glStateCon.errT !== undefined
+                && [ErrType.INWARN, ErrType.FEWARN, ErrType.E404].includes(
+                    this.glStateCon.errT,
+                )
+                && this.glStateCon.errS[1] !== this.lastAlert;
+        if (alert) {
+            this.lastAlert = this.glStateCon.errS[1];
             crAlert(this.glStateCon.errT, this.glStateCon.errS[1]);
         }
         if (this.errCr) {
             const { panic, showErrCnt } = this.state;
-            this.setState({ panic, showErrCnt: (showErrCnt % 10) + 1 });
+            this.setState({ panic: panic || toPanic, showErrCnt: (showErrCnt % 10) + 1 });
         }
     }
 
@@ -104,10 +116,9 @@ class MainVD extends Component<
                 this.onError();
             },
             () => {
-                const { panic } = this.state;
-                if (!panic) {
-                    this.setState({ panic: true });
-                }
+                this.glStateCon.errTSet(ErrType.E500);
+                this.errCr = true;
+                this.onError(true);
             },
             { signal: AbortSignal.timeout(60000) },
         );

@@ -1,7 +1,6 @@
 import type { ErrStCon } from '@strinf/ts/interfaces/dom/global';
 import type { InValStInt } from '@strinf/ts/interfaces/dom/inp';
 import type { JSX } from 'preact';
-import type { MutableRef } from 'preact/hooks';
 import errSty from '@strinf/css/mods/error.module.css';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
 import ErrType, { ERR_MARK } from '@strinf/ts/constants/type/ErrT';
@@ -102,7 +101,7 @@ function ErrorWr({ errM, errFM, errT, ctx }: ErrorWrProps): JSX.Element | null {
     return null;
 }
 
-function ErrorVD({ blocked }: { blocked: MutableRef<boolean> }): JSX.Element | null {
+function ErrorVD({ blocked }: { blocked: boolean }): JSX.Element | null {
     const ctx: (ErrStCon & InValStInt) | undefined = use(MainConGl);
     if (ctx === undefined) {
         return null;
@@ -110,7 +109,7 @@ function ErrorVD({ blocked }: { blocked: MutableRef<boolean> }): JSX.Element | n
     return (
         <div className={errSty.err}>
             <ErrorWr errT={ctx.errT} errFM={ctx.errS[0]} errM={ctx.errS[1]} ctx={ctx} />
-            {blocked.current ? <h3>Try reloading the webpage!</h3> : null}
+            {blocked ? <h3>Try reloading the webpage!</h3> : null}
         </div>
     );
 }

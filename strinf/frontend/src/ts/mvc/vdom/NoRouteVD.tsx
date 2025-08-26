@@ -10,7 +10,7 @@ interface EmptyProps {
     path: string;
 }
 
-function EmptyVD({ path }: EmptyProps): JSX.Element {
+function NoRouteVD({ path }: EmptyProps): JSX.Element {
     const ctx: BreadCrumbsG | undefined = use(MainConGl);
     if (ctx?.bread !== undefined) {
         for (const actF of ctx.bread) {
@@ -32,4 +32,4 @@ function EmptyVD({ path }: EmptyProps): JSX.Element {
     );
 }
 
-export default EmptyVD;
+export default NoRouteVD;

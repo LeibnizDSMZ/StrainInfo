@@ -1,6 +1,5 @@
 import type { BreadCrumbsG, ErrStCon } from '@strinf/ts/interfaces/dom/global';
 import type { JSX } from 'preact';
-import type { MutableRef } from 'preact/hooks';
 import { UIApiCon } from '@strinf/ts/constants/api/ui_api';
 import { ClHtml, Dis, Pad } from '@strinf/ts/constants/style/ClHtml';
 import ErrType from '@strinf/ts/constants/type/ErrT';
@@ -11,7 +10,7 @@ import Redirect from '@strinf/ts/mvc/vdom/fun/route/Redirect';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import { LID } from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
 import { lazy, Route, Router, useLocation } from 'preact-iso';
-import { useContext as use, useEffect, useRef } from 'preact/hooks';
+import { useContext as use, useEffect, useState } from 'preact/hooks';
 
 const INDEX_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/IndexVD'));
 const CONTACT_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ContactVD'));
@@ -49,7 +48,7 @@ const STR_REG_VD = lazy(
 );
 const NEWS_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/NewsVD'));
 const IMP_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ImprintVD'));
-const EMPTY_VD = lazy(async () => import('@strinf/ts/mvc/vdom/EmptyVD'));
+const NO_ROUTE_VD = lazy(async () => import('@strinf/ts/mvc/vdom/NoRouteVD'));
 const API_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ApiVd'));
 
 const PATH_STRAIN = `${UIApiCon.strain}:id`;
@@ -79,9 +78,13 @@ function disableLoader(): void {
     }
 }
 
-function crRoutesVD(blocked: MutableRef<boolean>): JSX.Element[] {
-    if (blocked.current) {
-        return [<Route key="default" default component={EMPTY_VD} />];
+function EmptyVD(): JSX.Element {
+    return <span></span>;
+}
+
+function crRoutesVD(blocked: boolean): JSX.Element[] {
+    if (blocked) {
+        return [<Route key="default" default component={EmptyVD} />];
     }
     return [
         <Route key={UIApiCon.index} path={UIApiCon.index} component={INDEX_VD} />,
@@ -103,8 +106,14 @@ function crRoutesVD(blocked: MutableRef<boolean>): JSX.Element[] {
         <Route key={UIApiCon.manual} path={UIApiCon.manual} component={DOCS_VD} />,
         <Route key={UIApiCon.imprint} path={UIApiCon.imprint} component={IMP_VD} />,
         <Route key={UIApiCon.service} path={UIApiCon.service} component={API_VD} />,
-        <Route key="default" default component={EMPTY_VD} />,
+        <Route key="default" default component={NO_ROUTE_VD} />,
     ];
+}
+
+function displayContainer(errorP: string, errorB: boolean, mainCon: boolean): string {
+    if (errorB || errorP !== '')
+        return mainCon ? Dis.dNone : '';
+    return mainCon ? '' : Dis.dNone;
 }
 
 function ContentVD({
@@ -115,52 +124,56 @@ function ContentVD({
     panic: boolean;
 } & ERR_PROP): JSX.Element | null {
     const ctx: (BreadCrumbsG & ErrStCon) | undefined = use(MainConGl);
-    const errR = useRef<HTMLDivElement>(null);
-    const conR = useRef<HTMLDivElement>(null);
-    const errorP = useRef<string>('');
-    const errorB = useRef<boolean>(false);
-    if (error() && errorP.current === '') {
-        errorP.current = window.location.pathname + window.location.search;
-    }
-    if (panic || ctx?.errT === ErrType.E503) {
-        errorB.current = true;
-    }
+    const [errorState, setErrorState] = useState({
+        errorP: '',
+        errorB: false,
+    });
+
     useEffect(() => {
-        if (error() && errorP.current === '') {
-            disable();
+        const { errorB, errorP } = errorState;
+        const newState = { ...errorState };
+        if (error() && errorP === '') {
             disableLoader();
+            newState.errorP = window.location.pathname + window.location.search;
         }
-    }, [error, panic]);
+        if (panic || ctx?.errT === ErrType.E503) {
+            newState.errorB = true;
+        }
+        if (newState.errorP !== errorP || newState.errorB !== errorB) {
+            setErrorState(newState);
+        }
+    }, [error, panic, ctx?.errT]);
     if (ctx === undefined) {
         return null;
     }
+    const { errorB, errorP } = errorState;
+
     return (
         <div className={ClHtml.cntWr}>
             <div
                 className={`${ClHtml.cntCon} ${Pad.bN0}
-                ${errorP.current === '' ? Dis.dNone : ''}`}
+                ${displayContainer(errorP, errorB, false)}`}
                 style={{ minHeight: '100vh' }}
-                ref={errR}
             >
                 <ERROR_VD blocked={errorB} />
             </div>
             <div
                 className={`${ClHtml.cntCon} ${Pad.bN0}
-                ${errorP.current !== '' ? Dis.dNone : ''}`}
+                ${displayContainer(errorP, errorB, true)}`}
                 style={{ minHeight: '100vh' }}
-                ref={conR}
             >
                 <Router
                     onRouteChange={(path) => {
-                        if (errorP.current !== path && !errorB.current) {
-                            errorP.current = '';
+                        if (errorP !== path && !errorB) {
                             onRouteChange(path);
-                            conR.current?.classList.remove(Dis.dNone);
-                            errR.current?.classList.add(Dis.dNone);
+                            if (errorP !== '') {
+                                disable();
+                                setErrorState({ ...errorState, errorP: '' });
+                            }
                         }
                     }}
                 >
-                    {crRoutesVD(errorB)}
+                    {crRoutesVD(errorB || errorP !== '')}
                 </Router>
             </div>
             <FootVD />
