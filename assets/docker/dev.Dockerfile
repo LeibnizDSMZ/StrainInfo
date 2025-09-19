@@ -7,6 +7,7 @@ ARG USER_GID=${USER_UID}
 ARG WORK_DIR=/workspace
 ENV HOME="/home/${USERNAME}"
 ENV CONTAINER="container"
+ENV PATH="${HOME}/.bun/bin:${HOME}/.local/bin:${PATH}"
 
 ARG BIN_DEPLOY_PREP
 ARG BIN_DEPLOY_REQ
