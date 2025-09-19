@@ -1,3 +1,9 @@
+ifeq ($(CONTAINER),container)
+$(info Makefile enabled, proceeding ...)
+else	
+$(error Error: Makefile disabled, exiting ...)
+endif
+
 ROOT_MAKEFILE:=$(abspath $(patsubst %/, %, $(dir $(abspath $(lastword $(MAKEFILE_LIST))))))
 
 include $(ROOT_MAKEFILE)/.env

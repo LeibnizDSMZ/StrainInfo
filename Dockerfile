@@ -3,6 +3,7 @@ FROM docker.io/rockylinux:9 AS appbuilder
 ARG BIN_DEPLOY
 ARG FIX_CONFIG
 ARG STAGE
+ENV CONTAINER="container"
 
 COPY . /tmp/app
 
