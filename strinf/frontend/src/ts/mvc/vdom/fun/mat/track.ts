@@ -1,18 +1,19 @@
 import { matomoCallback } from '@strinf/ts/mvc/vdom/fun/mat/init';
 
 function trackPageV(): void {
+    const loc = window.location.href;
     matomoCallback(() => {
         window._paq = window._paq ?? [];
-        window._paq.push(['setCustomUrl', window.location.href]);
+        window._paq.push(['setCustomUrl', loc]);
         window._paq.push(['trackPageView']);
     });
 }
 
 function trackPageRootV(time: number): void {
+    const loc = window.location;
+    const url = `${loc.protocol}//${loc.host}${loc.pathname}`;
     matomoCallback(() => {
         window._paq = window._paq ?? [];
-        const loc = window.location;
-        const url = `${loc.protocol}//${loc.host}${loc.pathname}`;
         window._paq.push(['setCustomUrl', url]);
         window._paq.push(['setCustomVariable', 1, 'Response time', `${time}ms`, 'page']);
         window._paq.push(['trackPageView']);
