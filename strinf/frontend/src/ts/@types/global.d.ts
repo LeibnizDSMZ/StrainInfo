@@ -16,6 +16,7 @@ declare global {
         Matomo?: object;
         matomoLoaded?: true;
         tracking?: number;
+        lastSearch?: string;
     }
 }
 

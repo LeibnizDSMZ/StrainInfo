@@ -31,6 +31,6 @@ jobs:
                   sudo apt install -y curl git-lfs
             - name: lint and test
               run: |
+                  export CONTAINER="container"
                   make dev
-                  export GITHUB_WORKER='true'
                   make runChecks

@@ -29,10 +29,14 @@ function trackSearch(
     if (paV) {
         trackPageRootV(time);
     }
-    matomoCallback(() => {
-        window._paq = window._paq ?? [];
-        window._paq.push(['trackSiteSearch', `${seaC} - ${seaV}`, seaC, cnt]);
-    });
+    const sea = `${seaC} - ${seaV}`;
+    if (window.lastSearch !== sea) {
+        matomoCallback(() => {
+            window._paq = window._paq ?? [];
+            window._paq.push(['trackSiteSearch', sea, seaC, cnt]);
+        });
+    }
+    window.lastSearch = sea;
 }
 
 function trackDownload(url: string, bytes: number): void {
