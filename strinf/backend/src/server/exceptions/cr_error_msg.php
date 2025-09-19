@@ -6,13 +6,13 @@ namespace straininfo\server\exceptions;
 
 use Safe\Exceptions\OutcontrolException;
 use Safe\Exceptions\SimplexmlException;
-use straininfo\server\configs\Config;
-
 use function Safe\json_encode;
+
 use function Safe\ob_clean;
 use function Safe\ob_end_flush;
 use function Safe\ob_start;
 use function Safe\simplexml_load_string;
+use straininfo\server\configs\Config;
 
 function print_msg_500(bool $over): void
 {

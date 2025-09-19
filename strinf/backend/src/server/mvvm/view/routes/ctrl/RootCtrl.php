@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl;
 
-use straininfo\server\shared\mvvm\view\HeadArgs;
-use function straininfo\server\shared\mvvm\view\add_default_headers;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use function Safe\json_encode;
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+use straininfo\server\shared\mvvm\view\HeadArgs;
 
 final class RootCtrl
 {

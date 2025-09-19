@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl\dbs;
 
-use straininfo\server\shared\mvvm\view\StatArgs;
-use straininfo\server\shared\mvvm\view\HeadArgs;
-use function straininfo\server\shared\mvvm\view\contained_in_origin;
-use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
-use function straininfo\server\shared\mvvm\view\add_default_headers;
-use function straininfo\server\exceptions\create_error_json;
-use Slim\Exception\HttpInternalServerErrorException;
-use Slim\Exception\HttpForbiddenException;
-
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use MatomoTracker;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpInternalServerErrorException;
+use function straininfo\server\exceptions\create_error_json;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+
+use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
+use function straininfo\server\shared\mvvm\view\domain_overlap;
+use straininfo\server\shared\mvvm\view\HeadArgs;
+use straininfo\server\shared\mvvm\view\StatArgs;
 
 abstract class DBSCtrl
 {
@@ -95,13 +95,14 @@ abstract class DBSCtrl
             throw new HttpInternalServerErrorException($request);
         }
         $origin = $request->getHeader('Origin');
+        $referer = $request->getHeader('Referer');
         if ($empty) {
             $response = $response->withStatus(404);
             $response->getBody()->write(create_error_json('No data available!', 404));
         } else {
             $response->getBody()->write($json);
         }
-        $this->track($request, $origin);
+        $this->track($request, $origin, $referer);
         return add_default_headers(
             $response,
             new HeadArgs(
@@ -114,12 +115,17 @@ abstract class DBSCtrl
         );
     }
 
-    /** @param array<string> $origin */
-    private function track(ServerRequestInterface $request, array $origin): void
+    /**
+     * @param array<string> $origin
+     * @param array<string> $referer
+     */
+    private function track(ServerRequestInterface $request, array $origin, array $referer): void
     {
-        $track = count($origin) === 0 ? $this->trackCli($request) : $this->trackOri(
-            $origin, $request
-        );
+        $toCheck = count($origin) === 0 && count($referer) === 0;
+        $track = $this->trackCli($request);
+        if ($toCheck) {
+            $track = $track && !domain_overlap(array_merge($origin, $referer), $this->ignore);
+        }
         try {
             if ($track) {
                 $this->stats->setRequestTimeout(1);
@@ -139,16 +145,6 @@ abstract class DBSCtrl
     private function trackCli(ServerRequestInterface $request): bool
     {
         return $this->track_enabled && !array_key_exists(
-            get_do_not_track_arg(),
-            $request->getQueryParams()
-        );
-    }
-
-    /** @param array<string> $origin */
-    private function trackOri(array $origin, ServerRequestInterface $request): bool
-    {
-        return $this->track_enabled && !contained_in_origin($origin, $this->ignore) &&
-        !array_key_exists(
             get_do_not_track_arg(),
             $request->getQueryParams()
         );

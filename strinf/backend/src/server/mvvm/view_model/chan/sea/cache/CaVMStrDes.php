@@ -18,7 +18,7 @@ final class CaVMStrDes extends CaVMChanSea
      */
     public function getResult(array $arg): QDConSea
     {
-        $str_des =$this->getMChan()->getStrDes($arg);
+        $str_des = $this->getMChan()->getStrDes($arg);
         return new QDConSea(array_diff($arg, array_keys($str_des)), $str_des);
     }
 
@@ -27,17 +27,18 @@ final class CaVMStrDes extends CaVMChanSea
     {
         if ($sea_con->getToBuf()) {
             $this->getMSetChan()->setStrDes($sea_con->getToBuf());
-        }elseif (count($sea_con->getMisIds()) > 0) {
+        } elseif (count($sea_con->getMisIds()) > 0) {
             $this->getMSetChan()->setStrDes(
                 array_merge(...array_map(
-                    static function($sid) {
+                    static function ($sid) {
                         return [
-                            $sid=> []
+                            $sid => [],
                         ];
                     },
-                    array_filter($sea_con->getMisIds(), static function($seaId) {
-                    return strlen($seaId) < 32;
-                })))
+                    array_filter($sea_con->getMisIds(), static function ($seaId) {
+                        return strlen($seaId) < 32;
+                    })
+                ))
             );
         }
     }

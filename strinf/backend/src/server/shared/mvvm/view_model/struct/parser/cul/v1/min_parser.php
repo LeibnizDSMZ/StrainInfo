@@ -19,7 +19,7 @@ use straininfo\server\shared\mvvm\model\struct\DataCon;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StCulE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StRegE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v1\StTaxE;
-use function straininfo\server\shared\text\encodeUrl;
+use function straininfo\server\shared\text\encode_url;
 
 function get_cul_source(?string $src, ?int $ccno_id): ?string
 {
@@ -47,7 +47,7 @@ function get_min_arr_cul_base(array $val): array
     $url = check_kt_f_str($val, $db::CAT->value);
     if (!is_null($url)) {
         $cat = [
-            StCulE::CAT_URL->value => encodeUrl($url),
+            StCulE::CAT_URL->value => encode_url($url),
             StCulE::CAT_ON->value => check_kt_bool($val, $db::CAT_ON->value),
         ];
     }

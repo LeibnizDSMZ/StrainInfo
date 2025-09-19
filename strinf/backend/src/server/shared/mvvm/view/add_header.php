@@ -4,29 +4,32 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\view;
 
-use straininfo\server\configs\Config;
 use Psr\Http\Message\ResponseInterface;
+use straininfo\server\configs\Config;
+
+use function straininfo\server\shared\text\extract_valid_domains;
 
 /**
- * @param array<string> $origin
  * @param array<string> $to_check
+ * @param array<string> $overlap
  */
-function contained_in_origin(array $origin, array $to_check): bool
+function domain_overlap(array $to_check, array $overlap): bool
 {
-    foreach ($origin as $ori) {
-        if (strlen($ori) > 0 && in_array($ori, $to_check)) {
+    $to_check_dom = extract_valid_domains($to_check);
+    $overlap_dom = extract_valid_domains($overlap);
+    foreach ($to_check_dom as $toc) {
+        if (strlen($toc) > 0 && in_array($toc, $overlap_dom)) {
             return true;
         }
     }
     return false;
 }
 
-
 function add_default_headers(
     ResponseInterface $response,
     HeadArgs $hArgs
 ): ResponseInterface {
-    $response = $response->withHeader('Content-Type', $hArgs->getContentType() ."; charset=".$hArgs->getCharS());
+    $response = $response->withHeader('Content-Type', $hArgs->getContentType() .'; charset='.$hArgs->getCharS());
     $response = $response->withHeader('Cache-Control', 'no-store');
     if (Config::isProductionBuild()) {
         $response = $response->withHeader('X-Content-Type-Options', 'nosniff');

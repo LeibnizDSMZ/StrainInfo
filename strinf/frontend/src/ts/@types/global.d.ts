@@ -14,7 +14,8 @@ declare global {
         onerror: OnErrorEventHandlerNoNull;
         _paq?: Matomo[];
         Matomo?: object;
-        matomoLoaded?: boolean;
+        matomoLoaded?: true;
+        tracking?: number;
     }
 }
 

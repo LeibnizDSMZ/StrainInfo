@@ -21,7 +21,7 @@ use straininfo\server\shared\mvvm\view\StatArgs;
 use straininfo\server\shared\mvvm\view\WebArgsBE;
 use straininfo\server\shared\mvvm\view\WebArgsFE;
 
-use function straininfo\server\shared\text\createDomain;
+use function straininfo\server\shared\text\create_domain_url;
 
 final class ConCtrl
 {
@@ -46,7 +46,7 @@ final class ConCtrl
         string $version
     ) {
         $chS = $wbe_args->getCharSet();
-        $cors = [ ...$wbe_args->getCORS(), createDomain($wfe_args)];
+        $cors = [ ...$wbe_args->getCORS(), create_domain_url($wfe_args)];
         $pri = $wbe_args->getPrivate();
         $this->root_ctrl = new RootCtrl(
             $wbe_args->getCharSet(),

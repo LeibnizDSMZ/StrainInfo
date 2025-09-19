@@ -11,7 +11,9 @@ services:
                 WORK_DIR: /workspace
                 BIN_DEPLOY_PREP: ${BIN_DEPLOY_PREP}
                 BIN_DEPLOY_REQ: ${BIN_DEPLOY_REQ}
+                SSH_AUTH_SOCK: /ssh-agent
         volumes:
+            - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
             - .:/workspace
             - ~/.gitconfig:/etc/gitconfig:ro
             - redis-sock:/redis

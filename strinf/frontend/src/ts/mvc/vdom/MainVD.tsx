@@ -12,7 +12,6 @@ import { getActiveWrapperCookies } from '@strinf/ts/functions/cookie/acc';
 import { reInitCStyle } from '@strinf/ts/functions/libs/style';
 import ContentVD from '@strinf/ts/mvc/vdom/ContentVD';
 import crAlert from '@strinf/ts/mvc/vdom/fun/alert/alert';
-import initMat from '@strinf/ts/mvc/vdom/fun/mat/init';
 import HeadVD from '@strinf/ts/mvc/vdom/HeadVD';
 import GlState, { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import { Component, createRef } from 'preact';
@@ -41,7 +40,6 @@ class MainVD extends Component<
 
     constructor(props: Record<string, never>) {
         super(props);
-        initMat(CONFIG.statistic);
         this.lastAlert = '';
         this.errCr = false;
         this.state = { panic: false, showErrCnt: 0 };

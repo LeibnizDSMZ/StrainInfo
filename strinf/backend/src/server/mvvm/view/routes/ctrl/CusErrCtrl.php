@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl;
 
-use straininfo\server\shared\mvvm\view\HeadArgs;
-use function straininfo\server\shared\mvvm\view\add_default_headers;
-use function straininfo\server\exceptions\create_error_json;
-use Throwable;
-use Slim\Handlers\ErrorHandler;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpMethodNotAllowedException;
-use Slim\Exception\HttpForbiddenException;
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-
-use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpMethodNotAllowedException;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Handlers\ErrorHandler;
+use function straininfo\server\exceptions\create_error_json;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+
+use straininfo\server\shared\mvvm\view\HeadArgs;
+use Throwable;
 
 final class CusErrCtrl extends ErrorHandler
 {
@@ -62,7 +62,7 @@ final class CusErrCtrl extends ErrorHandler
             $error_code = 500;
         }
         $response = $this->psr17Factory->createResponse();
-        $message = match (get_class($exception)) {
+        $message = match ($exception::class) {
             HttpMethodNotAllowedException::class => $this->err405,
             HttpNotFoundException::class => $this->err404,
             HttpForbiddenException::class => $this->err403,
@@ -82,7 +82,8 @@ final class CusErrCtrl extends ErrorHandler
                 $request->getHeader('Origin'),
                 $this->cors,
                 $this->charset,
-                false, 'application/json'
+                false,
+                'application/json'
             )
         );
     }

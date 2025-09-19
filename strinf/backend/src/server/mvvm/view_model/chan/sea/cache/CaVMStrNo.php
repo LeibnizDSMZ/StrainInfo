@@ -18,7 +18,7 @@ final class CaVMStrNo extends CaVMChanSea
      */
     public function getResult(array $arg): QDConSea
     {
-        $name =$this->getMChan()->getStrNo($arg);
+        $name = $this->getMChan()->getStrNo($arg);
         return new QDConSea(array_diff($arg, array_keys($name)), $name);
     }
 
@@ -27,17 +27,18 @@ final class CaVMStrNo extends CaVMChanSea
     {
         if ($sea_con->getToBuf()) {
             $this->getMSetChan()->setStrNo($sea_con->getToBuf());
-        }elseif (count($sea_con->getMisIds()) > 0) {
+        } elseif (count($sea_con->getMisIds()) > 0) {
             $this->getMSetChan()->setStrNo(
                 array_merge(...array_map(
-                    static function($sid) {
+                    static function ($sid) {
                         return [
-                            $sid=> []
+                            $sid => [],
                         ];
                     },
-                    array_filter($sea_con->getMisIds(), static function($seaId) {
-                    return strlen($seaId) < 32;
-                })))
+                    array_filter($sea_con->getMisIds(), static function ($seaId) {
+                        return strlen($seaId) < 32;
+                    })
+                ))
             );
         }
     }

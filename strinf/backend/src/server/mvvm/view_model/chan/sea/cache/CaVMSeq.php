@@ -30,14 +30,15 @@ final class CaVMSeq extends CaVMChanSea
         } elseif (count($sea_con->getMisIds()) > 0) {
             $this->getMSetChan()->setSeqAcc(
                 array_merge(...array_map(
-                    static function($sid) {
+                    static function ($sid) {
                         return [
-                            $sid=> []
+                            $sid => [],
                         ];
                     },
-                    array_filter($sea_con->getMisIds(), static function($seaId) {
-                    return strlen($seaId) < 32;
-                })))
+                    array_filter($sea_con->getMisIds(), static function ($seaId) {
+                        return strlen($seaId) < 32;
+                    })
+                ))
             );
         }
     }

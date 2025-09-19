@@ -14,7 +14,7 @@ export default antfu(
         jsonc: true,
         yaml: true,
         react: true,
-        ignores: ["**/configs"],
+        ignores: ['**/configs'],
     },
     {
         files: ['**/src/**/*.{js,jsx,ts,tsx}'],
@@ -48,10 +48,10 @@ export default antfu(
             'ts/no-unsafe-enum-comparison': 'off',
             'ts/switch-exhaustiveness-check': 'warn',
             'ts/no-deprecated': 'warn',
-            'complexity': ['error', { max: 18 }],
+            complexity: ['error', { max: 18 }],
             'ts/no-base-to-string': 'warn',
             'ts/no-unsafe-type-assertion': 'warn',
-            'no-console': 'warn'
+            'no-console': 'warn',
         },
     },
     {
@@ -62,5 +62,5 @@ export default antfu(
                 options: { alwaysTryTypes: true, project: 'tsconfig.app.json' },
             },
         },
-    },
+    }
 );

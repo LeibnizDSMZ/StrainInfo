@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl;
 
-use function straininfo\server\shared\mvvm\view\api\get_short_arg;
-
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+use function straininfo\server\shared\mvvm\view\api\get_short_arg;
 
 final class ShortCtrl
 {
@@ -17,8 +17,8 @@ final class ShortCtrl
     private readonly Psr17Factory $psr17Factory;
 
     public function __construct(
-        string $charset)
-    {
+        string $charset
+    ) {
         $this->charset = $charset;
         $this->psr17Factory = new Psr17Factory();
     }
@@ -48,5 +48,4 @@ final class ShortCtrl
         $newResp->getBody()->write($bodyShort);
         return $newResp;
     }
-
 }

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes;
 
-use straininfo\server\shared\mvvm\view\WebArgsFE;
-use straininfo\server\shared\mvvm\view\WebArgsBE;
-use straininfo\server\shared\mvvm\view\StatArgs;
-use straininfo\server\mvvm\view\routes\ctrl\ShortCtrl;
-use straininfo\server\mvvm\view\routes\ctrl\MaintainCtrl;
-use straininfo\server\mvvm\view\routes\ctrl\CusErrCtrl;
-use straininfo\server\mvvm\view\const\ConCtrl;
-use straininfo\server\interfaces\mvvm\view\ToViewIntV;
-use function straininfo\server\shared\text\createDomain;
-use Slim\App;
-
 use Psr\Log\LoggerInterface;
+use Slim\App;
+use straininfo\server\interfaces\mvvm\view\ToViewIntV;
+use straininfo\server\mvvm\view\const\ConCtrl;
+use straininfo\server\mvvm\view\routes\ctrl\CusErrCtrl;
+use straininfo\server\mvvm\view\routes\ctrl\MaintainCtrl;
+use straininfo\server\mvvm\view\routes\ctrl\ShortCtrl;
+use straininfo\server\shared\mvvm\view\StatArgs;
+use straininfo\server\shared\mvvm\view\WebArgsBE;
+use straininfo\server\shared\mvvm\view\WebArgsFE;
+
+use function straininfo\server\shared\text\create_domain_url;
 
 final class RoutesMain
 {
@@ -27,7 +27,6 @@ final class RoutesMain
 
     private ?MaintainCtrl $m_ctrl;
     private ?ShortCtrl $s_ctrl;
-
 
     // mutable
     private ConCtrl $ctrl_con;
@@ -44,7 +43,6 @@ final class RoutesMain
         $this->version = $version;
         $this->m_ctrl = null;
         $this->s_ctrl = null;
-
     }
 
     /**
@@ -90,7 +88,7 @@ final class RoutesMain
             $this->wbe_args->getCharSet(),
             [
                 ...$this->wbe_args->getCORS(),
-                createDomain($this->wfe_args),
+                create_domain_url($this->wfe_args),
             ],
             $logger
         );
@@ -112,7 +110,6 @@ final class RoutesMain
             $app->add($this->getShortCtrl());
         }
     }
-
 
     public function getWebArgs(): WebArgsBE
     {
@@ -153,7 +150,7 @@ final class RoutesMain
             $this->getWebArgs()->getCharSet(),
             [
                 ...$this->wbe_args->getCORS(),
-                createDomain($this->wfe_args),
+                create_domain_url($this->wfe_args),
             ],
         );
         return $this->m_ctrl;
@@ -164,7 +161,6 @@ final class RoutesMain
         $this->s_ctrl ??= new ShortCtrl($this->getWebArgs()->getCharSet());
         return $this->s_ctrl;
     }
-
 
     /** @param App<\Psr\Container\ContainerInterface|null> $app */
     private function initMain(App $app): void

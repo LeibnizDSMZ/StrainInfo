@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\model\chan\sia;
 
-use straininfo\server\mvvm\model\chan\PdoMWr;
 use straininfo\server\interfaces\mvvm\model\chan\query\QMIntSeaIdCul;
+use straininfo\server\mvvm\model\chan\PdoMWr;
 
-use function straininfo\server\shared\text\create_designation_triplet;
-use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_des_id;
-use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_cul_id;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_sea_str_id_cul;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_designation;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_cul_base;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_tax_name_ent_2_base;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_str_no_ent_2_base;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_seq_acc_ent_2_base;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_des_ent_2_base;
-use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_brc_ent_2_base;
 use function straininfo\server\shared\mvvm\model\pdo\bind_and_exe;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_brc_ent_2_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_des_ent_2_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_seq_acc_ent_2_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_str_no_ent_2_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_tax_name_ent_2_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_cul_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_designation;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_sea_str_id_cul;
+use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_cul_id;
+use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_des_id;
+use function straininfo\server\shared\text\create_designation_triplet;
 
 final class QPCulSea extends PdoMWr implements QMIntSeaIdCul
 {
@@ -163,7 +163,7 @@ final class QPCulSea extends PdoMWr implements QMIntSeaIdCul
     ): array {
         $this->checkMaintenanceMode();
         $sta = $this->prepDefSta($sql);
-        if( bind_and_exe($sta, $args, $type)) {
+        if (bind_and_exe($sta, $args, $type)) {
             return array_map(
                 $parser,
                 $sta->fetchAll()

@@ -8,7 +8,7 @@ use function Safe\parse_url;
 
 use straininfo\server\interfaces\global\Url;
 
-function createURL(Url $url, string $path): string
+function create_url(Url $url, string $path): string
 {
     $main = $url->getProtocol() . '://' . $url->getDomain();
     if (
@@ -24,12 +24,30 @@ function createURL(Url $url, string $path): string
     return $main . $c_path;
 }
 
-function createDomain(Url $url): string
+function create_domain_url(Url $url): string
 {
-    return createURL($url, '');
+    return create_url($url, '');
 }
 
-function encodeUrl(string $url): string
+/**
+ * @param array<string> $urls
+ *
+ * @return array<string>
+ */
+function extract_valid_domains(array $urls): array
+{
+    $validDomains = [];
+    foreach ($urls as $url) {
+        $parsedUrl = parse_url($url);
+        if (isset($parsedUrl['host']) && $parsedUrl['host'] !== '') {
+            $validDomains[] = $parsedUrl['host'];
+        }
+    }
+
+    return $validDomains;
+}
+
+function encode_url(string $url): string
 {
     $parts = parse_url($url);
     $encodedPath = '';

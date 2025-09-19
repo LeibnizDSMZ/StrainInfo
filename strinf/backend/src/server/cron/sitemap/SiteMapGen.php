@@ -24,7 +24,7 @@ use straininfo\server\mvvm\model\dbs\ChMainDB;
 use function straininfo\server\shared\dbs\tryToConnect;
 use function straininfo\server\shared\path\get_public_root;
 use straininfo\server\shared\path\QUIMap;
-use function straininfo\server\shared\text\createURL;
+use function straininfo\server\shared\text\create_url;
 
 final class SiteMapGen
 {
@@ -86,7 +86,7 @@ final class SiteMapGen
         <?xml version="1.0" encoding="UTF-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         EOF;
-        $url = createURL($this->configurations->getWebArgsFE(), QUIMap::STRAIN->value);
+        $url = create_url($this->configurations->getWebArgsFE(), QUIMap::STRAIN->value);
         $str_ids = count($strain_ids);
         for ($cnt_i = $start; $cnt_i < $str_ids && $cnt_i < $end; $cnt_i++) {
             $loc = $url . '/' . $strain_ids[$cnt_i];
@@ -116,11 +116,11 @@ final class SiteMapGen
         <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         EOF);
         $feCon = $this->configurations->getWebArgsFE();
-        $url = createURL($feCon, $feCon->getSiteMap());
+        $url = create_url($feCon, $feCon->getSiteMap());
         fwrite($index, "<sitemap><loc>{$url}</loc></sitemap>");
         for ($cnt_i = 1; $cnt_i <= $cnt; $cnt_i++) {
             $map_path = $sitemap_dir . "/sitemap{$cnt_i}.xml";
-            $url = createURL($feCon, $map_path);
+            $url = create_url($feCon, $map_path);
             fwrite($index, "<sitemap><loc>{$url}</loc></sitemap>");
             $this->createSiteMap($strain_ids, $map_path, $cnt_i);
         }
@@ -144,7 +144,7 @@ final class SiteMapGen
         fclose($robot_rfh);
         $robot_wfh = fopen($robot, 'w');
         $robots_txt = preg_replace("/\s*Sitemap\s*:\s*.*(\n|$)/i", '', $robots_txt);
-        $url = createURL($this->configurations->getWebArgsFE(), QUIMap::SITEMAP->value);
+        $url = create_url($this->configurations->getWebArgsFE(), QUIMap::SITEMAP->value);
         $robots_txt .= "\n\nSitemap: " . $url . "\n\n";
         fwrite($robot_wfh, $robots_txt);
         fclose($robot_wfh);

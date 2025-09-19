@@ -31,7 +31,7 @@ use straininfo\server\shared\mvvm\view_model\struct\json\v2\StRegE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v2\StRelDesE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v2\StSamE;
 use straininfo\server\shared\mvvm\view_model\struct\json\v2\StStrE;
-use function straininfo\server\shared\text\encodeUrl;
+use function straininfo\server\shared\text\encode_url;
 
 /**
  * @template TV
@@ -215,7 +215,7 @@ function get_avg_arr_brc(array $val): array
     $url = check_kt_f_str($val, $db::B_HOME->value);
     if (!is_null($url)) {
         $home = [
-            StCcE::CC_URL->value => encodeUrl($url),
+            StCcE::CC_URL->value => encode_url($url),
             StCcE::CC_ON->value => check_kt_bool($val, $db::B_ON->value),
         ];
     }
@@ -252,7 +252,7 @@ function get_avg_arr_cul(array $val): array
     $url = check_kt_f_str($val, $db::CAT->value);
     if (!is_null($url)) {
         $cat = [
-            StDepositE::CAT_URL->value => encodeUrl($url),
+            StDepositE::CAT_URL->value => encode_url($url),
             StDepositE::CAT_ON->value => check_kt_bool($val, $db::CAT_ON->value),
         ];
     }
