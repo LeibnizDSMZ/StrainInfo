@@ -23,15 +23,15 @@
         "fullstack"
     ],
     "dependencies": {
-        "typescript": "^5.9.2"
+        "typescript": "5.9.3"
     },
     "devDependencies": {
-        "@types/bun": "1.2.21",
-        "@types/node": "24.3.0",
+        "@types/bun": "1.2.22",
+        "@types/node": "22.18.5",
         "commitizen": "4.3.1",
         "cz-conventional-changelog": "3.3.0",
         "husky": "9.1.7",
-        "lint-staged": "16.1.5",
+        "lint-staged": "16.2.3",
         "prettier": "3.6.2",
         "shellcheck": "3.1.0"
     },

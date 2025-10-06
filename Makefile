@@ -107,9 +107,6 @@ runUpdate: %: export_% dev
 
 export_runUpdate: clean postInstall
 	echo "UPDATE NODE -> $(NODE_ENV)"
-	rm -f $(ROOT_MAKEFILE)/*.lockb
-	rm -f $(ROOT_MAKEFILE)/*.lock
-	rm -f $(ROOT_MAKEFILE)/$(STRINF_BACKEND)/*.lock
 	$(BUN) update
 	echo "UPDATE COMPOSER"
 	$(COMPOSER_BE) update -d $(ROOT_MAKEFILE)/$(STRINF_BACKEND_SRC) 
