@@ -60,6 +60,7 @@ clean: cleanBuild
 	rm -rf $(ROOT_MAKEFILE)/$(PHP_VENDOR_BE)
 	rm -rf $(ROOT_MAKEFILE)/$(CACHE_DIR)
 	rm -rf $(ROOT_MAKEFILE)/$(EXTRA_STYLE)
+	rm -rf $(ROOT_MAKEFILE)/$(EXTRA_ASSETS)
 
 uninstall: clean
 	[ -f "$(BUN)" ] && $(BUN) pm cache rm || echo "not installed"
