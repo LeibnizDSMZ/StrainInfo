@@ -1,5 +1,5 @@
 FROM ghcr.io/roadrunner-server/roadrunner:2025 AS roadrunner
-FROM docker.io/rockylinux:9
+FROM docker.io/almalinux:9
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
