@@ -25,3 +25,9 @@ services:
             - ${FRONTEND_STAGE_PORT}:${FRONTEND_STAGE_PORT}
         networks:
             - straininfo
+            - ollama
+
+networks:
+    ollama:
+        name: ollama
+        driver: bridge
