@@ -144,30 +144,31 @@ Closes \#42\n\
 
 
 message:
+	@if [ -z "$(COMMIT_MSG_FILE)" ]; then \
+		echo "Error: COMMIT_MSG_FILE is not set"; \
+		exit 1; \
+	fi
 	git diff --staged -- . ':(exclude)*bun.lock' ':(exclude)*composer.lock'| \
 		jq -Rs --arg prompt "$(PROMPT)" '{"stream": false, "model": "$(OLLAMA_MODEL)", "prompt": ($$prompt + " -- " + .)}' | \
 		curl -s -X POST http://ollama:11434/api/generate \
 			-H "Content-Type: application/json" \
 			-d @- | \
-		jq -r 'select(.done == true) | .response' > .commit_msg
-	vim .commit_msg
-	sed -i 's/^[ \t]*//; s/[ \t]*$$//' .commit_msg
-	@if [ -s .commit_msg ]; then \
-		$(BUN) run commitlint -e .commit_msg; \
+		jq -r 'select(.done == true) | .response' > $(COMMIT_MSG_FILE)
+	vim $(COMMIT_MSG_FILE)
+	sed -i 's/^[ \t]*//; s/[ \t]*$$//' $(COMMIT_MSG_FILE)
+	@if [ -s $(COMMIT_MSG_FILE) ]; then \
+		$(BUN) run commitlint -e $(COMMIT_MSG_FILE); \
 	else \
-		echo ".commit_msg is empty, aborting."; \
+		echo "$(COMMIT_MSG_FILE) is empty, aborting."; \
 		exit 1; \
 	fi
-	HUSKY=0 git commit -F .commit_msg --no-verify
 
 runMessage: dev
-	echo "" > .commit_msg
 	@if curl -sf http://ollama:11434; then \
 		$(MAKE) message; \
 	else \
 		$(BUN) run cz --hook; \
 	fi
-	echo "" > .commit_msg
 
 runPreCommit: dev createBuild	
 	$(BUN) run lint

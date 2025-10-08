@@ -10,8 +10,6 @@
 .cache/
 .hypothesis
 schemathesis-report
-.commit_msg
-.commit_msg.*
 
 # ---> other tools
 *.cache
