@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\model\sia\sql\ent;
 
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructCulE;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructCulE;
 
-use function straininfo\server\shared\mvvm\model\sia\sql\create_sql_in_templ;
 use function straininfo\server\shared\mvvm\model\sia\sql\create_sql_in_tuple_templ;
+use function straininfo\server\shared\mvvm\model\sia\sql\create_sql_in_templ;
 
 /** @return array<string> */
 function create_sql_designation_triplet(int $cntPart): array
@@ -65,6 +65,15 @@ function get_str_base(): string
     EOF;
 }
 
+function get_str_base_min(): string
+{
+    $sain = DBStructStrE::MAIN_ID->value;
+    return <<<EOF
+    SELECT DISTINCT strain.main_id as {$sain}
+        FROM strain
+    EOF;
+}
+
 function add_l_ccno_2_base(): string
 {
     return <<<EOF
@@ -116,9 +125,7 @@ function add_w_sea_tax_name_ent_2_base(string $table): string
     return <<<EOF
         INNER JOIN taxon_name
             ON {$table}.tax_id=taxon_name.id
-        WHERE taxon_name.name_canonical=?
-        GROUP BY strain.main_id
-        ORDER BY COUNT(culture.id) DESC;
+                AND taxon_name.name_canonical=?;
     EOF;
 }
 

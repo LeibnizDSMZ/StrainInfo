@@ -16,6 +16,7 @@ use function straininfo\server\shared\mvvm\model\sia\sql\ent\add_w_sea_tax_name_
 use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_designation;
 use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_sea_cul_id_str;
 use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_str_base;
+use function straininfo\server\shared\mvvm\model\sia\sql\ent\get_str_base_min;
 use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_des_id;
 use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_main_str_id;
 use function straininfo\server\shared\text\create_designation_triplet;
@@ -43,7 +44,7 @@ final class QPStrSea extends PdoMWr implements QMIntSeaIdStr
     {
         $a_val = implode(' ', $tax_name);
         $res_str = $this->getResStrId(
-            get_str_base() . ' ' . add_w_sea_tax_name_ent_2_base('strain'),
+            get_str_base_min() . ' ' . add_w_sea_tax_name_ent_2_base('strain'),
             [$a_val],
             parse_sql_main_str_id(...),
             \PDO::PARAM_STR
@@ -93,7 +94,7 @@ final class QPStrSea extends PdoMWr implements QMIntSeaIdStr
         $des_tri = create_designation_triplet($str_no);
         $sql = add_w_sea_str_no_ent_2_base(count($str_no), count($des_tri));
         return $this->getResStrId(
-            get_str_base() . ' ' .$sql,
+            get_str_base() . ' ' . $sql,
             array_merge($str_no, array_merge(...$des_tri)),
             parse_sql_main_str_id(...),
             \PDO::PARAM_STR
@@ -144,7 +145,7 @@ final class QPStrSea extends PdoMWr implements QMIntSeaIdStr
         }
         $sql = add_w_sea_brc_ent_2_base($acr_cnt);
         return $this->getResStrId(
-            get_str_base() . ' ' .$sql,
+            get_str_base() . ' ' . $sql,
             array_merge($brc, $brc),
             parse_sql_main_str_id(...),
             \PDO::PARAM_STR
