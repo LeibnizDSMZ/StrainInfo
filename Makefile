@@ -58,6 +58,8 @@ cleanBuild:
 
 clean: cleanBuild
 	rm -rf $(ROOT_MAKEFILE)/node_modules
+	rm -rf $(ROOT_MAKEFILE)/$(STRINF_API)/node_modules
+	rm -rf $(ROOT_MAKEFILE)/$(STRINF_FRONTEND)/node_modules
 	rm -rf $(ROOT_MAKEFILE)/$(PHP_VENDOR_BE)
 	rm -rf $(ROOT_MAKEFILE)/$(CACHE_DIR)
 	rm -rf $(ROOT_MAKEFILE)/$(EXTRA_STYLE)
@@ -104,13 +106,15 @@ runProfile: dev createBuild
 
 runUpdate: %: export_% dev
 
-export_runUpdate: clean postInstall
+export_runUpdate:
 	echo "UPDATE NODE -> $(NODE_ENV)"
-	rm -f $(ROOT_MAKEFILE)/*.lock
-	$(BUN) update
+	rm -rf bun.lock
 	$(BUN) install --lockfile-only --exact --no-cache
+	$(BUN) update
+	$(BUN) pm cache rm
 	echo "UPDATE COMPOSER"
 	$(COMPOSER_BE) update -d $(ROOT_MAKEFILE)/$(STRINF_BACKEND_SRC) 
+	$(MAKE) clean
 
 runCron: dev
 	bash $(ROOT_MAKEFILE)/$(BIN_BACKEND_RUN_CRON)
@@ -140,7 +144,6 @@ Added support for user login via OAuth2. This allows users to authenticate\n\
 using their Google account.\n\
 \n\
 Closes \#42\n\
-- Git diff
 
 
 message:
@@ -149,7 +152,7 @@ message:
 		exit 1; \
 	fi
 	git diff --staged -- . ':(exclude)*bun.lock' ':(exclude)*composer.lock'| \
-		jq -Rs --arg prompt "$(PROMPT)" '{"stream": false, "model": "$(OLLAMA_MODEL)", "prompt": ($$prompt + " -- " + .)}' | \
+		jq -Rs --arg prompt "$(PROMPT)" '{"stream": false, "model": "$(OLLAMA_MODEL)", "prompt": (" <GIT_DIFF> " + . + " </GIT_DIFF> " + $$prompt)}' | \
 		curl -s -X POST http://ollama:11434/api/generate \
 			-H "Content-Type: application/json" \
 			-d @- | \

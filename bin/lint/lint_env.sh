@@ -10,7 +10,7 @@ BE_ENV="$ROOT/strinf/backend/.env"
 FE_ENV="$ROOT/strinf/frontend/.env"
 ENV_FILES=("$ROOT_ENV" "$API_ENV" "$BE_ENV" "$FE_ENV")
 
-ALL_ENV=("MAKEFILE_LIST" "HOME" "PATH" "STAGE" "NONCE_WEB" "PURGE_CSS" "FIX_CONFIG")
+ALL_ENV=("MAKEFILE_LIST" "HOME" "PATH" "STAGE" "NONCE_WEB" "PURGE_CSS" "FIX_CONFIG" "COMMIT_MSG_FILE" "MAKE")
 
 check_env_uniqueness() {
     cmd="$(awk 'match($0, /^.*=/) {print substr($0, RSTART, RLENGTH-1)}' "$1")"
@@ -54,17 +54,17 @@ check_name_occurrence() {
     if [[ "$(grep -Rnw "$ROOT/.devcontainer" -e "$docker_reg" | wc -l)" -gt 0 ]]; then
         return 0
     fi
-    if [[ "$(grep --exclude-dir=src -Rnw "$ROOT/strinf" -e "$norm_reg" | wc -l)" -gt 0 ]]; then
+    if [[ "$(grep --exclude-dir={src,node_modules} -Rnw "$ROOT/strinf" -e "$norm_reg" | wc -l)" -gt 0 ]]; then
         return 0
     fi
     if [[ "$2" = 1 ]]; then
         return 1
     fi
-    if [[ "$(grep --exclude-dir=src --exclude-dir=bin -Rnw "$ROOT/strinf" -e "$1" | wc -l)" -gt 0 ]]; then
+    if [[ "$(grep --exclude-dir={src,bin,node_modules} -Rnw "$ROOT/strinf" -e "$1" | wc -l)" -gt 0 ]]; then
         return 0
     fi
     if [[ "$1" = "COPY_FE_"* ]]; then
-        if [[ "$(grep --exclude-dir={src,bin} -Rnw "$ROOT/strinf" -e "COPY_FE_" | wc -l)" -gt 0 ]]; then
+        if [[ "$(grep --exclude-dir={src,bin,node_modules} -Rnw "$ROOT/strinf" -e "COPY_FE_" | wc -l)" -gt 0 ]]; then
             return 0
         fi
     fi

@@ -2,30 +2,19 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "formulahendry.code-runner",
+                "Continue.continue",
                 "streetsidesoftware.code-spell-checker",
-                "kamikillerto.vscode-colorize",
-                "ms-azuretools.vscode-docker",
-                "donjayamanne.githistory",
-                "eamodio.gitlens",
                 "oderwat.indent-rainbow",
                 "yzhang.markdown-all-in-one",
                 "christian-kohler.path-intellisense",
-                "foxundermoon.shell-format",
-                "ms-vscode.test-adapter-converter",
-                "hbenl.vscode-test-explorer",
                 "Gruntfuggly.todo-tree",
-                "uctakeoff.vscode-counter",
-                "DotJoshJohnson.xml",
                 "aaron-bond.better-comments",
-                "firefox-devtools.vscode-firefox-debug",
                 "tamasfe.even-better-toml",
-                "wix.vscode-import-cost",
                 "xdebug.php-debug",
                 "bmewburn.vscode-intelephense-client",
                 "MehediDracula.php-namespace-resolver",
-                "unifiedjs.vscode-mdx",
-                "st-pham.php-refactor-tool"
+                "st-pham.php-refactor-tool",
+                "unifiedjs.vscode-mdx"
             ]
         }
     },
