@@ -12,7 +12,7 @@ import {
     parseVal2Html,
 } from '@strinf/ts/mvc/vdom/fun/tab/misc';
 import crToolTip from '@strinf/ts/mvc/vdom/fun/tooltip/tooltip';
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
 const TAB_GEN = `${ClHtml.tab} ${ClHtml.sm} ${ClHtml.hov}`;
 
@@ -110,18 +110,18 @@ type EventsSt = [() => void, string, Element][];
 function TooltipWrapper(props: TTWrProps): JSX.Element {
     const { srcH, upD, chi } = props;
     const tarRef = useRef<HTMLDivElement>(null);
-    const [events] = useState<EventsSt>([]);
+    const events = useRef<EventsSt>([]);
     const storeEv = (eve: EventsSt) => {
-        events.length = 0;
-        events.push(...eve);
+        events.current.splice(0, events.current.length);
+        events.current.push(...eve);
     };
-    for (const eve of events) {
+    for (const eve of events.current) {
         if (eve[1] === 'blur') {
             eve[0]();
         }
         eve[2].removeEventListener(eve[1], eve[0]);
     }
-    crToolTip([tarRef, srcH], upD, storeEv);
+    useEffect((): void => crToolTip([tarRef, srcH], upD, storeEv), [srcH, upD]);
     return (
         <div ref={tarRef} {...TT_TAR}>
             {chi}
@@ -135,12 +135,12 @@ function useTooltipForRef<T extends Element>(
     upD: () => void,
     timeout: [number, number],
 ): void {
-    const [events] = useState<EventsSt>([]);
+    const events = useRef<EventsSt>([]);
     const storeEv = (eve: EventsSt) => {
-        events.length = 0;
-        events.push(...eve);
+        events.current.splice(0, events.current.length);
+        events.current.push(...eve);
     };
-    for (const eve of events) {
+    for (const eve of events.current) {
         if (eve[1] === 'blur') {
             eve[0]();
         }

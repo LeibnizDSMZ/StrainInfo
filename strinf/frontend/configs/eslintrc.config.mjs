@@ -1,5 +1,5 @@
 import antfu from '@antfu/eslint-config';
-import * as tsResolver from 'eslint-import-resolver-typescript';
+import tsParser from '@typescript-eslint/parser';
 
 export default antfu(
     {
@@ -8,13 +8,17 @@ export default antfu(
             quotes: 'single',
             semi: true,
         },
-        typescript: {
-            tsconfigPath: 'tsconfig.app.json',
-        },
+        typescript: true,
         jsonc: true,
         yaml: true,
         react: true,
-        ignores: ['**/configs'],
+        ignores: ['**/configs', 'vite.config.ts'],
+        languageOptions: {
+            parserOptions: {
+                project: 'tsconfig.app.json',
+                parser: tsParser,
+            },
+        },
     },
     {
         files: ['**/src/**/*.{js,jsx,ts,tsx}'],
@@ -52,15 +56,6 @@ export default antfu(
             'ts/no-base-to-string': 'warn',
             'ts/no-unsafe-type-assertion': 'warn',
             'no-console': 'warn',
-        },
-    },
-    {
-        settings: {
-            'import/resolver': {
-                name: 'tsResolver',
-                resolver: tsResolver,
-                options: { alwaysTryTypes: true, project: 'tsconfig.app.json' },
-            },
         },
     }
 );

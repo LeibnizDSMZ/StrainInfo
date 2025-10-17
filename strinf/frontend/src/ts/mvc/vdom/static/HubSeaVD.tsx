@@ -1,4 +1,4 @@
-import type { JSX, RefObject } from 'preact';
+import type { JSX, RefObject, TargetedKeyboardEvent } from 'preact';
 import hubSty from '@strinf/css/mods/hub.module.css';
 import btnSty from '@strinf/css/mods/icon.module.css';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
@@ -7,14 +7,11 @@ import { Align, ClHtml, Dis, Mar, Wid } from '@strinf/ts/constants/style/ClHtml'
 import LogoHubDsmzVD from '@strinf/ts/mvc/vdom/static/images/logos/LogoHubDsmzVD';
 import { useRef } from 'preact/hooks';
 
-function actSearch(eve: JSX.TargetedKeyboardEvent<HTMLInputElement>): boolean {
+function actSearch(eve: TargetedKeyboardEvent<HTMLInputElement>): boolean {
     return eve.key === 'Enter' || eve.key === 'Accept' || eve.key === 'Tab';
 }
 
-function clickEvent(
-    value: string,
-    eve?: JSX.TargetedKeyboardEvent<HTMLInputElement>,
-): void {
+function clickEvent(value: string, eve?: TargetedKeyboardEvent<HTMLInputElement>): void {
     if (eve === undefined || actSearch(eve)) {
         window.location.href = hub_dsmz_search(value);
     }

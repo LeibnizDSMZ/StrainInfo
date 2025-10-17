@@ -197,7 +197,7 @@ async function runPurgeCss(): Promise<void> {
                 const newS = fs.statSync(file).size / 1024;
                 console.log(`${file}: ${initS} -> ${newS} KB`);
             }
-        }),
+        })
     );
 }
 
@@ -223,7 +223,7 @@ function createCopyPath(): {
 
 function crFEConfEnv(): [ConfLinkT, string] {
     const glConf = CSS.parse(
-        JSON.parse(fs.readFileSync(Path.resolve(ROOT, ENV_GL.CONFIG_STRINF)).toString()),
+        JSON.parse(fs.readFileSync(Path.resolve(ROOT, ENV_GL.CONFIG_STRINF)).toString())
     );
     const [fe_dom, fe_pro, fe_por] = [
         glConf.frontend.web.domain,
@@ -292,7 +292,7 @@ function copyToOut(): void {
 
 function addCspHeaders(): OutgoingHttpHeaders {
     const glConf = CSS.parse(
-        JSON.parse(fs.readFileSync(Path.resolve(ROOT, ENV_GL.CONFIG_STRINF)).toString()),
+        JSON.parse(fs.readFileSync(Path.resolve(ROOT, ENV_GL.CONFIG_STRINF)).toString())
     );
     const {
         backend: {
@@ -304,14 +304,14 @@ function addCspHeaders(): OutgoingHttpHeaders {
     const statUrl = matomo;
     return {
         'Content-Security-Policy': [
-            'object-src \'none\'',
+            "object-src 'none'",
             `connect-src 'self' ${backUrl} ${statUrl}`,
             `default-src 'self' 'nonce-${getNonceSub()}'`,
-            'style-src \'self\' \'unsafe-inline\'',
-            'img-src \'self\' data:',
-            'media-src \'self\' data:',
+            "style-src 'self' 'unsafe-inline'",
+            "img-src 'self' data:",
+            "media-src 'self' data:",
             'frame-src youtube.com www.youtube.com',
-            'frame-ancestors \'self\'',
+            "frame-ancestors 'self'",
         ].join(';'),
         'Cross-Origin-Opener-Policy': 'same-origin',
         'X-Frame-Options': 'DENY',
@@ -321,7 +321,7 @@ function addCspHeaders(): OutgoingHttpHeaders {
 const ALIAS: {
     [key: string]: string;
 } = {
-    'react': 'preact/compat',
+    react: 'preact/compat',
     'react-dom/test-utils': 'preact/test-utils',
     'react-dom': 'preact/compat', // Must be below test-utils
     'react/jsx-runtime': 'preact/jsx-runtime',
@@ -385,18 +385,18 @@ function createBuild(): UserConfig {
                 ].concat(
                     getBench() === 'true'
                         ? [
-                                visualizer({
-                                    filename: Path.resolve(
-                                        PROFILE_DIR,
-                                        'rollup_stats.tree.html',
-                                    ),
-                                    open: false,
-                                    gzipSize: true,
-                                    brotliSize: true,
-                                    template: 'treemap' as const,
-                                }),
-                            ]
-                        : [],
+                              visualizer({
+                                  filename: Path.resolve(
+                                      PROFILE_DIR,
+                                      'rollup_stats.tree.html'
+                                  ),
+                                  open: false,
+                                  gzipSize: true,
+                                  brotliSize: true,
+                                  template: 'treemap' as const,
+                              }),
+                          ]
+                        : []
                 ),
             },
         },
@@ -420,7 +420,7 @@ function createShared(build: boolean): UserConfig {
             transformer: 'lightningcss',
             lightningcss: {
                 targets: browserslistToTargets(
-                    browserslist('last 2 versions, not dead, > 0.2%'),
+                    browserslist('last 2 versions, not dead, > 0.2%')
                 ),
             },
         },
@@ -473,7 +473,7 @@ function createShared(build: boolean): UserConfig {
 
 function createDefaultServer(
     port: number,
-    headers: OutgoingHttpHeaders,
+    headers: OutgoingHttpHeaders
 ): PreviewOptions | ServerOptions {
     return {
         host: '0.0.0.0',

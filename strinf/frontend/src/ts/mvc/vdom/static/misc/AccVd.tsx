@@ -1,7 +1,6 @@
 import type { DefAttr } from '@strinf/ts/constants/style/AtHtml';
 import type { CookieG, WrapperInt } from '@strinf/ts/interfaces/dom/global';
-import type { JSX, RefObject } from 'preact';
-import type { TargetedEvent } from 'preact/compat';
+import type { JSX, RefObject, TargetedEvent } from 'preact';
 import CONFIG from '@strinf/ts/configs/config';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
 import ClHtmlSt from '@strinf/ts/constants/stat/ClHtml';

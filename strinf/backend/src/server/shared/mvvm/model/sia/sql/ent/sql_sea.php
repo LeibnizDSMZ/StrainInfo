@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\model\sia\sql\ent;
 
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructCulE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
 
-use function straininfo\server\shared\mvvm\model\sia\sql\create_sql_in_tuple_templ;
 use function straininfo\server\shared\mvvm\model\sia\sql\create_sql_in_templ;
+use function straininfo\server\shared\mvvm\model\sia\sql\create_sql_in_tuple_templ;
 
 /** @return array<string> */
 function create_sql_designation_triplet(int $cntPart): array

@@ -9,7 +9,7 @@ import Known500Error from '@strinf/ts/errors/known/500';
 import onPrError from '@strinf/ts/functions/err/async';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import { memo } from 'preact/compat';
-import { useContext as use, useRef, useState } from 'preact/hooks';
+import { useContext as use, useEffect, useRef, useState } from 'preact/hooks';
 
 const NAV: { [key in keyof typeof SideT]?: string } = {
     [SideT.HOME]: 'Home',
@@ -38,13 +38,15 @@ interface SideTProps {
 function SideEl({ act, key, ele, tId }: SideTProps): JSX.Element {
     const actCl = `${ClHtml.wIco} ${act ? ClHtml.act : ''}`;
     const hrefRef = useRef<HTMLAnchorElement>(null);
-    ele[3]
-        .then((link) => {
-            if (hrefRef.current !== null) {
-                hrefRef.current.href = link;
-            }
-        })
-        .catch(onPrError);
+    useEffect(() => {
+        ele[3]
+            .then((link) => {
+                if (hrefRef.current !== null) {
+                    hrefRef.current.href = link;
+                }
+            })
+            .catch(onPrError);
+    }, [ele[3]]);
     return (
         <a
             {...(tId == null ? {} : { id: tId })}

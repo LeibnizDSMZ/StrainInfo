@@ -1,6 +1,6 @@
 import type { SeaIndJT } from '@strinf/ts/interfaces/api/data';
 import type { GlobVersionGet } from '@strinf/ts/interfaces/dom/global';
-import type { JSX, RefObject } from 'preact';
+import type { JSX, RefObject, TargetedEvent } from 'preact';
 import type { LocationHook } from 'preact-iso';
 import btnSty from '@strinf/css/mods/icon.module.css';
 import CONFIG from '@strinf/ts/configs/config';
@@ -28,7 +28,7 @@ type InProps = InputMProps & {
 
 type InWrProps = InputMProps & {
     reset: () => void;
-    onInput: (input: JSX.TargetedEvent<HTMLInputElement>) => void;
+    onInput: (input: TargetedEvent<HTMLInputElement>) => void;
 };
 
 interface BtnProps {
@@ -62,7 +62,7 @@ function seaIndEvent(
     ctrl: SeaIndexCtrl,
     hooks: IndSeaSt,
     keyLen: number,
-    input: JSX.TargetedEvent<HTMLInputElement>,
+    input: TargetedEvent<HTMLInputElement>,
 ): void {
     const val = input.currentTarget.value;
     const valLen = val.length >= keyLen || val.replaceAll(/[^A-Z]/gi, '').length >= 1;

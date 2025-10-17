@@ -36,7 +36,7 @@ import crToolTip from '@strinf/ts/mvc/vdom/fun/tooltip/tooltip';
 import LogoEnaVD from '@strinf/ts/mvc/vdom/static/images/logos/LogoEnaVD';
 import LogoNcbiVD from '@strinf/ts/mvc/vdom/static/images/logos/LogoNcbiVD';
 import { Fragment, isValidElement } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
 function createBoolIcon(val: boolean, dark = false): JSX.Element {
     const filter = dark ? 'brightness(2)' : 'brightness(1.0)';
@@ -317,15 +317,17 @@ interface RowChildProps {
 
 function RowWTT({ chiEl, hooks, stEv }: RowChildProps): JSX.Element {
     const rowRef = useRef<HTMLDivElement>(null);
-    crToolTip(
-        [rowRef, hooks],
-        () => {
-            if (hooks.data !== undefined) {
-                hooks.data(chiEl[0]);
-            }
-        },
-        stEv,
-    );
+    useEffect(() => {
+        crToolTip(
+            [rowRef, hooks],
+            () => {
+                if (hooks.data !== undefined) {
+                    hooks.data(chiEl[0]);
+                }
+            },
+            stEv,
+        );
+    }, []);
     return (
         <div ref={rowRef} {...TT_TAR}>
             {chiEl[1]}

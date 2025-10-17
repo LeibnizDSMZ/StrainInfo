@@ -9,6 +9,7 @@ export default {
         /^typescript-plugin.+/,
         /^@?eslint.*/,
         '@antfu/eslint-config',
+        '@typescript-eslint/parser',
     ],
     ignoreBinaries: ['knip', 'eslint', 'tsc', 'vite'],
     compilers: {

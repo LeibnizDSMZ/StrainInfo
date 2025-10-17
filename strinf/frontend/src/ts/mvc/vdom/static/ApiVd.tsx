@@ -257,7 +257,6 @@ interface RapiDocProps {
 
 async function loadSpec(docu: Element, specUrl: unknown): Promise<void> {
     if (hasProp('loadSpec', docu) && typeof docu.loadSpec === 'function') {
-        // eslint-disable-next-line ts/no-unsafe-call
         await docu.loadSpec(specUrl);
     }
 }
