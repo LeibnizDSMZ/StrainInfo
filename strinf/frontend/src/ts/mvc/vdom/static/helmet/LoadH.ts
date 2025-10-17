@@ -21,7 +21,7 @@ function PreLoadH({ id, href, type }: { id: string; href: string; type: IMG }): 
         return () => {
             document.querySelector(`#${fId}`)?.remove();
         };
-    }, [id, href]);
+    }, [href, fId, type]);
 
     return null;
 }

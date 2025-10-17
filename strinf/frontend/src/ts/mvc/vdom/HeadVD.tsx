@@ -99,6 +99,7 @@ function HeadVD(): JSX.Element {
             <ToolTipCon />
             <FirInfVD />
             <button
+                type="button"
                 aria-label="Menu"
                 className={`${ClHtml.sOv} ${linkSty.cleanbutton}`}
                 onClick={() => {

@@ -94,13 +94,13 @@ interface WrProps {
     children?: JSX.Element[] | JSX.Element;
 }
 
-function ContactWr({ children = [] }: WrProps): JSX.Element {
+function ContactWr({ children }: WrProps): JSX.Element {
     return (
         <>
             <MetaH title="StrainInfo - Contact" desc="StrainInfo contact information" />
             <CanonH href={getCurFullPath()} />
             <div className={ClHtmlPl.con}>
-                <div className={ClHtmlPl.cnt}>{children}</div>
+                <div className={ClHtmlPl.cnt}>{children || []}</div>
             </div>
         </>
     );

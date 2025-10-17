@@ -55,7 +55,7 @@ function createStrainTitleBar(
         const cla = exCl[ind];
         if (val === undefined || head === undefined || cla === undefined) {
             throw new Known500Error(
-                `headers [${headers}] and values [${values}] are mismatched!`,
+                `headers [${JSON.stringify(headers)}] and values [${values}] are mismatched!`,
             );
         }
         con.push(appendTitleRow(head, val, cla));

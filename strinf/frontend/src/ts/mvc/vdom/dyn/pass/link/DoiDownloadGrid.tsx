@@ -62,6 +62,7 @@ function DoiDownloadGrid(props: DownloadT): JSX.Element {
                     className={`${btnC} ${claB}`}
                     style={{ outline: 'none', boxShadow: 'none' }}
                     aria-label="Copy archive"
+                    type="button"
                     onClick={() => {
                         try {
                             navigator.clipboard

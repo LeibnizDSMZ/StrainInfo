@@ -38,7 +38,7 @@ function MetaH({
         return () => {
             document.head.querySelector(`.${metaCl}`)?.remove();
         };
-    }, [desc]);
+    }, [desc, index, title]);
 
     return null;
 }

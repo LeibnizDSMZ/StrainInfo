@@ -273,7 +273,7 @@ function parseVal2Html(value: unknown): JSX.Element | null {
         }
         return null;
     }
-    return <span>{String(value)}</span>;
+    return <span>{JSON.stringify(value)}</span>;
 }
 
 function create2ColDiv<T>(
@@ -327,7 +327,7 @@ function RowWTT({ chiEl, hooks, stEv }: RowChildProps): JSX.Element {
             },
             stEv,
         );
-    }, []);
+    }, [chiEl, hooks, stEv]);
     return (
         <div ref={rowRef} {...TT_TAR}>
             {chiEl[1]}

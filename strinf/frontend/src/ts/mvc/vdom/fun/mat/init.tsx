@@ -86,7 +86,7 @@ function matomoCallback(callback: () => void): void {
         setMatomoInterval(
             () => createDelayedTrack(callback),
             () => {
-                console.log('matomo not loaded');
+                console.warn('matomo not loaded');
             },
         );
     }

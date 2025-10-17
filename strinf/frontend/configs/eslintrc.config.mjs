@@ -23,6 +23,9 @@ export default antfu(
     {
         files: ['**/src/**/*.{js,jsx,ts,tsx}'],
         rules: {
+            // react
+            'react-refresh/only-export-components': 'off',
+            'react/no-array-index-key': 'off',
             // Example TypeScript rule overrides
             'ts/no-magic-numbers': 'off',
             'ts/explicit-function-return-type': 'off',

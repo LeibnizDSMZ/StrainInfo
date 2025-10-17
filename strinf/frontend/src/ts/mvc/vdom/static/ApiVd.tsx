@@ -31,7 +31,7 @@ import MetaH from '@strinf/ts/mvc/vdom/static/helmet/MetaH';
 import Loading from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
 import * as yaml from 'js-yaml';
 import { memo } from 'preact/compat';
-import { useContext as use, useEffect, useState } from 'preact/hooks';
+import { useContext as use, useCallback, useEffect, useState } from 'preact/hooks';
 import 'rapidoc';
 import '@strinf/css/adhoc/api.css';
 
@@ -275,17 +275,23 @@ function RapDoc({
                 res(loadSpec(docu, specUrl));
             }).catch(onPrError);
         }
+        const onSpecLoaded = (eve: Event) => {
+            docu?.classList.remove(Dis.dNone);
+            addAnchors(eve, anc);
+        };
         if (docu !== undefined && docu instanceof HTMLElement) {
             docu.addEventListener('spec-loaded', addStyle);
             docu.addEventListener('before-try', beforeTry);
-            docu.addEventListener('spec-loaded', (eve) => {
-                docu.classList.remove(Dis.dNone);
-                addAnchors(eve, anc);
-            });
+            docu.addEventListener('spec-loaded', onSpecLoaded);
             amendShadow(docu);
             setSectionTags(docu, anc);
         }
-    }, [specUrl]);
+        return () => {
+            docu?.removeEventListener('spec-loaded', addStyle);
+            docu?.removeEventListener('before-try', beforeTry);
+            docu?.removeEventListener('spec-loaded', onSpecLoaded);
+        };
+    }, [specUrl, anc]);
     const font = dyslexia ? 'OpenDyslexic' : 'Rubik';
     return (
         <div
@@ -382,13 +388,23 @@ const RapDocM = memo(RapDoc);
 
 function ApiVD(): JSX.Element {
     const [spec, setSpec] = useState<[unknown, string] | undefined>();
-    const [dys, setDys] = useState<boolean>(isDyslexiaSet());
+    const [dys, setDys] = useState<boolean>(isDyslexiaSet);
     const [anc, setAnc] = useState<AncT | undefined>();
     const ctx: (BreadCrumbsG & CookieS) | undefined = use(MainConGl);
     const [ver, setVer] = useState(ApiVer.v2);
     useEffect(() => {
         loadApiSpec(ctx, setSpec, spec === undefined, ver);
     }, [ctx?.bread]);
+    const setVerC = useCallback(
+        (nVer: ApiVer) => {
+            if (ver !== nVer) {
+                loadApiSpec(ctx, setSpec, true, nVer);
+                deactivateAllDropdownToggles();
+                setVer(nVer);
+            }
+        },
+        [ver],
+    );
     if (spec === undefined) {
         return <Loading />;
     }
@@ -406,18 +422,7 @@ function ApiVD(): JSX.Element {
             />
             <CanonH href={getCurFullPath()} />
             <div className={ClHtml.row}>
-                <RapDocM
-                    spec={spec}
-                    anc={setAnc}
-                    dyslexia={dys}
-                    setVer={(nVer) => {
-                        if (ver !== nVer) {
-                            loadApiSpec(ctx, setSpec, true, nVer);
-                            deactivateAllDropdownToggles();
-                            setVer(nVer);
-                        }
-                    }}
-                />
+                <RapDocM spec={spec} anc={setAnc} dyslexia={dys} setVer={setVerC} />
                 <OnPageNavVD>{createNavLinks(anc)}</OnPageNavVD>
             </div>
         </>

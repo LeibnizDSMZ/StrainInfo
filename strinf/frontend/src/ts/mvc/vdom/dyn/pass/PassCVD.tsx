@@ -248,7 +248,7 @@ function crUpdater(
 }
 
 function DataSet({ res, dCtrl }: DataSetProps): JSX.Element | null {
-    const [dat, setDat] = useState<Map<number, string>>(new Map());
+    const [dat, setDat] = useState<Map<number, string>>(() => new Map());
     const miss = res.relations.filter(([culId]) => !dat.has(culId));
     const { relations } = res;
     if (miss.length !== 0) {
@@ -273,11 +273,6 @@ function checkUndefined(props: PassRProps): props is PassRVerified {
 }
 
 class PassCVD extends Component<PassRProps, object> {
-    constructor(props: PassRProps) {
-        super(props);
-        this.state = {};
-    }
-
     public render(): JSX.Element | null {
         const ctx: TTHookG<TT_GL_TYPE> | undefined = this.context;
         const hookDep = ctx?.getTTHook(TT_ID_DEP);

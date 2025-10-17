@@ -1,8 +1,8 @@
 import { useEffect } from 'preact/hooks';
 
 function CanonH({ href }: { href: string }): null {
-    const fId = `canonical_url`;
     useEffect(() => {
+        const fId = `canonical_url`;
         document.querySelector(`#${fId}`)?.remove();
         const link = document.createElement('link');
         link.setAttribute('rel', 'canonical');

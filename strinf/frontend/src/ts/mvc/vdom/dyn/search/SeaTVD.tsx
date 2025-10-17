@@ -509,7 +509,7 @@ function SearchFilter({
         (filterV: FILTER_VALUES) => {
             filter(filterV);
         },
-        [data],
+        [data, filter],
     );
     let download: JSX.Element | null = (
         <DownloadBtn worker={worker} view={view} term={term} />
@@ -735,7 +735,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
                 data={this.data}
                 view={view}
                 term={term}
-                filter={(val) => {
+                filter={(val: FILTER_VALUES) => {
                     this.filterAction(val);
                 }}
                 showBtn={download}

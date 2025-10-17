@@ -107,7 +107,9 @@ function crUpdater(
 }
 
 function StrainStatus({ rel, dCtrl, ttHook }: StatusProps): JSX.Element | null {
-    const [dat, setDat] = useState<Map<number, [boolean, boolean, boolean]>>(new Map());
+    const [dat, setDat] = useState<Map<number, [boolean, boolean, boolean]>>(
+        () => new Map(),
+    );
     if (rel === undefined || dCtrl === undefined) {
         return null;
     }

@@ -38,15 +38,16 @@ interface SideTProps {
 function SideEl({ act, key, ele, tId }: SideTProps): JSX.Element {
     const actCl = `${ClHtml.wIco} ${act ? ClHtml.act : ''}`;
     const hrefRef = useRef<HTMLAnchorElement>(null);
+    const eleThree = ele[3];
     useEffect(() => {
-        ele[3]
+        eleThree
             .then((link) => {
                 if (hrefRef.current !== null) {
                     hrefRef.current.href = link;
                 }
             })
             .catch(onPrError);
-    }, [ele[3]]);
+    }, [eleThree]);
     return (
         <a
             {...(tId == null ? {} : { id: tId })}

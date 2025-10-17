@@ -33,7 +33,7 @@ function IndexBody(): JSX.Element {
             <LocationProvider>
                 <ErrorBoundary
                     onError={(err) => {
-                        console.log('detected uncaught error', err.message);
+                        console.warn('detected uncaught error', err.message);
                     }}
                 >
                     <PreConnectH

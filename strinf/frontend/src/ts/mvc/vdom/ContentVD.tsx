@@ -128,7 +128,7 @@ function ContentVD({
         errorP: '',
         errorB: false,
     });
-
+    const errT = ctx?.errT;
     useEffect(() => {
         const { errorB, errorP } = errorState;
         const newState = { ...errorState };
@@ -136,13 +136,13 @@ function ContentVD({
             disableLoader();
             newState.errorP = window.location.pathname + window.location.search;
         }
-        if (panic || ctx?.errT === ErrType.E503) {
+        if (panic || errT === ErrType.E503) {
             newState.errorB = true;
         }
         if (newState.errorP !== errorP || newState.errorB !== errorB) {
             setErrorState(newState);
         }
-    }, [error, panic, ctx?.errT]);
+    }, [error, panic, errT]);
     if (ctx === undefined) {
         return null;
     }

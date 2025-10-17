@@ -1,6 +1,6 @@
 import type { SeaIndJT } from '@strinf/ts/interfaces/api/data';
 import type { GlobVersionGet } from '@strinf/ts/interfaces/dom/global';
-import type { JSX, RefObject, TargetedEvent } from 'preact';
+import type { JSX, RefObject, TargetedEvent, TargetedKeyboardEvent } from 'preact';
 import type { LocationHook } from 'preact-iso';
 import btnSty from '@strinf/css/mods/icon.module.css';
 import CONFIG from '@strinf/ts/configs/config';
@@ -38,7 +38,7 @@ interface BtnProps {
     location: LocationHook;
 }
 
-type KeyEvent = JSX.TargetedKeyboardEvent<HTMLInputElement>;
+type KeyEvent = TargetedKeyboardEvent<HTMLInputElement>;
 
 function clickEvent({ callB, upD, reset, location }: BtnProps) {
     const ref = callB();

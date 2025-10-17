@@ -12,7 +12,7 @@ function PreConnectH({ id, href }: { id: string; href: string }): null {
         return () => {
             document.querySelector(`#${fId}`)?.remove();
         };
-    }, [id, href]);
+    }, [fId, href]);
 
     return null;
 }
