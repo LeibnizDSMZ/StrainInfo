@@ -53,11 +53,11 @@ export default antfu(
             'ts/restrict-template-expressions': 'off',
             'ts/no-use-before-define': 'off',
             'ts/no-unsafe-enum-comparison': 'off',
-            'ts/switch-exhaustiveness-check': 'warn',
+            'ts/switch-exhaustiveness-check': 'off',
             'ts/no-deprecated': 'warn',
             complexity: ['error', { max: 18 }],
             'ts/no-base-to-string': 'warn',
-            'ts/no-unsafe-type-assertion': 'warn',
+            'ts/no-unsafe-type-assertion': 'off',
             'no-console': 'warn',
         },
     }

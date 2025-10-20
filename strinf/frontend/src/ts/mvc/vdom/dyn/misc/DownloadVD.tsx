@@ -1,7 +1,7 @@
 import type { JSX } from 'preact';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 import onPrError from '@strinf/ts/functions/err/async';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 
 interface DBProp {
     btnC: string;
@@ -24,19 +24,18 @@ function DownloadBlobVD({
     state,
     desc,
 }: DBProp): JSX.Element {
-    const [load, setLoad] = useState(false);
-    const [linkC, setLinkC] = useState(['', '']);
+    const [downS, setDownS] = useState({
+        dState: state,
+        link: '',
+        name: '',
+        load: false,
+    });
     const linKRef = useRef<HTMLAnchorElement>(null);
-    useEffect(() => {
-        const [linkL, nameL] = linkC;
-        if (linkL !== '' || nameL !== '') {
-            setLinkC(['', '']);
-        }
-    }, [state]);
     const icoLS = { opacity: 1 };
     if (emptyLoad) {
         icoLS.opacity = 0;
     }
+    const { load } = downS;
     if (load) {
         return (
             <span className={`${btnC} ${ClHtml.load}`}>
@@ -44,8 +43,8 @@ function DownloadBlobVD({
             </span>
         );
     }
-    const [linkL, nameL] = linkC;
-    if (linkL === '' || nameL === '') {
+    const { link, name, dState } = downS;
+    if (link === '' || name === '' || dState !== state) {
         let counter = 1;
         return (
             <button
@@ -53,10 +52,15 @@ function DownloadBlobVD({
                 type="button"
                 aria-label={label}
                 onClick={(eve) => {
-                    setLoad(true);
+                    setDownS({ ...downS, load: true, dState: state });
                     callBack(eve)
                         .then((linkCC) => {
-                            setLinkC(linkCC);
+                            setDownS({
+                                ...downS,
+                                load: false,
+                                link: linkCC[0],
+                                name: linkCC[1],
+                            });
                             const int = setInterval(() => {
                                 counter++;
                                 if (linKRef.current !== null) {
@@ -67,7 +71,6 @@ function DownloadBlobVD({
                                     clearInterval(int);
                                 }
                             }, 100);
-                            setLoad(false);
                         })
                         .catch(onPrError);
                 }}
@@ -83,8 +86,8 @@ function DownloadBlobVD({
             <a
                 ref={linKRef}
                 type="button"
-                href={linkL}
-                download={nameL}
+                href={link}
+                download={name}
                 aria-label={label}
                 className={ancC}
                 target="_blank"

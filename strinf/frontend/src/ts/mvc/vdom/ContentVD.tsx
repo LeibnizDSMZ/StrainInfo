@@ -10,7 +10,7 @@ import Redirect from '@strinf/ts/mvc/vdom/fun/route/Redirect';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import { LID } from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
 import { lazy, Route, Router, useLocation } from 'preact-iso';
-import { useContext as use, useEffect, useState } from 'preact/hooks';
+import { useContext as use, useState } from 'preact/hooks';
 
 const INDEX_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/IndexVD'));
 const CONTACT_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ContactVD'));
@@ -19,8 +19,8 @@ const ERROR_VD = lazy(async () => import('@strinf/ts/mvc/vdom/ErrorVD'));
 const SEA_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/SearchVD'));
 
 interface ERR_PROP {
-    error: () => boolean;
-    disable: () => void;
+    isError: () => boolean;
+    disableError: () => void;
 }
 
 function SeaWrVD({
@@ -116,38 +116,43 @@ function displayContainer(errorP: string, errorB: boolean, mainCon: boolean): st
     return mainCon ? '' : Dis.dNone;
 }
 
+interface errStateT {
+    errorP: string;
+    errorB: boolean;
+}
+
+function onError(
+    panic: boolean,
+    handleError: () => boolean,
+    errT: ErrType | undefined,
+): errStateT {
+    const newState = {
+        errorP: '',
+        errorB: false,
+    };
+    if (handleError()) {
+        disableLoader();
+        newState.errorP = window.location.pathname + window.location.search;
+    }
+    if (panic || errT === ErrType.E503) {
+        newState.errorB = true;
+    }
+    return newState;
+}
+
 function ContentVD({
     panic,
-    error,
-    disable,
+    isError,
+    disableError,
 }: {
     panic: boolean;
 } & ERR_PROP): JSX.Element | null {
     const ctx: (BreadCrumbsG & ErrStCon) | undefined = use(MainConGl);
-    const [errorState, setErrorState] = useState({
-        errorP: '',
-        errorB: false,
-    });
-    const errT = ctx?.errT;
-    useEffect(() => {
-        const { errorB, errorP } = errorState;
-        const newState = { ...errorState };
-        if (error() && errorP === '') {
-            disableLoader();
-            newState.errorP = window.location.pathname + window.location.search;
-        }
-        if (panic || errT === ErrType.E503) {
-            newState.errorB = true;
-        }
-        if (newState.errorP !== errorP || newState.errorB !== errorB) {
-            setErrorState(newState);
-        }
-    }, [error, panic, errT]);
+    const { errorB, errorP } = onError(panic, isError, ctx?.errT);
+    const [errC, setErrC] = useState(0);
     if (ctx === undefined) {
         return null;
     }
-    const { errorB, errorP } = errorState;
-
     return (
         <div className={ClHtml.cntWr}>
             <div
@@ -166,9 +171,9 @@ function ContentVD({
                     onRouteChange={(path) => {
                         if (errorP !== path && !errorB) {
                             onRouteChange(path);
+                            disableError();
                             if (errorP !== '') {
-                                disable();
-                                setErrorState({ ...errorState, errorP: '' });
+                                setErrC((errC % 10) + 1);
                             }
                         }
                     }}

@@ -31,7 +31,7 @@ import MetaH from '@strinf/ts/mvc/vdom/static/helmet/MetaH';
 import Loading from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
 import * as yaml from 'js-yaml';
 import { memo } from 'preact/compat';
-import { useContext as use, useCallback, useEffect, useState } from 'preact/hooks';
+import { useContext as use, useEffect, useState } from 'preact/hooks';
 import 'rapidoc';
 import '@strinf/css/adhoc/api.css';
 
@@ -70,12 +70,11 @@ const ANCHOR_API = 'anchor_api_vd_sc_margin';
 
 function loadApiSpec(
     ctx: BreadCrumbsG | undefined,
-    setSpec: Dispatch<StateUpdater<[unknown, string] | undefined>>,
-    update: boolean,
-    ver: ApiVer,
+    apiS: ApiInitT,
+    setApiS: Dispatch<StateUpdater<ApiInitT>>,
 ): void {
     const crit = new Known500Error('Internal server error!');
-    if (ctx?.bread !== undefined) {
+    if (ctx?.bread !== undefined && apiS.spec === undefined) {
         for (const actF of ctx.bread) {
             actF(HeadT.API);
         }
@@ -87,15 +86,12 @@ function loadApiSpec(
                     res.maintenance.zone,
                 );
             }
-            if (update) {
-                getSpec(res.private, CONFIG.backend, ver)
-                    .then((resSpec) => {
-                        setTimeout(() => {
-                            setSpec(resSpec);
-                        }, 800);
-                    })
-                    .catch(onPrError);
-            }
+            const { ver } = apiS;
+            getSpec(res.private, CONFIG.backend, ver)
+                .then((resSpec) => {
+                    setApiS({ ...apiS, spec: resSpec });
+                })
+                .catch(onPrError);
         };
         getServerStatus(calB, () => {
             onPrError(crit);
@@ -222,17 +218,28 @@ enum ApiVer {
     v2 = 'v2',
 }
 
-function ApiV({ ver, setVer }: { ver: ApiVer; setVer: (ver: ApiVer) => void }) {
+function ApiV({
+    ver,
+    apiS,
+    setApiS,
+}: {
+    ver: ApiVer;
+    apiS: ApiT;
+    setApiS: (sta: ApiInitT) => void;
+}) {
+    const eventCall = () => {
+        const { ver: curVer } = apiS;
+        if (curVer !== ver) {
+            deactivateAllDropdownToggles();
+            setApiS({ ...apiS, ver, spec: undefined });
+        }
+    };
     return (
         <button
             type="button"
             className={`${linkSty.cleanbutton} ${Wid.f}`}
-            onClick={() => {
-                setVer(ver);
-            }}
-            onTouchEnd={() => {
-                setVer(ver);
-            }}
+            onClick={eventCall}
+            onTouchEnd={eventCall}
         >
             <span className={DdM.tl}>API</span>
             <span
@@ -249,10 +256,9 @@ function ApiV({ ver, setVer }: { ver: ApiVer; setVer: (ver: ApiVer) => void }) {
 }
 
 interface RapiDocProps {
-    spec: [unknown, string];
+    apiS: ApiT;
+    setApiS: (spec: ApiInitT) => void;
     anc: (anc: AncT) => void;
-    dyslexia: boolean;
-    setVer: (ver: ApiVer) => void;
 }
 
 async function loadSpec(docu: Element, specUrl: unknown): Promise<void> {
@@ -261,12 +267,11 @@ async function loadSpec(docu: Element, specUrl: unknown): Promise<void> {
     }
 }
 
-function RapDoc({
-    spec: [specUrl, serverUrl],
-    anc,
-    dyslexia,
-    setVer,
-}: RapiDocProps): JSX.Element {
+function RapDoc({ apiS, setApiS, anc }: RapiDocProps): JSX.Element {
+    const {
+        spec: [specUrl, serverUrl],
+        dys,
+    } = apiS;
     useEffect(() => {
         const [docu] = document.getElementsByTagName('rapi-doc');
         docu?.classList.add(Dis.dNone);
@@ -292,7 +297,7 @@ function RapDoc({
             docu?.removeEventListener('spec-loaded', onSpecLoaded);
         };
     }, [specUrl, anc]);
-    const font = dyslexia ? 'OpenDyslexic' : 'Rubik';
+    const font = dys ? 'OpenDyslexic' : 'Rubik';
     return (
         <div
             className={Col.lN9}
@@ -364,18 +369,8 @@ function RapDoc({
                         }}
                     >
                         <div className={`${drSty.dropdown} ${DdM.div}`}>
-                            <ApiV
-                                ver={ApiVer.v1}
-                                setVer={(ver) => {
-                                    setVer(ver);
-                                }}
-                            />
-                            <ApiV
-                                ver={ApiVer.v2}
-                                setVer={(ver) => {
-                                    setVer(ver);
-                                }}
-                            />
+                            <ApiV ver={ApiVer.v1} apiS={apiS} setApiS={setApiS} />
+                            <ApiV ver={ApiVer.v2} apiS={apiS} setApiS={setApiS} />
                         </div>
                     </div>
                 </div>
@@ -386,32 +381,53 @@ function RapDoc({
 
 const RapDocM = memo(RapDoc);
 
-function ApiVD(): JSX.Element {
-    const [spec, setSpec] = useState<[unknown, string] | undefined>();
-    const [dys, setDys] = useState<boolean>(isDyslexiaSet);
+function ApiAnchor({
+    apiS,
+    setApiS,
+}: {
+    apiS: ApiT;
+    setApiS: (sta: ApiInitT) => void;
+}): JSX.Element {
     const [anc, setAnc] = useState<AncT | undefined>();
-    const ctx: (BreadCrumbsG & CookieS) | undefined = use(MainConGl);
-    const [ver, setVer] = useState(ApiVer.v2);
-    useEffect(() => {
-        loadApiSpec(ctx, setSpec, spec === undefined, ver);
-    }, [ctx?.bread]);
-    const setVerC = useCallback(
-        (nVer: ApiVer) => {
-            if (ver !== nVer) {
-                loadApiSpec(ctx, setSpec, true, nVer);
-                deactivateAllDropdownToggles();
-                setVer(nVer);
-            }
-        },
-        [ver],
+    return (
+        <>
+            <RapDocM apiS={apiS} setApiS={setApiS} anc={setAnc} />
+            <OnPageNavVD>{createNavLinks(anc)}</OnPageNavVD>
+        </>
     );
+}
+
+interface ApiInitT {
+    spec: [unknown, string] | undefined;
+    ver: ApiVer;
+    dys: boolean;
+}
+
+interface ApiT {
+    spec: [unknown, string];
+    ver: ApiVer;
+    dys: boolean;
+}
+
+function ApiVD(): JSX.Element {
+    const [apiS, setApiS] = useState<ApiInitT>(() => {
+        return {
+            spec: undefined,
+            ver: ApiVer.v2,
+            dys: isDyslexiaSet(),
+        };
+    });
+    const ctx: (BreadCrumbsG & CookieS) | undefined = use(MainConGl);
+    loadApiSpec(ctx, apiS, setApiS);
+    const { spec } = apiS;
     if (spec === undefined) {
         return <Loading />;
     }
     ctx?.cookieActiveSet('ApiVD', (cookie) => {
         const newDys = cookie.includes(CookieValue.dyslexia);
+        const { dys } = apiS;
         if (newDys !== dys) {
-            setDys(newDys);
+            setApiS({ ...apiS, spec: undefined, dys: newDys });
         }
     });
     return (
@@ -422,8 +438,7 @@ function ApiVD(): JSX.Element {
             />
             <CanonH href={getCurFullPath()} />
             <div className={ClHtml.row}>
-                <RapDocM spec={spec} anc={setAnc} dyslexia={dys} setVer={setVerC} />
-                <OnPageNavVD>{createNavLinks(anc)}</OnPageNavVD>
+                <ApiAnchor apiS={apiS as ApiT} setApiS={setApiS} />
             </div>
         </>
     );

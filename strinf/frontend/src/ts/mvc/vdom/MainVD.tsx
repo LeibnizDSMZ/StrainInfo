@@ -89,14 +89,14 @@ class MainVD extends Component<
 
     public override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
         if (!CONFIG.production) {
-            console.log(error, errorInfo);
+            console.error(error, errorInfo);
         }
         this.handleError(error);
     }
 
     public handleError(error: Error): void {
         if (!CONFIG.production) {
-            console.log(error);
+            console.error(error);
         }
         getServerStatus(
             (status) => {
@@ -172,8 +172,8 @@ class MainVD extends Component<
                         <HeadVD />
                         <ContentVD
                             panic={panic}
-                            error={() => this.errCr}
-                            disable={() => (this.errCr = false)}
+                            isError={() => this.errCr}
+                            disableError={() => (this.errCr = false)}
                         />
                     </div>
                 </MainConGl>

@@ -38,7 +38,7 @@ import {
     DotTT,
 } from '@strinf/ts/mvc/vdom/fun/tab/misc';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
-import { useCallback, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 interface SeaTProps {
     res: SeaR[];
@@ -505,12 +505,6 @@ function SearchFilter({
     term,
     showBtn,
 }: FilterProps & DownloadProps): JSX.Element {
-    const runFilter = useCallback(
-        (filterV: FILTER_VALUES) => {
-            filter(filterV);
-        },
-        [data, filter],
-    );
     let download: JSX.Element | null = (
         <DownloadBtn worker={worker} view={view} term={term} />
     );
@@ -519,7 +513,7 @@ function SearchFilter({
     }
     return (
         <div>
-            <FilterWrapper data={data} filter={runFilter} />
+            <FilterWrapper data={data} filter={filter} />
             {download}
         </div>
     );
@@ -735,9 +729,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
                 data={this.data}
                 view={view}
                 term={term}
-                filter={(val: FILTER_VALUES) => {
-                    this.filterAction(val);
-                }}
+                filter={this.filterAction}
                 showBtn={download}
             />
         );
