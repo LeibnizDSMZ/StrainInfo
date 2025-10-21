@@ -10,7 +10,7 @@ import Redirect from '@strinf/ts/mvc/vdom/fun/route/Redirect';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import { LID } from '@strinf/ts/mvc/vdom/static/misc/LoadVD';
 import { lazy, Route, Router, useLocation } from 'preact-iso';
-import { useContext as use, useState } from 'preact/hooks';
+import { useContext as use, useEffect, useState } from 'preact/hooks';
 
 const INDEX_VD = lazy(async () => import('@strinf/ts/mvc/vdom/main/IndexVD'));
 const CONTACT_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ContactVD'));
@@ -56,8 +56,7 @@ const PATH_SEARCH = `${UIApiCon.search}/:sea_typ/:sea_val`;
 
 const PATH_PRE = [UIApiCon.strain, UIApiCon.search, UIApiCon.pass] as const;
 
-function onRouteChange(path: string): void {
-    defaultRouteBeh();
+function track(path: string) {
     let track = true;
     for (const ign of PATH_PRE) {
         if (path.startsWith(ign)) {
@@ -68,6 +67,11 @@ function onRouteChange(path: string): void {
     if (track) {
         trackPageV();
     }
+}
+
+function onRouteChange(path: string): void {
+    defaultRouteBeh();
+    track(path);
 }
 
 function disableLoader(): void {
@@ -150,6 +154,9 @@ function ContentVD({
     const ctx: (BreadCrumbsG & ErrStCon) | undefined = use(MainConGl);
     const { errorB, errorP } = onError(panic, isError, ctx?.errT);
     const [errC, setErrC] = useState(0);
+    useEffect(() => {
+        track(window.location.pathname);
+    }, []);
     if (ctx === undefined) {
         return null;
     }

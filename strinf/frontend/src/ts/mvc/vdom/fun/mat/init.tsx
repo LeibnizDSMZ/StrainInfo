@@ -20,8 +20,10 @@ function initF(url: string, id: string): void {
 
 function initT(domains: string[]): void {
     window._paq = window._paq ?? [];
-    window._paq.push(['setCookieDomain', domains]);
-    window._paq.push(['setDomains', domains]);
+    for (const dom of domains) {
+        window._paq.push(['setCookieDomain', dom]);
+        window._paq.push(['setDomains', dom]);
+    }
     window._paq.push(['enableLinkTracking']);
 }
 
