@@ -12,7 +12,7 @@ function LogoHubDsmzVD({
     const srcI = full ? srcFull : src;
     return (
         <img
-            loading="lazy"
+            fetchPriority="high"
             height={height ?? 100}
             src={srcI}
             alt="DSMZ Digital Diversity"

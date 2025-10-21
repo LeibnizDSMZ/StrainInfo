@@ -24,7 +24,6 @@ import {
     getSeaResTuple,
 } from '@strinf/ts/functions/api/map';
 import { defaultSort, numSort } from '@strinf/ts/functions/arr/sort';
-import { selectBannerImage } from '@strinf/ts/functions/files/image';
 import { getCurFullPathWithArgs } from '@strinf/ts/functions/http/http';
 import { isSmallScreen } from '@strinf/ts/functions/misc/screen';
 import parseCountryCode from '@strinf/ts/functions/parse/country';
@@ -38,6 +37,7 @@ import {
     DotTT,
 } from '@strinf/ts/mvc/vdom/fun/tab/misc';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
+import { DefaultGradientVD } from '@strinf/ts/mvc/vdom/static/images/background/DefaultVD';
 import { useState } from 'preact/hooks';
 
 interface SeaTProps {
@@ -737,14 +737,6 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
 }
 
 SeaTable.contextType = MainConGl;
-const bgSty = {
-    'background-size': 'cover',
-    'background-position': 'top',
-    'background-image':
-        'linear-gradient(to right,rgba(27, 27, 27, 0.8),'
-        + 'rgba(27, 27, 27, 0.8)), '
-        + `url(${selectBannerImage()})`,
-};
 
 function SeaTVD({ res, sea, hook }: SeaTProps): JSX.Element | null {
     if (res.length === 0) {
@@ -753,7 +745,14 @@ function SeaTVD({ res, sea, hook }: SeaTProps): JSX.Element | null {
     const seaCat = getApiToStr(sea[1]);
     const seaVal = sea[0] !== '' ? `- ${decodeURIComponent(sea[0])}` : '';
     return (
-        <section className={ClHtml.sec} style={bgSty}>
+        <section
+            className={ClHtml.sec}
+            style={{
+                opacity: 0.9,
+                position: 'relative',
+            }}
+        >
+            <DefaultGradientVD />
             <h1 className={`${Tex.w} ${ClHtml.titSec}`}>
                 {seaCat}
                 {' '}

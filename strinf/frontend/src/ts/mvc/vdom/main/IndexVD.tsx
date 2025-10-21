@@ -5,7 +5,6 @@ import { ClHtml, Dis, Mar, Tex, Wid } from '@strinf/ts/constants/style/ClHtml';
 import IdHtmlTour from '@strinf/ts/constants/tour/IdHtml';
 import HeadT from '@strinf/ts/constants/type/HeadT';
 import PagPosT from '@strinf/ts/constants/type/PagPosT';
-import { selectBannerImage } from '@strinf/ts/functions/files/image';
 import IndCtrl from '@strinf/ts/mvc/ctrl/IndCtrl';
 import OvVD from '@strinf/ts/mvc/vdom/dyn/stat/OvVD';
 import SeaInVD from '@strinf/ts/mvc/vdom/main/input/SeaInVD';
@@ -13,6 +12,7 @@ import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import IndSt from '@strinf/ts/mvc/vdom/state/IndSt';
 import AboutIVD from '@strinf/ts/mvc/vdom/static/AboutHomeVD';
 import MetaH from '@strinf/ts/mvc/vdom/static/helmet/MetaH';
+import { DefaultGradientVD } from '@strinf/ts/mvc/vdom/static/images/background/DefaultVD';
 import { Component } from 'preact';
 
 const H_DESC = `
@@ -26,14 +26,11 @@ function Hero(): JSX.Element {
         <section
             className={`${ClHtml.her} ${ClHtml.sec} ${ClHtml.secD} ${ClHtml.secI}`}
             style={{
-                'background-size': 'cover',
-                'background-position': 'center',
-                'background-image':
-                    'linear-gradient(to right,rgba(27, 27, 27, 1) 20%,'
-                    + 'rgba(27, 27, 27, 0)), '
-                    + `url(${selectBannerImage()})`,
+                opacity: '0.9',
+                position: 'relative',
             }}
         >
+            <DefaultGradientVD />
             <div>
                 <h1 className={Tex.w}>
                     Welcome to

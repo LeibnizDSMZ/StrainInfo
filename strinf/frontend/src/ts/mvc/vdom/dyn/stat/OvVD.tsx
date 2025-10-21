@@ -3,8 +3,8 @@ import type { DataCon } from '@strinf/ts/interfaces/dom/global';
 import type { StaSetF } from '@strinf/ts/interfaces/dom/ind';
 import type { JSX } from 'preact';
 import { ClHtml, Col, Mar, Tex } from '@strinf/ts/constants/style/ClHtml';
-import { selectBannerImage } from '@strinf/ts/functions/files/image';
 import CpsVD from '@strinf/ts/mvc/vdom/dyn/stat/CpsVD';
+import { DefaultDarkVD } from '@strinf/ts/mvc/vdom/static/images/background/DefaultVD';
 import { useState } from 'preact/hooks';
 
 function mapStats(sta: DataCon<number>): JSX.Element {
@@ -42,20 +42,18 @@ function Statistics({ dia, stat }: StaProps): JSX.Element {
     );
 }
 
-const STY = {
-    'background-size': 'cover',
-    'background-position': 'left',
-    'background-image':
-        'linear-gradient(to right,rgba(27, 27, 27, 0.8),'
-        + 'rgba(27, 27, 27, 0.8)), '
-        + `url(${selectBannerImage()})`,
-};
-
 function OvVD({ dia, sta }: OvProps): JSX.Element {
     const [stat, setStat] = useState<DataCon<number>[]>([]);
     sta(setStat);
     return (
-        <section className={`${ClHtml.sec} ${ClHtml.secD} ${ClHtml.secI}`} style={STY}>
+        <section
+            className={`${ClHtml.sec} ${ClHtml.secD} ${ClHtml.secI}`}
+            style={{
+                opacity: 0.9,
+                position: 'relative',
+            }}
+        >
+            <DefaultDarkVD />
             <div className={ClHtml.con}>
                 <Statistics stat={stat} dia={dia} />
             </div>
