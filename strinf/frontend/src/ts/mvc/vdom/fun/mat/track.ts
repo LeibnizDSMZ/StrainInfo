@@ -1,11 +1,12 @@
 import { matomoCallback } from '@strinf/ts/mvc/vdom/fun/mat/init';
 
+type Matomo = [string, string[] | boolean] | string[] | (string | number)[];
+
 function trackPageV(): void {
     const loc = window.location.href;
     matomoCallback(() => {
         window._paq = window._paq ?? [];
-        window._paq.push(['setCustomUrl', loc]);
-        window._paq.push(['trackPageView']);
+        window._paq.push(['setCustomUrl', loc], ['trackPageView']);
     });
 }
 
@@ -22,18 +23,14 @@ function trackSearch(
     if (window.lastSearch !== sea || paV) {
         matomoCallback(() => {
             window._paq = window._paq ?? [];
+            const paq: Matomo[] = [];
             if (paV) {
-                window._paq.push(['setCustomUrl', url]);
-                window._paq.push([
-                    'setCustomVariable',
-                    1,
-                    'Response time',
-                    `${time}ms`,
-                    'page',
-                ]);
-                window._paq.push(['trackPageView']);
+                paq.push(['setCustomUrl', url]);
+                paq.push(['setCustomVariable', 1, 'Response time', `${time}ms`, 'page']);
+                paq.push(['trackPageView']);
             }
-            window._paq.push(['trackSiteSearch', sea, seaC, cnt]);
+            paq.push(['trackSiteSearch', sea, seaC, cnt]);
+            window._paq.push(...paq);
         });
     }
     window.lastSearch = sea;
@@ -42,9 +39,11 @@ function trackSearch(
 function trackDownload(url: string, bytes: number): void {
     matomoCallback(() => {
         window._paq = window._paq ?? [];
-        window._paq.push(['appendToTrackingUrl', `bw_bytes=${bytes}`]);
-        window._paq.push(['trackLink', url, 'download']);
-        window._paq.push(['appendToTrackingUrl', '']);
+        window._paq.push(
+            ['appendToTrackingUrl', `bw_bytes=${bytes}`],
+            ['trackLink', url, 'download'],
+            ['appendToTrackingUrl', ''],
+        );
     });
 }
 
