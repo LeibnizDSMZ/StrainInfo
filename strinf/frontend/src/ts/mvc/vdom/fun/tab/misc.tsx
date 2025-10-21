@@ -273,7 +273,7 @@ function parseVal2Html(value: unknown): JSX.Element | null {
         }
         return null;
     }
-    return <span>{JSON.stringify(value)}</span>;
+    return <span>{JSON.stringify(value).slice(1, -1)}</span>;
 }
 
 function create2ColDiv<T>(
