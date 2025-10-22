@@ -1,4 +1,5 @@
 import type { JSX } from 'preact';
+import ClHtmlSt from '@strinf/ts/constants/stat/ClHtml';
 import { ClHtml } from '@strinf/ts/constants/style/ClHtml';
 import onPrError from '@strinf/ts/functions/err/async';
 import { useRef, useState } from 'preact/hooks';
@@ -89,7 +90,7 @@ function DownloadBlobVD({
                 href={link}
                 download={name}
                 aria-label={label}
-                className={ancC}
+                className={`${ancC} ${ClHtmlSt.ignore}`}
                 target="_blank"
                 rel="noopener"
             >
