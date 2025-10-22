@@ -18,11 +18,18 @@ function initF(url: string, id: string): void {
     }
 }
 
+const CORE = /^\*\./;
+
 function initT(domains: string[]): void {
     window._paq = window._paq ?? [];
+    const path = window.location.hostname;
     for (const dom of domains) {
-        window._paq.push(['setCookieDomain', dom]);
-        window._paq.push(['setDomains', dom]);
+        const core = dom.replace(CORE, '');
+        if (path.endsWith(core)) {
+            window._paq.push(['setCookieDomain', dom]);
+            window._paq.push(['setDomains', dom]);
+            break;
+        }
     }
     window._paq.push(['enableLinkTracking']);
 }
