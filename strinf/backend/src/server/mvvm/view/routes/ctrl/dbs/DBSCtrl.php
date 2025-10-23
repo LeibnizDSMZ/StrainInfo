@@ -115,6 +115,12 @@ abstract class DBSCtrl
             ?? $params['REMOTE_ADDR']
             ?? $params['HTTP_CLIENT_IP']
             ?? '127.0.0.1';
+        if (is_array($cip)) {
+            $cip = reset($cip);
+        }
+        if (is_string($cip) && str_contains($cip, ',')) {
+            $cip = trim(explode(',', $cip)[0]);
+        }
         $buf_stat->setIP($cip);
         $buf_stat->setUserAgent($request->getHeader('User-Agent')[0] ?? 'Unknown');
         $buf_stat->setUrl((string) $request->getUri());
