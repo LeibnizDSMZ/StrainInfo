@@ -10,13 +10,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
-use function straininfo\server\exceptions\create_error_json;
-use function straininfo\server\shared\mvvm\view\add_default_headers;
-
-use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
-use function straininfo\server\shared\mvvm\view\domain_overlap;
 use straininfo\server\shared\mvvm\view\HeadArgs;
 use straininfo\server\shared\mvvm\view\StatArgs;
+
+use function straininfo\server\exceptions\create_error_json;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
+use function straininfo\server\shared\mvvm\view\domain_overlap;
 
 abstract class DBSCtrl
 {
@@ -28,14 +28,9 @@ abstract class DBSCtrl
     /** @var array<string> */
     private readonly array $private;
 
-    /** @var array<string> */
-    private readonly array $ignore;
-
-    private readonly MatomoTracker $stats;
+    private readonly StatArgs $stat_args;
 
     private readonly LoggerInterface $logger;
-
-    private readonly bool $track_enabled;
 
     /**
      * @param array<string> $cors
@@ -52,15 +47,7 @@ abstract class DBSCtrl
         $this->charset = $charset;
         $this->cors = $cors;
         $this->private = $private;
-        $buf_stat = null;
-        $this->track_enabled = $stat_args->getEnabled();
-        $buf_stat = new MatomoTracker(
-            $stat_args->getId(),
-            $stat_args->getMatomo()
-        );
-        $buf_stat->setTokenAuth($stat_args->getToken());
-        $this->stats = $buf_stat;
-        $this->ignore = $stat_args->getIgnore();
+        $this->stat_args = $stat_args;
     }
 
     protected function checkPrivate(ServerRequestInterface $request, bool $private): void
@@ -115,36 +102,55 @@ abstract class DBSCtrl
         );
     }
 
+    private function runMatomoTrack(ServerRequestInterface $request): void
+    {
+        $buf_stat = new MatomoTracker(
+            (int) $this->stat_args->getId(),
+            $this->stat_args->getMatomo()
+        );
+        $buf_stat->setTokenAuth($this->stat_args->getToken());
+        $buf_stat->setRequestTimeout(12);
+        $params = $request->getServerParams();
+        $cip = $params['HTTP_X_FORWARDED_FOR']
+            ?? $params['REMOTE_ADDR']
+            ?? $params['HTTP_CLIENT_IP']
+            ?? '127.0.0.1';
+        $buf_stat->setIP($cip);
+        $buf_stat->setUserAgent($request->getHeader('User-Agent')[0] ?? 'Unknown');
+        $buf_stat->setUrl((string) $request->getUri());
+        $buf_stat->setUrlReferrer($request->getHeader('Referer')[0] ?? '');
+        $buf_stat->doTrackPageView('API');
+    }
+
     /**
      * @param array<string> $origin
      * @param array<string> $referer
      */
-    private function track(ServerRequestInterface $request, array $origin, array $referer): void
-    {
-        $toCheck = count($origin) === 0 && count($referer) === 0;
+    private function track(
+        ServerRequestInterface $request,
+        array $origin,
+        array $referer
+    ): void {
+        $toCheck = count($origin) > 0 || count($referer) > 0;
         $track = $this->trackCli($request);
         if ($toCheck) {
-            $track = $track && !domain_overlap(array_merge($origin, $referer), $this->ignore);
+            $track = $track && !domain_overlap(
+                array_merge($origin, $referer),
+                $this->stat_args->getIgnore()
+            );
         }
         try {
             if ($track) {
-                $this->stats->setRequestTimeout(1);
-                $params = $request->getServerParams();
-                $cip = $params['HTTP_X_FORWARDED_FOR']
-                    ?? $params['REMOTE_ADDR']
-                    ?? $params['HTTP_CLIENT_IP']
-                    ?? '127.0.0.1';
-                $this->stats->setIP($cip);
-                $this->stats->doTrackPageView('API');
+                $this->runMatomoTrack($request);
             }
         } catch (\Throwable $exp) {
-            $this->logger->info('Could not track (' . $exp->getMessage() . ')');
+            $this->logger->warning('Could not track (' . $exp->getMessage() . ')');
         }
     }
 
     private function trackCli(ServerRequestInterface $request): bool
     {
-        return $this->track_enabled && !array_key_exists(
+        return $this->stat_args->getEnabled() && !array_key_exists(
             get_do_not_track_arg(),
             $request->getQueryParams()
         );
