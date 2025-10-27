@@ -153,7 +153,7 @@ type TILE = (
     anc: string,
     val: [number, number, string],
     ctx: InValStInt | undefined,
-    exCl: string
+    exCl: string,
 ) => JSX.Element;
 
 function createTiles<T>(

@@ -59,7 +59,7 @@ class MemoryCtrl<T> {
     private readonly dataReq: (
         status: ServerStatusJT,
         cha: Chan<T>,
-        ids: number[]
+        ids: number[],
     ) => void;
 
     constructor(

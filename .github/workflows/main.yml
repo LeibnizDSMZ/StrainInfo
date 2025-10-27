@@ -11,10 +11,10 @@ jobs:
             fail-fast: false
         runs-on: ubuntu-latest
         steps:
-            - name: Set up Node 20
+            - name: Set up Node 22
               uses: actions/setup-node@v4
               with:
-                  node-version: '20'
+                  node-version: '22'
             - name: Setup PHP with PECL extension
               uses: shivammathur/setup-php@v2
               with:
@@ -28,7 +28,11 @@ jobs:
                   sudo mkdir -p $HOME
                   sudo mkdir -p $HOME/.local/bin
                   sudo chown runner -R $HOME
-                  sudo apt install -y curl git-lfs
+                  sudo apt install -y curl git-lfs wget tar
+                  scversion="stable"
+                  wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
+                  cp "shellcheck-${scversion}/shellcheck" $HOME/.local/bin/
+                  shellcheck --version
             - name: lint and test
               run: |
                   export CONTAINER="container"

@@ -34,3 +34,5 @@ make clean all
 ln -s /woff_parser/woff2/woff2_compress /bin/woff2_compress
 # increase memory size
 sed -i -E "s/memory_limit\\s*=\\s*[0-9]+.*$/memory_limit=1024M/g" "/etc/php.ini"
+# for shellcheck
+dnf -y install ShellCheck
