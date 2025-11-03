@@ -75,23 +75,21 @@ function createPassCulHref(
         return <span>{strain}</span>;
     }
     return (
-        <span>
-            <a
-                key={strain}
-                href={href}
-                className={Tex.tr}
-                onClick={() => {
-                    setTimeout(() => {
-                        updateHrefVal(`${IdAcrTagCon.depId} ${cul}`, ctx);
-                        updateAnc(`#${anc}`);
-                    }, 100);
-                    return true;
-                }}
-                style="font-weight: normal;"
-            >
-                {strain}
-            </a>
-        </span>
+        <a
+            key={strain}
+            href={href}
+            className={Tex.tr}
+            onClick={() => {
+                setTimeout(() => {
+                    updateHrefVal(`${IdAcrTagCon.depId} ${cul}`, ctx);
+                    updateAnc(`#${anc}`);
+                }, 100);
+                return true;
+            }}
+            style="font-weight: normal;"
+        >
+            {strain}
+        </a>
     );
 }
 
@@ -106,22 +104,20 @@ function createPassLinkStrain(
             : createStrainCall(strain);
 
     return (
-        <span>
-            <a
-                key={strain}
-                href={href}
-                className={Tex.tr}
-                onClick={() => {
-                    setTimeout(() => {
-                        updateHrefVal(`${IdAcrTagCon.strId} ${strain}`, ctx);
-                    }, 100);
-                    return true;
-                }}
-                style="font-weight: normal;"
-            >
-                {strain}
-            </a>
-        </span>
+        <a
+            key={strain}
+            href={href}
+            className={Tex.tr}
+            onClick={() => {
+                setTimeout(() => {
+                    updateHrefVal(`${IdAcrTagCon.strId} ${strain}`, ctx);
+                }, 100);
+                return true;
+            }}
+            style="font-weight: normal;"
+        >
+            {strain}
+        </a>
     );
 }
 
@@ -161,17 +157,15 @@ function createLinkedTile(
 ): JSX.Element {
     const clV = `${exCl} ${tilSty.tiletext} ${ClHtml.til} ${ClHtml.tLin} ${Tex.tr}`;
     return (
-        <span>
-            <a
-                key={key}
-                href={href}
-                className={clV}
-                onClick={cal}
-                style="font-weight: normal;"
-            >
-                {name}
-            </a>
-        </span>
+        <a
+            key={key}
+            href={href}
+            className={clV}
+            onClick={cal}
+            style="font-weight: normal;"
+        >
+            {name}
+        </a>
     );
 }
 
