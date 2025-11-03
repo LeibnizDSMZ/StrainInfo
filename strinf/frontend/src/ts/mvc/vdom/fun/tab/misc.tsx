@@ -6,7 +6,6 @@ import type {
 } from '@strinf/ts/interfaces/dom/tooltip';
 import type { JSX } from 'preact';
 import conSty from '@strinf/css/mods/container.module.css';
-import linkSty from '@strinf/css/mods/link.module.css';
 import tilSty from '@strinf/css/mods/tile.module.css';
 import IdAcrTagCon from '@strinf/ts/constants/acr/id_acr';
 import ClHtmlI from '@strinf/ts/constants/icon/ClHtml';
@@ -30,6 +29,7 @@ import {
     createStrainCall,
     createStrainCultureCall,
 } from '@strinf/ts/functions/links/create_pass';
+import updateAnc from '@strinf/ts/functions/links/update_anc';
 import updateHrefVal from '@strinf/ts/functions/links/update_href';
 import { useTooltipForRef } from '@strinf/ts/mvc/vdom/fun/tab/pass';
 import crToolTip from '@strinf/ts/mvc/vdom/fun/tooltip/tooltip';
@@ -64,50 +64,35 @@ function createBoolIcon(val: boolean, dark = false): JSX.Element {
     );
 }
 
-interface HrefProps {
-    href: string;
-    className: string;
-    key: number;
-}
-
-function crALink(cont: JSX.Element, onCl: () => void, hrefProps: HrefProps): JSX.Element {
-    const { href, className, key } = hrefProps;
-    return (
-        <button
-            type="button"
-            className={linkSty.cleanbutton}
-            aria-label="Link"
-            onClick={() => {
-                onCl();
-            }}
-        >
-            <a key={key} href={href} className={className}>
-                {cont}
-            </a>
-        </button>
-    );
-}
-
 function createPassCulHref(
     val: [string | undefined, string],
     ctx: InValStInt | undefined,
     href: string,
+    anc: string,
 ): JSX.Element {
     const [cul, strain] = val;
     if (cul === undefined) {
         return <span>{strain}</span>;
     }
-    const culCl = () => {
-        setTimeout(() => {
-            updateHrefVal(`${IdAcrTagCon.depId} ${cul}`, ctx);
-        }, 100);
-        return true;
-    };
-    return crALink(<span>{strain}</span>, culCl, {
-        href,
-        className: Tex.tr,
-        key: 0,
-    });
+    return (
+        <span>
+            <a
+                key={strain}
+                href={href}
+                className={Tex.tr}
+                onClick={() => {
+                    setTimeout(() => {
+                        updateHrefVal(`${IdAcrTagCon.depId} ${cul}`, ctx);
+                        updateAnc(`#${anc}`);
+                    }, 100);
+                    return true;
+                }}
+                style="font-weight: normal;"
+            >
+                {strain}
+            </a>
+        </span>
+    );
 }
 
 function createPassLinkStrain(
@@ -115,21 +100,29 @@ function createPassLinkStrain(
     cul: string | undefined,
     ctx: InValStInt | undefined,
 ): JSX.Element {
-    const strCl = () => {
-        setTimeout(() => {
-            updateHrefVal(`${IdAcrTagCon.strId} ${strain}`, ctx);
-        }, 100);
-        return true;
-    };
     const href
         = cul !== undefined
             ? createStrainCultureCall(strain, cul)
             : createStrainCall(strain);
-    return crALink(<span>{strain}</span>, strCl, {
-        href,
-        className: Tex.tr,
-        key: 0,
-    });
+
+    return (
+        <span>
+            <a
+                key={strain}
+                href={href}
+                className={Tex.tr}
+                onClick={() => {
+                    setTimeout(() => {
+                        updateHrefVal(`${IdAcrTagCon.strId} ${strain}`, ctx);
+                    }, 100);
+                    return true;
+                }}
+                style="font-weight: normal;"
+            >
+                {strain}
+            </a>
+        </span>
+    );
 }
 
 function createSimpleTile(key: number, name: string, exCl: string): JSX.Element {
@@ -160,19 +153,26 @@ function createSimpleTiles<T>(
 }
 
 function createLinkedTile(
-    anc: string,
-    val: [number, number, string],
+    href: string,
+    key: number,
+    name: string,
     cal: () => boolean,
     exCl: string,
 ): JSX.Element {
-    const [key, , name] = val;
     const clV = `${exCl} ${tilSty.tiletext} ${ClHtml.til} ${ClHtml.tLin} ${Tex.tr}`;
-    const cont = <>{name}</>;
-    return crALink(cont, cal, {
-        key,
-        href: anc,
-        className: clV,
-    });
+    return (
+        <span>
+            <a
+                key={key}
+                href={href}
+                className={clV}
+                onClick={cal}
+                style="font-weight: normal;"
+            >
+                {name}
+            </a>
+        </span>
+    );
 }
 
 function createDepositTile(
@@ -181,14 +181,21 @@ function createDepositTile(
     ctx: InValStInt | undefined,
     exCl: string,
 ): JSX.Element {
-    const [, depId] = val;
+    const [key, depId, name] = val;
     const culCl = () => {
         setTimeout(() => {
             updateHrefVal(`${IdAcrTagCon.depId} ${depId}`, ctx);
+            updateAnc(anc);
         }, 100);
         return true;
     };
-    return createLinkedTile(anc, val, culCl, exCl);
+    return createLinkedTile(
+        `${window.location.pathname}?${IdAcrTagCon.depId}${depId}`,
+        key,
+        name,
+        culCl,
+        exCl,
+    );
 }
 
 function createStrainTile(
@@ -197,14 +204,14 @@ function createStrainTile(
     ctx: InValStInt | undefined,
     exCl: string,
 ): JSX.Element {
-    const [, strId] = val;
+    const [key, strId, name] = val;
     const strCl = () => {
         setTimeout(() => {
             updateHrefVal(`${IdAcrTagCon.strId} ${strId}`, ctx);
         }, 100);
         return true;
     };
-    return createLinkedTile(createStrainCall(strId), val, strCl, exCl);
+    return createLinkedTile(createStrainCall(strId), key, name, strCl, exCl);
 }
 
 function createDoiLink(doi: string | undefined, tit: string): JSX.Element {
@@ -215,7 +222,10 @@ function createDoiLink(doi: string | undefined, tit: string): JSX.Element {
         <span>
             {tit}
             <a href={createUrlStr(DOI_L, doi)} target="_blank" rel="noopener">
-                <span>&nbsp;[link]</span>
+                <span>
+                    &nbsp;
+                    <i className={ClHtmlI.link} />
+                </span>
             </a>
         </span>
     );

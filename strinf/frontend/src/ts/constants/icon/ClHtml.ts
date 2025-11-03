@@ -28,5 +28,6 @@ enum ClHtml {
     depOn = 'ph ph-check-circle',
     depOff = 'ph ph-x-circle',
     err = 'ph ph-warning-circle',
+    link = 'ph ph-arrow-square-out',
 }
 export default ClHtml;

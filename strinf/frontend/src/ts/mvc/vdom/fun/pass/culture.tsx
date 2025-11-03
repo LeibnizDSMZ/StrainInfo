@@ -1,6 +1,7 @@
 import type { InValStInt } from '@strinf/ts/interfaces/dom/inp';
 import type { ToolTipHookInt, TT_GL_TYPE } from '@strinf/ts/interfaces/dom/tooltip';
 import type { JSX } from 'preact';
+import IdAcrTagCon from '@strinf/ts/constants/acr/id_acr';
 import { Align, Dis } from '@strinf/ts/constants/style/ClHtml';
 import { createPassCulHref, DotTT, RowElWTT } from '@strinf/ts/mvc/vdom/fun/tab/misc';
 
@@ -17,7 +18,12 @@ function formatCultureTT(
         .slice(0, 2)
         .map((cde): [number, JSX.Element] => [
             cde[1],
-            createPassCulHref([cde[1].toString(), cde[0]], ctx, `#${anc}`),
+            createPassCulHref(
+                [cde[1].toString(), cde[0]],
+                ctx,
+                `${window.location.pathname}?${IdAcrTagCon.depId}${cde[1]}`,
+                anc,
+            ),
         ]);
 
     const data = cultures.slice(2).map(([ccno]) => ccno);

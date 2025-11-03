@@ -38,13 +38,30 @@ interface PassState {
 }
 
 const REG_ARG = new RegExp(`[?&]{1}${IdAcrTagCon.depId}\\s*(\\d+)`, 'gi');
-function H_DESC(sid: number | undefined, tax: string | undefined): string {
-    return `
-A strain passport, from the microbial strain database StrainInfo,
-depicting all information for the strain
-${sid !== undefined ? ` with the identifier ${IdAcrTagCon.strId} ${sid}` : ''} 
-${tax !== undefined ? `, the name ${tax}` : ''}. 
-`;
+
+function buildStrainDesc(
+    sid: number | undefined,
+    tax: string | undefined,
+    ccno: string[],
+): string {
+    const lines: string[] = [
+        'A strain passport from the microbial strain database StrainInfo,',
+        'providing comprehensive information about the strain.',
+    ];
+
+    if (sid !== undefined) {
+        lines.push(`Identifier: ${IdAcrTagCon.strId} ${sid}.`);
+    }
+
+    if (tax !== undefined) {
+        lines.push(`Taxon name: ${tax}.`);
+    }
+
+    if (ccno.length > 0) {
+        const displayed = ccno.slice(0, 3).join(', ');
+        lines.push(`CCNo: ${displayed}.`);
+    }
+    return lines.join(' ').trim();
 }
 
 class PassVD extends Component<PassProps, PassState> {
@@ -123,7 +140,11 @@ class PassVD extends Component<PassProps, PassState> {
         return (
             <>
                 <MetaH
-                    desc={H_DESC(tab?.overview[0], tab?.overview[2][0])}
+                    desc={buildStrainDesc(
+                        tab?.overview[0],
+                        tab?.overview[2][0],
+                        tab?.relations.map(val => val[1]) ?? [],
+                    )}
                     title={`${tax} - ${sid}`}
                 />
                 <CanonH href={getCurFullPath()} />
