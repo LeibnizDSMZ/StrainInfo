@@ -177,11 +177,12 @@ class SeqTable extends TableCon<MOD_SEQ_T, SeqProps> {
             if (val === undefined) {
                 return false;
             }
-            const [acc, desC, , , len, year] = val;
+            const [acc, desC, desc, , len, year] = val;
             if (
                 acc.toLocaleLowerCase().includes(prepFilter)
                 || len.toLocaleLowerCase().includes(prepFilter)
                 || year.toLocaleLowerCase().includes(prepFilter)
+                || desc.toLocaleLowerCase().includes(prepFilter)
             ) {
                 return true;
             }
