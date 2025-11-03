@@ -42,4 +42,4 @@ function createDateRKMS(date: string): string {
     return createDate(date);
 }
 
-export { createDate, createDateRKMS };
+export { BETWEEN_R, createDate, createDateRKMS };

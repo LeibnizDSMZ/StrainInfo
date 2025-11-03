@@ -7,6 +7,7 @@ import {
     SeqType,
     StrainStatus,
 } from '@strinf/ts/constants/api/data';
+import { BETWEEN_R } from '@strinf/ts/functions/parse/date';
 import {
     array,
     boolean,
@@ -33,15 +34,36 @@ z_config({
 });
 
 // check functions
-function checkDate(ctx: ParsePayload<string>): void {
-    if (Number.isNaN(Date.parse(ctx.value))) {
+function checkDate(ctx: ParsePayload<string>, date: string): void {
+    if (Number.isNaN(Date.parse(date))) {
         ctx.issues.push({
             code: 'invalid_format',
             message: 'Date format error',
-            input: ctx.value,
+            input: date,
             format: 'Date',
         });
     }
+}
+function checkDateRKMSCtx(ctx: ParsePayload<string>): void {
+    const date = ctx.value;
+    const btw = BETWEEN_R.exec(date);
+    if (date.startsWith('/')) {
+        checkDate(ctx, date.slice(1));
+    }
+    else if (date.endsWith('/')) {
+        checkDate(ctx, date.slice(0, -1));
+    }
+    else if (btw?.[1] !== undefined && btw[2] !== undefined) {
+        checkDate(ctx, btw[1]);
+        checkDate(ctx, btw[2]);
+    }
+    else {
+        checkDate(ctx, date);
+    }
+}
+
+function checkDateCtx(ctx: ParsePayload<string>): void {
+    checkDate(ctx, ctx.value);
 }
 // --- parts
 
@@ -55,7 +77,7 @@ const EntityCon = strictObject({
 });
 
 const RegConMin = strictObject({
-    date: string().check(checkDate),
+    date: string().check(checkDateCtx),
     submitter: optional(EntityCon),
 });
 
@@ -78,7 +100,7 @@ const SamSlimCon = strictObject({
 
 const SamCon = strictObject({
     ...SamSlimCon.shape,
-    date: optional(string().check(checkDate)),
+    date: optional(string().check(checkDateRKMSCtx)),
     place: optional(array(string().check(minLength(1)))),
 });
 
@@ -89,7 +111,7 @@ const IsoCon = strictObject({
 
 const ArcCon = strictObject({
     doi: string().check(minLength(1)),
-    date: string().check(checkDate),
+    date: string().check(checkDateCtx),
     title: string().check(minLength(1)),
 });
 
@@ -173,7 +195,7 @@ const DepositMin = strictObject({
     catalogue: optional(UrlCon),
     status: z_enum(DepositStatus),
     typeStrain: boolean(),
-    lastUpdate: string().check(checkDate),
+    lastUpdate: string().check(checkDateCtx),
     dataSource: array(z_enum(DataSource)).check(minLength(1)),
     registration: optional(RegConMin),
     taxon: optional(TaxonCon),
