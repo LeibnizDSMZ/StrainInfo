@@ -281,8 +281,8 @@ interface SeqTFilProps {
 const SEQ_THESAURUS: Record<string, string> = {
     genome: 'Genome',
     gene: 'Gene',
-    rop: 'rRNA operon',
-    pat: 'Patent',
+    rrnaop: 'rRNA operon',
+    patent: 'Patent',
 };
 
 const SEQ_TYPE_ORDER = [SeqType.genome, SeqType.rop, SeqType.gene, SeqType.pat];
