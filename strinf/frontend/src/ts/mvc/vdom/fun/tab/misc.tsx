@@ -263,6 +263,8 @@ function createSeqAccLink(acc: string): JSX.Element {
     );
 }
 
+const QUOTES = /^['"]|['"]$/g;
+
 function parseVal2Html(value: unknown): JSX.Element | null {
     if (typeof value === 'boolean') {
         return createBoolIcon(value);
@@ -273,7 +275,7 @@ function parseVal2Html(value: unknown): JSX.Element | null {
         }
         return null;
     }
-    return <span>{JSON.stringify(value).slice(1, -1)}</span>;
+    return <span>{JSON.stringify(value).replaceAll(QUOTES, '')}</span>;
 }
 
 function create2ColDiv<T>(
