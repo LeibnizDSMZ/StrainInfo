@@ -434,8 +434,18 @@ function activeLink(
     return callback;
 }
 
+function calcState(view: number[]): number {
+    let hash = 2166136261;
+    for (const val of view) {
+        hash ^= val;
+        hash = Math.imul(hash, 16777619); // multiply by FNV prime
+    }
+    return hash;
+}
+
 function DownloadBtn({ worker, view, term }: DownloadProps): JSX.Element {
     const btnC = `${ClHtml.btn} ${ClHtml.pri} ${Mar.lN5} ${ClHtmlSt.mask}`;
+
     return (
         <DownloadBlobVD
             btnC={btnC}
@@ -444,7 +454,7 @@ function DownloadBtn({ worker, view, term }: DownloadProps): JSX.Element {
             ancC={linkSty.linkmain}
             label="Save all filtered results"
             emptyLoad={false}
-            state={view.length}
+            state={calcState(view)}
             desc="Download"
         />
     );

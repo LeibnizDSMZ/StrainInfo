@@ -61,6 +61,7 @@ function DownloadBlobVD({
                                 load: false,
                                 link: linkCC[0],
                                 name: linkCC[1],
+                                dState: state,
                             });
                             const int = setInterval(() => {
                                 counter++;
