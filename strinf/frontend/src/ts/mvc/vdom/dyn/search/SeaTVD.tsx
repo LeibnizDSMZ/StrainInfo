@@ -729,7 +729,9 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
                 data={this.data}
                 view={view}
                 term={term}
-                filter={this.filterAction}
+                filter={(filter: [string | boolean | number, number][]) => {
+                    this.filterAction(filter);
+                }}
                 showBtn={download}
             />
         );
