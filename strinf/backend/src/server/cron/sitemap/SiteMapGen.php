@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace straininfo\server\cron\sitemap;
 
 use Psr\Log\LoggerInterface;
+use straininfo\server\configs\ConfigsCont;
+use straininfo\server\mvvm\model\dbs\ChMainDB;
+use straininfo\server\shared\path\QUIMap;
+
 use function Safe\chmod;
 use function Safe\fclose;
 use function Safe\filesize;
-
 use function Safe\fopen;
 use function Safe\fread;
 use function Safe\fwrite;
@@ -17,13 +20,10 @@ use function Safe\ini_set;
 use function Safe\mkdir;
 use function Safe\preg_replace;
 use function Safe\touch;
-use straininfo\server\configs\ConfigsCont;
 use function straininfo\server\exceptions\get_err_handler_slim_fun;
 use function straininfo\server\logger\create_logger;
-use straininfo\server\mvvm\model\dbs\ChMainDB;
 use function straininfo\server\shared\dbs\tryToConnect;
 use function straininfo\server\shared\path\get_public_root;
-use straininfo\server\shared\path\QUIMap;
 use function straininfo\server\shared\text\create_url;
 
 final class SiteMapGen
@@ -55,8 +55,8 @@ final class SiteMapGen
             printf('START - ' . $mem . ' -> ' . $new_mem . "\n");
             ini_set('memory_limit', '512M');
             $all_con = $this->getDataDB()->getQDBAll();
-            $all_strains = $all_con->getAllStrIds();
-            $site_maps_cnt = (int) ceil(count($all_strains) / 40_000);
+            $all_strains = $all_con->getAllStrIdsWDate();
+            $site_maps_cnt = (int) ceil(count($all_strains) / 30_000);
             printf('Sitemap creation, with ' . $site_maps_cnt . " sitemaps\n");
             $this->createSiteMapIndex($site_maps_cnt, $all_strains);
             $this->createRobots();
@@ -76,11 +76,11 @@ final class SiteMapGen
         return $this->data;
     }
 
-    /** @param array<int> $strain_ids */
+    /** @param array<array{int, string}> $strain_ids */
     private function createSiteMap(array $strain_ids, string $path, int $cont): void
     {
-        $start = 40_000 * ($cont - 1);
-        $end = $start + 40_000;
+        $start = 30_000 * ($cont - 1);
+        $end = $start + 30_000;
         $file_fh = fopen($this->rootPath . '/' . $path, 'w');
         $data = <<<EOF
         <?xml version="1.0" encoding="UTF-8"?>
@@ -89,15 +89,16 @@ final class SiteMapGen
         $url = create_url($this->configurations->getWebArgsFE(), QUIMap::STRAIN->value);
         $str_ids = count($strain_ids);
         for ($cnt_i = $start; $cnt_i < $str_ids && $cnt_i < $end; $cnt_i++) {
-            $loc = $url . '/' . $strain_ids[$cnt_i];
-            $data .= '<url><loc>' . $loc . '</loc></url>';
+            $loc = $url . '/' . $strain_ids[$cnt_i][0];
+            $data .= '<url><loc>' . $loc . '</loc><lastmod>' . $strain_ids[$cnt_i][1];
+            $data .= '</lastmod></url>';
         }
         $data .= '</urlset>';
         fwrite($file_fh, $data);
         fclose($file_fh);
     }
 
-    /** @param array<int> $strain_ids */
+    /** @param array<array{int, string}> $strain_ids */
     private function createSiteMapIndex(int $site_maps_cnt, array $strain_ids): void
     {
         $cnt = $site_maps_cnt;

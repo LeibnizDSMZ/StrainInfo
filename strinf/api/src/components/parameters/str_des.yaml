@@ -9,6 +9,6 @@ schema:
         type: string
         minLength: 4
         pattern: '[\x00-\x7F]{4,}$'
-    examples: [Delft L 40, STAFF 1027]
+    example: [Delft L 40, STAFF 1027]
 style: simple
 explode: false

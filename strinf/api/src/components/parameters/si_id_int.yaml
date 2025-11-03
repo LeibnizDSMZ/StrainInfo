@@ -8,6 +8,6 @@ schema:
     items:
         type: integer
         minimum: 1
-    examples: [1, 14559]
+    example: [1, 14559]
 style: simple
 explode: false

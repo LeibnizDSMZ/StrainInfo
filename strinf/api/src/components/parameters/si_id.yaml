@@ -8,6 +8,6 @@ schema:
     items:
         type: string
         pattern: '^SI-ID ?[1-9][0-9]*(\.[1-9][0-9]*)+$'
-    examples: [SI-ID1.1, SI-ID34969.1]
+    example: [SI-ID1.1, SI-ID34969.1]
 style: simple
 explode: false

@@ -14,6 +14,6 @@ schema:
             |[A-Z]{5}\\d{7}\
             |(?:AC_|NC_|NG_|NT_|NW_|NZ_|NM_|NR_|XM_|XR_)\\d+\
             |(GCA_|GCF_)\\d+)$"
-    examples: [AJ519476, AB595134]
+    example: [AJ519476, AB595134]
 style: simple
 explode: false

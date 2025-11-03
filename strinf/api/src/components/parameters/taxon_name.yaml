@@ -9,6 +9,6 @@ schema:
         type: string
         minLength: 3
         pattern: '^(?: *[a-zA-Z\.0-9]{3,} *)+$'
-    examples: [Acetobacter aceti, Eubacterium limosum]
+    example: [Acetobacter aceti, Eubacterium limosum]
 style: simple
 explode: false

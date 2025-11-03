@@ -17,6 +17,9 @@ interface QMIntAll extends MainChannel
     /** @return array<int> */
     public function getAllTStrIds(): array;
 
+    /** @return array<array{int, string}> */
+    public function getAllStrIdsWDate(): array;
+
     /** @return array<int> */
     public function getAllTCulIds(): array;
 }

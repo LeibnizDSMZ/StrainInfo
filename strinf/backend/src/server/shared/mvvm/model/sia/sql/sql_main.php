@@ -47,6 +47,19 @@ function parse_sql_index_entity(array $row): array
 /**
  * @param array<string|int> $row
  *
+ * @return array{int, string}
+ */
+function parse_sql_id_date(array $row): array
+{
+    return [
+        (int) $row[0],
+        (string) $row[1],
+    ];
+}
+
+/**
+ * @param array<string|int> $row
+ *
  * @return array{string, int, int}
  */
 function parse_sql_index_entity_ccno(array $row): array
@@ -75,6 +88,7 @@ function parse_sql_str_id(array $ele): int
 {
     return (int) $ele[DBStructStrE::STRAIN_ID->value];  // @phpstan-ignore cast.int
 }
+
 /**
  * @template T
  *
@@ -84,6 +98,7 @@ function parse_sql_main_str_id(array $ele): int
 {
     return (int) $ele[DBStructStrE::MAIN_ID->value];  // @phpstan-ignore cast.int
 }
+
 /**
  * @template T
  *
@@ -93,6 +108,7 @@ function parse_sql_merge_str_id(array $ele): int
 {
     return (int) $ele[DBStructStrE::MERGE_ID->value];  // @phpstan-ignore cast.int
 }
+
 /**
  * @template T
  *
@@ -139,6 +155,7 @@ function create_sql_in_templ(int $cnt, array $column, string $comb): string
     $res_str = implode(" {$comb} ", $res);
     return "{$res_str}";
 }
+
 /** @param array<string> $column */
 function create_sql_in_tuple_templ(int $cnt, array $column): string
 {

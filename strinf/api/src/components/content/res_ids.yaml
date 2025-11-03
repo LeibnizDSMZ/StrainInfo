@@ -1,6 +1,6 @@
 type: array
 minItems: 1
-examples: [4, 5]
 items:
     type: integer
     minimum: 1
+example: [4, 5]

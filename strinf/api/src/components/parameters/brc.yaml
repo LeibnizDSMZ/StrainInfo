@@ -9,6 +9,6 @@ schema:
         type: string
         minLength: 3
         pattern: '[a-zA-Z0-9_\-\\/:.,;#+* ]{3,}$'
-    examples: [DSMZ, CCUG]
+    example: [DSMZ, CCUG]
 style: simple
 explode: false
