@@ -345,7 +345,7 @@ function createBuild(): UserConfig {
             write: true,
             outDir: `../../../${ENV.APP_FRONTEND}`,
             assetsDir: './assets',
-            assetsInlineLimit: 8 * 1024,
+            assetsInlineLimit: 16 * 1024,
             cssCodeSplit: true,
             emptyOutDir: false,
             sourcemap: false,
@@ -353,6 +353,9 @@ function createBuild(): UserConfig {
             ssr: false,
             minify: 'esbuild' as const,
             cssMinify: 'lightningcss' as const,
+            modulePreload: {
+                polyfill: false,
+            },
             rollupOptions: {
                 output: {
                     manualChunks(id: string) {
@@ -367,7 +370,14 @@ function createBuild(): UserConfig {
                         if (id.includes('@phosphor-icons')) {
                             return '@icons';
                         }
-                        return undefined;
+                        if (id.includes('node_modules')) {
+                            if (id.includes('d3')) return '@d3';
+                            if (id.includes('highlight.js')) return '@highlight';
+                            if (id.includes('rapidoc')) return '@rapidoc';
+                            if (id.includes('@floating-ui')) return '@fui';
+                            if (id.includes('zod')) return '@zod';
+                        }
+                        return '@misc';
                     },
                     assetFileNames: `assets/[name]-${TIME_STAMP}-[hash][extname]`,
                     chunkFileNames: `assets/[name]-${TIME_STAMP}-[hash].js`,
@@ -423,6 +433,10 @@ function createShared(build: boolean): UserConfig {
                     browserslist('last 2 versions, not dead, > 0.2%')
                 ),
             },
+        },
+        optimizeDeps: {
+            include: ['d3', 'd3-sankey', 'highlight.js', '@floating-ui/dom', 'zod'],
+            exclude: ['@phosphor-icons/web'],
         },
         json: {
             stringify: true,
