@@ -29,7 +29,16 @@ function splitDoi(doi: string): JSX.Element {
     return (
         <span>
             {splDoi[1]}
-            <strong className={Tex.p}>{splDoi[2]}</strong>
+            <strong
+                className={Tex.w}
+                style={{
+                    backgroundColor: 'var(--color-db-straininfo)',
+                    borderRadius: '4px',
+                    padding: '2px',
+                }}
+            >
+                {splDoi[2]}
+            </strong>
             {splDoi[3]}
         </span>
     );

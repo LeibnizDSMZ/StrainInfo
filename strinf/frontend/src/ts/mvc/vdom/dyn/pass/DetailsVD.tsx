@@ -514,7 +514,17 @@ function Details({ ctx, data, cid, rel, hookCul, hookInf, ccno }: ResProps): JSX
             <h3 className={ClHtml.titSec}>
                 {TIT}
                 :
-                <span className={`${Tex.p} ${Pad.lN10}`}>{ccno}</span>
+                <span
+                    className={Tex.w}
+                    style={{
+                        backgroundColor: 'var(--color-db-straininfo)',
+                        borderRadius: '4px',
+                        padding: '6px',
+                        marginLeft: '10px',
+                    }}
+                >
+                    {ccno}
+                </span>
                 {localData[3]
                     ? (
                             <span className={`${icoSty.tc} ${Tex.s}`}>

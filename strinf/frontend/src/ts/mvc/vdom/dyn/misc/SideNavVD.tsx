@@ -55,7 +55,6 @@ function SideEl({ act, key, ele, tId }: SideTProps): JSX.Element {
             className={`${actCl} ${ele[2]}`}
             ref={hrefRef}
             href="/"
-            aria-label={`Sidebar link to ${ele[0]}`}
         >
             {' '}
             <i className={ele[1]} />
@@ -190,11 +189,17 @@ function SideNavVD(): JSX.Element {
     });
     return (
         <>
-            <h5 className={ClHtml.tit}>Content</h5>
+            <h5 className={ClHtml.tit} style={{ color: 'var(--color-gray-80)' }}>
+                Content
+            </h5>
             {NAV_CON_CNT.map((val, ind) => mapSide(val, ind, act))}
-            <h5 className={ClHtml.tit}>Information</h5>
+            <h5 className={ClHtml.tit} style={{ color: 'var(--color-gray-80)' }}>
+                Information
+            </h5>
             {NAV_CON_INF.map((val, ind) => mapSide(val, ind, act))}
-            <h5 className={ClHtml.tit}>About&nbsp;us</h5>
+            <h5 className={ClHtml.tit} style={{ color: 'var(--color-gray-80)' }}>
+                About&nbsp;us
+            </h5>
             {NAV_CON_ABU.map((val, ind) => mapSide(val, ind, act))}
             <span
                 ref={() => {

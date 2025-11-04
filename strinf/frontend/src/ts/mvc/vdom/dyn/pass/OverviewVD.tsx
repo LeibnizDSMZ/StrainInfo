@@ -158,6 +158,7 @@ function OverviewVD({ res, dCtrl, rel }: ResProps): JSX.Element | null {
             style={{
                 margin: '-2rem -2rem 0 -2rem',
                 width: 'auto',
+                backgroundColor: '#fbfbfb',
             }}
         >
             <div
