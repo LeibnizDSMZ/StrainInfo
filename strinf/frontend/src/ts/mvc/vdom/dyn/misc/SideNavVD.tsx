@@ -55,6 +55,7 @@ function SideEl({ act, key, ele, tId }: SideTProps): JSX.Element {
             className={`${actCl} ${ele[2]}`}
             ref={hrefRef}
             href="/"
+            aria-label={ele[0]}
         >
             {' '}
             <i className={ele[1]} />

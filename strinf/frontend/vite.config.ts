@@ -345,7 +345,7 @@ function createBuild(): UserConfig {
             write: true,
             outDir: `../../../${ENV.APP_FRONTEND}`,
             assetsDir: './assets',
-            assetsInlineLimit: 16 * 1024,
+            assetsInlineLimit: 0,
             cssCodeSplit: true,
             emptyOutDir: false,
             sourcemap: false,
@@ -353,9 +353,6 @@ function createBuild(): UserConfig {
             ssr: false,
             minify: 'esbuild' as const,
             cssMinify: 'lightningcss' as const,
-            modulePreload: {
-                polyfill: false,
-            },
             rollupOptions: {
                 output: {
                     manualChunks(id: string) {
@@ -371,13 +368,9 @@ function createBuild(): UserConfig {
                             return '@icons';
                         }
                         if (id.includes('node_modules')) {
-                            if (id.includes('d3')) return '@d3';
-                            if (id.includes('highlight.js')) return '@highlight';
                             if (id.includes('rapidoc')) return '@rapidoc';
-                            if (id.includes('@floating-ui')) return '@fui';
-                            if (id.includes('zod')) return '@zod';
                         }
-                        return '@misc';
+                        return undefined;
                     },
                     assetFileNames: `assets/[name]-${TIME_STAMP}-[hash][extname]`,
                     chunkFileNames: `assets/[name]-${TIME_STAMP}-[hash].js`,
