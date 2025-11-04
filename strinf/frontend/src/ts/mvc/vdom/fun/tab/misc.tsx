@@ -215,11 +215,14 @@ function createDoiLink(doi: string | undefined, tit: string): JSX.Element {
     return (
         <span>
             {tit}
-            <a href={createUrlStr(DOI_L, doi)} target="_blank" rel="noopener">
-                <span>
-                    &nbsp;
-                    <i className={ClHtmlI.link} />
-                </span>
+            <a
+                href={createUrlStr(DOI_L, doi)}
+                target="_blank"
+                rel="noopener"
+                aria-label={tit}
+            >
+                &nbsp;
+                <i className={ClHtmlI.link} />
             </a>
         </span>
     );
