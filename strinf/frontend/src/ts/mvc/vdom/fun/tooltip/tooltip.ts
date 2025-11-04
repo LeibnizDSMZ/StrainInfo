@@ -5,6 +5,13 @@ import { HIDE } from '@strinf/ts/constants/style/AtHtml';
 import onPrError from '@strinf/ts/functions/err/async';
 import { isSmallScreen } from '@strinf/ts/functions/misc/screen';
 
+const PLA: { [key: string]: string } = {
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+};
+
 function ttShow(src: Element, tooltip: HTMLElement, aro: HTMLElement): void {
     tooltip.removeAttribute(HIDE);
     computePosition(src, tooltip, {
@@ -19,13 +26,7 @@ function ttShow(src: Element, tooltip: HTMLElement, aro: HTMLElement): void {
                 Object.assign(tooltip.style, { left: `${x}px`, top: `${y}px` });
                 const [aroX, aroY] = [middlewareData.arrow?.x, middlewareData.arrow?.y];
                 const pla = placement.split('-')[0] ?? 'right';
-                const stSi
-                    = {
-                        top: 'bottom',
-                        right: 'left',
-                        bottom: 'top',
-                        left: 'right',
-                    }[pla] ?? 'left';
+                const stSi = PLA[pla] ?? 'left';
                 Object.assign(aro.style, {
                     left: aroX != null ? `${aroX}px` : '',
                     top: aroY != null ? `${aroY}px` : '',

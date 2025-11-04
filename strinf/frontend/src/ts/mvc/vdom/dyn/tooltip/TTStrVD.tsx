@@ -29,7 +29,7 @@ function crToolTipC(res: JSX.Element): JSX.Element {
 function ToolTipC({ res, loading, info }: ToolTipProps): JSX.Element {
     const fixStr = [`${IdAcrTagCon.strId} ${res[0]}`, ...res.slice(1)];
     const filteredTT: [string[], EleT[]] = filterArrStr(HEAD, fixStr);
-    const ind = filteredTT[0].indexOf(HEAD[2] ?? '');
+    const ind = filteredTT[0].indexOf(HEAD[1] ?? '');
     filteredTT[1][ind] = <i>{filteredTT[1][ind]}</i>;
     const resDiv = create2ColDiv<EleT | JSX.Element>(
         ...filteredTT,

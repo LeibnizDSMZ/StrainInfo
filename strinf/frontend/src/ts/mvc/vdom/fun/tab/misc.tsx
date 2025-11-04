@@ -299,10 +299,11 @@ function create2ColDiv<T>(
                 `keys [${keys}] and values [${values}] are mismatched!`,
             );
         }
+        const sep = ': ';
         rows.push(
             <div key={ind}>
                 <b>{side}</b>
-                :
+                {sep}
                 {parser(val, side)}
             </div>,
         );
