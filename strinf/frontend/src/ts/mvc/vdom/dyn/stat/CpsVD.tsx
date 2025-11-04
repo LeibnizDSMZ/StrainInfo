@@ -162,15 +162,12 @@ function RectDia({ scX, scY, val, index, yDa, ttH }: RectDiaT): JSX.Element {
         ttH,
         () => {
             if (ttH.data !== undefined) {
+                const textB = `Strains with ${wrCulText(val)}`;
+                const text = `: ${yDa[index]}`;
                 ttH.data(
                     <p>
-                        <b>
-                            Strains with
-                            {wrCulText(val)}
-                            :
-                        </b>
-                        {' '}
-                        {yDa[index]}
+                        <b>{textB}</b>
+                        {text}
                     </p>,
                 );
             }

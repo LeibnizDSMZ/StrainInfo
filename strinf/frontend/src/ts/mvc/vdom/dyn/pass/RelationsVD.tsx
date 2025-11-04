@@ -71,6 +71,7 @@ function createTilesDes(
     desCon: string[],
 ): JSX.Element[] {
     const desLocCon = desCon;
+
     return tiles.map((til, ind: number) => (
         <TooltipWrapper
             key={ind + addInd}
@@ -78,11 +79,11 @@ function createTilesDes(
             srcH={hook}
             upD={() => {
                 if (hook.data !== undefined) {
+                    const text = `: ${desLocCon[til[1]] ?? '...'}`;
                     hook.data(
                         <div>
                             <b>{getInfoDesTuple()}</b>
-                            {': '}
-                            {desLocCon[til[1]] ?? '...'}
+                            {text}
                         </div>,
                     );
                 }

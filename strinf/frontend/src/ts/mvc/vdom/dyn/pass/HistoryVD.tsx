@@ -103,11 +103,10 @@ function formatMsg(culCnt: number): JSX.Element {
     if (culCnt === 0) {
         return <></>;
     }
-    const msg = culCnt < 2 ? `${culCnt} collection` : `${culCnt} collections`;
+    const msg = culCnt < 2 ? `: ${culCnt} collection` : `: ${culCnt} collections`;
     return (
         <span>
             <b>Send to</b>
-            :
             {msg}
         </span>
     );

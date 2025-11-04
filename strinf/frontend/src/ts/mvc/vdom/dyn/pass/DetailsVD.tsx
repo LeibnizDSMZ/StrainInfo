@@ -488,6 +488,7 @@ function Details({ ctx, data, cid, rel, hookCul, hookInf, ccno }: ResProps): JSX
     let localData = data;
     const ref = useRef<HTMLDivElement>(null);
     localData ??= crEmptyDetC();
+    const text = `: ${ccno} | ${IdAcrTagCon.depId} ${cid}`;
     useTooltipForRef(
         ref,
         hookInf,
@@ -496,13 +497,7 @@ function Details({ ctx, data, cid, rel, hookCul, hookInf, ccno }: ResProps): JSX
                 hookInf.data(
                     <p>
                         <b>StrainRegistry</b>
-                        :
-                        {ccno}
-                        {' '}
-                        |
-                        {IdAcrTagCon.depId}
-                        {' '}
-                        {cid}
+                        {text}
                     </p>,
                 );
             }

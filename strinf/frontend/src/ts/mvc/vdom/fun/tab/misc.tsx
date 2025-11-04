@@ -376,14 +376,11 @@ function DotTT({ head, data, hook }: DotTTProps): JSX.Element | null {
         hook,
         () => {
             if (hook.data !== undefined) {
+                const text = `: ${results}`;
                 hook.data(
                     <p>
-                        <b>
-                            {head}
-                            :
-                            {' '}
-                        </b>
-                        {results}
+                        <b>{head}</b>
+                        {text}
                     </p>,
                 );
             }
