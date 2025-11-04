@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\model\sia\sql\str;
 
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructRelCulE;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructTaxE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructRelCulE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
 
 function get_sql_base_select_str(): string
 {
@@ -137,7 +137,7 @@ function get_sql_rel_cul(): string
         designation.designation as {$str},
         culture_collection_number.brc_id as {$cid},
         (
-            culture_collection.deprecated=1
+            COALESCE(culture_collection.deprecated = 1, FALSE)
             OR culture.status="erroneous data"
         ) as {$err}
     FROM strain

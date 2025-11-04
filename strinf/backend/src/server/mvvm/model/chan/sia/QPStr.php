@@ -6,8 +6,9 @@ namespace straininfo\server\mvvm\model\chan\sia;
 
 use straininfo\server\interfaces\mvvm\model\chan\query\QMIntDat;
 use straininfo\server\mvvm\model\chan\PdoMWr;
-use function straininfo\server\shared\mvvm\model\pdo\bind_and_exe;
+use straininfo\server\shared\mvvm\model\struct\DataCon;
 
+use function straininfo\server\shared\mvvm\model\pdo\bind_and_exe;
 use function straininfo\server\shared\mvvm\model\sia\sql\cul\get_cul_min_reg_id;
 use function straininfo\server\shared\mvvm\model\sia\sql\cul\get_cul_min_str_id;
 use function straininfo\server\shared\mvvm\model\sia\sql\parse_sql_alt_str_id;
@@ -26,7 +27,6 @@ use function straininfo\server\shared\mvvm\model\sia\sql\str\get_sql_seq;
 use function straininfo\server\shared\mvvm\model\sia\sql\str\get_sql_strain_err;
 use function straininfo\server\shared\mvvm\model\sia\sql\str\get_sql_strain_online;
 use function straininfo\server\shared\mvvm\model\sia\sql\str\get_strain_type_cul;
-use straininfo\server\shared\mvvm\model\struct\DataCon;
 
 /**
  * @implements QMIntDat<array<string, mixed>>

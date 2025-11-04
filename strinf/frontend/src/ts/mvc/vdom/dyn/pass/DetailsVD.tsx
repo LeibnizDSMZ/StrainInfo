@@ -519,8 +519,11 @@ function Details({ ctx, data, cid, rel, hookCul, hookInf, ccno }: ResProps): JSX
                     style={{
                         backgroundColor: 'var(--color-db-straininfo)',
                         borderRadius: '4px',
-                        padding: '6px',
-                        marginLeft: '10px',
+                        paddingRight: '6px',
+                        paddingLeft: '6px',
+                        paddingTop: '2px',
+                        paddingBottom: '2px',
+                        marginLeft: '8px',
                     }}
                 >
                     {ccno}

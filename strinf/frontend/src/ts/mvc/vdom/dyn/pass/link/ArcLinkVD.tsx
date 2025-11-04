@@ -34,7 +34,10 @@ function splitDoi(doi: string): JSX.Element {
                 style={{
                     backgroundColor: 'var(--color-db-straininfo)',
                     borderRadius: '4px',
-                    padding: '2px',
+                    paddingRight: '4px',
+                    paddingLeft: '4px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px',
                 }}
             >
                 {splDoi[2]}
