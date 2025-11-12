@@ -8,7 +8,7 @@ apk --no-cache add php84 \
     php84-curl php84-ctype php84-pecl-redis
 
 # php84-json already pre installed
-apk --no-cache add zlib gzip
+apk --no-cache add zlib gzip curl
 # cron
 apk --no-cache add cronie
 

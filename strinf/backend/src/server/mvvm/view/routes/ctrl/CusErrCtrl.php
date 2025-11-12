@@ -56,7 +56,6 @@ final class CusErrCtrl extends ErrorHandler
         bool $logErrDet
     ): ResponseInterface {
         $msg = "{$exception->getMessage()};";
-        $this->logger->error("{$msg} {$showErrDet} - {$logErr} - {$logErrDet}");
         $error_code = $exception->getCode();
         if (!(is_int($error_code) && $error_code >= 100 && $error_code <= 599)) {
             $error_code = 500;
@@ -68,6 +67,9 @@ final class CusErrCtrl extends ErrorHandler
             HttpForbiddenException::class => $this->err403,
             default => $this->err500,
         };
+        if ($message === $this->err500) {
+            $this->logger->error("[ROUTE-ERR] {$msg} {$showErrDet} - {$logErr} - {$logErrDet}");
+        }
         $response->getBody()->write(create_error_json($message, $error_code));
         $response = $response->withStatus($error_code);
         if ($exception instanceof HttpMethodNotAllowedException) {

@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl\dbs;
 
-use MatomoTracker;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpForbiddenException;
-use Slim\Exception\HttpInternalServerErrorException;
-use function straininfo\server\exceptions\create_error_json;
-use function straininfo\server\shared\mvvm\view\add_default_headers;
-
-use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
-use function straininfo\server\shared\mvvm\view\domain_overlap;
-use straininfo\server\shared\mvvm\view\HeadArgs;
 use straininfo\server\shared\mvvm\view\StatArgs;
+use straininfo\server\shared\mvvm\view\HeadArgs;
+use function straininfo\server\shared\mvvm\view\domain_overlap;
+use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+use function straininfo\server\exceptions\create_error_json;
+use function Safe\parse_url;
+use function Safe\curl_init;
+
+use Slim\Exception\HttpInternalServerErrorException;
+use Slim\Exception\HttpForbiddenException;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use MatomoTracker;
 
 abstract class DBSCtrl
 {
@@ -102,14 +104,46 @@ abstract class DBSCtrl
         );
     }
 
+    private function sendMatomoNoAwait(string $url, string $agent, string|false $lang): void
+    {
+        $parsedUrl = parse_url($url);
+        parse_str($parsedUrl['query'] ?? '', $queryParams);
+
+        if (!empty($this->stat_args->getToken())) {
+            $queryParams['token_auth'] = $this->stat_args->getToken();
+        }
+
+        $queryString = http_build_query($queryParams);
+
+        $fullUrl = (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '')
+            . ($parsedUrl['host'] ?? '')
+            . ($parsedUrl['path'] ?? '')
+            . '?' . $queryString;
+
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $fullUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT_MS => 500,
+            CURLOPT_CONNECTTIMEOUT_MS => 500,
+            CURLOPT_NOSIGNAL => true,
+            CURLOPT_USERAGENT => $agent,
+            CURLOPT_HEADER => true,
+            CURLOPT_HTTPHEADER => [
+                'Accept-Language: ' . $lang,
+            ],
+            CURLOPT_FOLLOWLOCATION => true,
+        ]);
+        curl_exec($ch);
+        curl_close($ch);
+    }
+
     private function runMatomoTrack(ServerRequestInterface $request): void
     {
         $buf_stat = new MatomoTracker(
             (int) $this->stat_args->getId(),
             $this->stat_args->getMatomo()
         );
-        $buf_stat->setTokenAuth($this->stat_args->getToken());
-        $buf_stat->setRequestTimeout(12);
         $params = $request->getServerParams();
         $cip = $params['HTTP_X_FORWARDED_FOR']
             ?? $params['REMOTE_ADDR']
@@ -122,10 +156,13 @@ abstract class DBSCtrl
             $cip = trim(explode(',', $cip)[0]);
         }
         $buf_stat->setIP($cip);
-        $buf_stat->setUserAgent($request->getHeader('User-Agent')[0] ?? 'Unknown');
         $buf_stat->setUrl((string) $request->getUri());
         $buf_stat->setUrlReferrer($request->getHeader('Referer')[0] ?? '');
-        $buf_stat->doTrackPageView('API');
+        $this->sendMatomoNoAwait(
+            $buf_stat->getUrlTrackPageView('API'),
+            $request->getHeader('User-Agent')[0] ?? 'Unknown',
+            $request->getHeaderLine('Accept-Language') ?: false
+        );
     }
 
     /**

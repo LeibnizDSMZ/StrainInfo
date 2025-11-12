@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace straininfo\server\shared\mvvm\model\sia\sql\str;
 
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructTaxE;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
-use straininfo\server\shared\mvvm\model\sia\fields\DBStructRelCulE;
 use straininfo\server\shared\mvvm\model\sia\fields\DBStructDesE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructRelCulE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructStrE;
+use straininfo\server\shared\mvvm\model\sia\fields\DBStructTaxE;
 
 function get_sql_base_select_str(): string
 {
