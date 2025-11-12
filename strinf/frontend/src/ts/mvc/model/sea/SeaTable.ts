@@ -75,8 +75,7 @@ class SeaTable {
                 ind = range;
                 argsStr += `,${curId}-${rangeId}`;
                 added += rangeId - curId + 1;
-            }
-            else {
+            } else {
                 argsStr += `,${curId}`;
                 added += 1;
             }
@@ -88,7 +87,7 @@ class SeaTable {
         cha: ViewChanInt,
         jsonId: number[],
         api: string,
-        args: string,
+        args: string
     ): void {
         this.fetchedCnt = 0;
         cha.prog(0);
@@ -98,7 +97,7 @@ class SeaTable {
         const res_con: SeaR[] = [];
         while (cnt < jsonId.length) {
             const [argsS, addedN] = SeaTable.createArgs(
-                sortedJson.slice(cnt, cnt + SeaTable.packSize),
+                sortedJson.slice(cnt, cnt + SeaTable.packSize)
             );
             cnt += addedN;
             const call = this.apiCall.createApiCall(`${QApiCon.seaStrIds}${argsS}`);
@@ -107,8 +106,8 @@ class SeaTable {
                 new Promise((res) => {
                     setTimeout(() => {
                         fetchRetry(call)
-                            .then(async resp =>
-                                checkRespArr<SeaR>(resp, toArrSerSeaRes),
+                            .then(async (resp) =>
+                                checkRespArr<SeaR>(resp, toArrSerSeaRes)
                             )
                             .then((json: SeaR[]): void => {
                                 this.getRes(cha, json, res_con);
@@ -118,7 +117,7 @@ class SeaTable {
                                 throw err;
                             });
                     }, timeOut);
-                }),
+                })
             );
             cntEl += 1;
         }
@@ -130,7 +129,7 @@ class SeaTable {
         api: string,
         ind: number,
         resTab: Promise<void>[],
-        res_con: SeaR[],
+        res_con: SeaR[]
     ): void {
         const call = this.apiCall.createApiCall(`${api}${ind}`);
         resTab.push(
@@ -149,18 +148,17 @@ class SeaTable {
                                     this.fetchedCnt = 0;
                                 }
                                 return checkRespObjOk<SerSeaAllJT>(resp, (data) => {
-                                    const valObj
-                                        = typeof data === 'object' && data !== null;
+                                    const valObj =
+                                        typeof data === 'object' && data !== null;
                                     if (valObj && 'next' in data) {
                                         this.runSearchAll(
                                             cha,
                                             api,
                                             ind + 1,
                                             resTab,
-                                            res_con,
+                                            res_con
                                         );
-                                    }
-                                    else {
+                                    } else {
                                         this.awaitRes(cha, resTab, api, '', res_con);
                                     }
                                     return isSerSeaAllJ(data);
@@ -175,9 +173,9 @@ class SeaTable {
                                 throw err;
                             });
                     },
-                    15 * ind + 1,
+                    15 * ind + 1
                 );
-            }),
+            })
         );
     }
 
@@ -186,7 +184,7 @@ class SeaTable {
         resTab: Promise<void>[],
         api: string,
         args: string,
-        res_con: SeaR[],
+        res_con: SeaR[]
     ): void {
         Promise.all(resTab)
             .then(() => {
@@ -194,15 +192,14 @@ class SeaTable {
                     onPrError(
                         new KnownLostWarnError(
                             `missing results ${this.foundCnt - this.fetchedCnt}, 
-                        consider reloading`,
-                        ),
+                        consider reloading`
+                        )
                     );
                 }
                 if (isOneStrain(res_con)) {
                     const strId = res_con[0] ? `${res_con[0][0]}` : '';
                     this.wrapToPass(cha, api, args, strId);
-                }
-                else {
+                } else {
                     SeaTable.onStop(cha);
                     cha.tab(res_con);
                 }
@@ -230,19 +227,18 @@ class SeaTable {
         cha: ViewChanInt,
         api: string,
         args: string,
-        strain: string,
+        strain: string
     ): void {
         const cApi = api as unknown as QApiCon;
         const reqApi = cApi
             .split(',')
-            .map(ael => SeaTable.mapStrApiCul(ael))
-            .filter(cel => cel !== '')
+            .map((ael) => SeaTable.mapStrApiCul(ael))
+            .filter((cel) => cel !== '')
             .join(',');
         if (reqApi === '') {
             SeaTable.onStop(cha);
             cha.toPass(strain, '');
-        }
-        else {
+        } else {
             this.runSearchApiComb(cha, reqApi, args, (lCha, lIds) => {
                 SeaTable.checkDepIds(lCha, lIds, strain);
             });
@@ -253,14 +249,13 @@ class SeaTable {
         cha: ViewChanInt,
         api: string,
         args: string,
-        strain: string,
+        strain: string
     ): void {
         const cApi = api as unknown as QApiCon;
         if (cApi === QApiCon.seaStrCulId) {
             SeaTable.onStop(cha);
             cha.toPass(strain, REG_NUM.test(args) ? args : '');
-        }
-        else {
+        } else {
             this.wrapToPassGen(cha, api, args, strain);
         }
     }
@@ -269,7 +264,7 @@ class SeaTable {
         cha: ViewChanInt,
         jId: number[],
         args: string,
-        api: string,
+        api: string
     ): void {
         this.foundCnt = jId.length;
         for (const ele of cha.load) {
@@ -304,8 +299,7 @@ class SeaTable {
         SeaTable.onStop(cha);
         if (jId.length === 1) {
             cha.toPass(strain, `${jId[0] ?? ''}`);
-        }
-        else {
+        } else {
             cha.toPass(strain, '');
         }
     }
@@ -314,7 +308,7 @@ class SeaTable {
         cha: ViewChanInt,
         api: string,
         args: string,
-        checkIds: (cha: ViewChanInt, jId: number[], args: string, api: string) => void,
+        checkIds: (cha: ViewChanInt, jId: number[], args: string, api: string) => void
     ): void {
         const idRes: { data: number[] } = {
             data: [],
@@ -324,15 +318,13 @@ class SeaTable {
         for (const callApi of apis) {
             const call = this.apiCall.createApiCall(`${callApi}${args}`);
             const fetchP = fetchRetry(call)
-                .then(async resp => checkRespArr<number>(resp, num => Number(num)))
+                .then(async (resp) => checkRespArr<number>(resp, (num) => Number(num)))
                 .then((json: number[]): void => {
                     if (apis.size === 1) {
                         idRes.data = json;
-                    }
-                    else if (json.length < 80000) {
+                    } else if (json.length < 80000) {
                         idRes.data.push(...json);
-                    }
-                    else {
+                    } else {
                         for (const val of json) {
                             idRes.data.push(val);
                         }
@@ -362,8 +354,7 @@ class SeaTable {
     private static forwardStrainToPass(cha: ViewChanInt, strain: string) {
         if (!isOnlyOneStr(QApiCon.seaCulStrId, strain)) {
             onPrError(new Known404Error(getApiToStr(QApiCon.seaCulStrId), strain));
-        }
-        else {
+        } else {
             cha.toPass(strain, '');
         }
     }
@@ -390,13 +381,11 @@ class SeaTable {
             }
             const res_con: SeaR[] = [];
             this.runSearchAll(cha, api, 0, [], res_con);
-        }
-        else if (cApi === QApiCon.seaCulStrId) {
+        } else if (cApi === QApiCon.seaCulStrId) {
             SeaTable.forwardStrainToPass(cha, args);
-        }
-        else if (
-            allowedApis.includes(cApi)
-            || csApi.every(elApi => allowedComb.has(elApi))
+        } else if (
+            allowedApis.includes(cApi) ||
+            csApi.every((elApi) => allowedComb.has(elApi))
         ) {
             for (const ele of cha.load) {
                 ele(LoadT.STA);
@@ -404,8 +393,7 @@ class SeaTable {
             this.runSearchApiComb(cha, api, args, (lCha, lIds, lArg, lApi) => {
                 this.checkStrIds(lCha, lIds, lArg, lApi);
             });
-        }
-        else {
+        } else {
             SeaTable.onStop(cha);
             onPrError(new Known500Error(`Unknown arguments detected: ${cApi}`));
         }

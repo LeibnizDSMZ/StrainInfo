@@ -13,10 +13,10 @@ const CACHE: {
 function fetchStatus(
     callback: (json: ServerStatusJT) => void,
     panic: () => void,
-    fetchInit?: RequestInit,
+    fetchInit?: RequestInit
 ) {
     fetchRetry(createUrlStr(CONFIG.backend, '/'), fetchInit, 2)
-        .then(async resp => checkRespObjOk<ServerStatusJT>(resp, isServerStatus))
+        .then(async (resp) => checkRespObjOk<ServerStatusJT>(resp, isServerStatus))
         .then((results: ServerStatusJT): void => {
             CACHE.time = new Date().getTime();
             CACHE.status = results;
@@ -28,13 +28,12 @@ function fetchStatus(
 function getServerStatus(
     callback: (json: ServerStatusJT) => void,
     panic: () => void,
-    fetchInit?: RequestInit,
+    fetchInit?: RequestInit
 ): void {
     const [timeCur, timeLast] = [new Date().getTime(), CACHE.time];
     if ((timeCur - timeLast) / 1000 > 10 || CACHE.status === undefined) {
         fetchStatus(callback, panic, fetchInit);
-    }
-    else {
+    } else {
         callback(CACHE.status);
     }
 }

@@ -35,7 +35,7 @@ interface PageProps {
 
 function getPagArray(sel: number, cnt: number): (number | string)[] {
     const pagination: number[] = [...Array.from({ length: 5 }).keys()]
-        .map(val => sel + val - 2)
+        .map((val) => sel + val - 2)
         .filter((val: number) => {
             if (val <= 1 || val >= cnt) {
                 return false;
@@ -208,19 +208,17 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
 
     private updateObjState(): void {
         const { res, head } = this.props;
-        const baseChanged
-            = this.data.length !== res.length || this.head.length !== head.length;
+        const baseChanged =
+            this.data.length !== res.length || this.head.length !== head.length;
         this.data = res;
         this.head = head;
         const filterChanged = this.toSearch() || this.toFilter();
         if (baseChanged) {
             this.searchState = { previous: '', next: '' };
             this.setState({ page: 1, view: [...this.data.keys()] });
-        }
-        else if (filterChanged) {
+        } else if (filterChanged) {
             this.runFilter();
-        }
-        else {
+        } else {
             this.ready = true;
         }
     }
@@ -280,11 +278,11 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
             const resS: Promise<number[]>[] = [];
             for (const view of indPkg) {
                 resS.push(
-                    new Promise(resolve =>
+                    new Promise((resolve) =>
                         setTimeout(() => {
                             resolve(this.search(this.searchState.next, view));
-                        }, 10),
-                    ),
+                        }, 10)
+                    )
                 );
             }
             Promise.all(resS)
@@ -294,13 +292,11 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
                 .catch((err: unknown) => {
                     if (toThrow) {
                         throw err;
-                    }
-                    else {
+                    } else {
                         onPrError(err);
                     }
                 });
-        }
-        else {
+        } else {
             this.setState({ page: 1, view: limit });
         }
     }
@@ -308,8 +304,8 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
     private runFilter(): void {
         this.resetSort();
         const toFil = this.toFilter() && this.filterState.next.length !== 0;
-        const toEmpty
-            = this.filterBuffer.length === 0 || this.filterState.next.length === 0 || toFil;
+        const toEmpty =
+            this.filterBuffer.length === 0 || this.filterState.next.length === 0 || toFil;
         this.filterState.previous = this.filterState.next;
         const limit = toEmpty ? [...this.data.keys()] : this.filterBuffer;
         if (toFil) {
@@ -317,11 +313,11 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
             const resF: Promise<number[]>[] = [];
             for (const view of indPkg) {
                 resF.push(
-                    new Promise(resolve =>
+                    new Promise((resolve) =>
                         setTimeout(() => {
                             resolve(this.filter(this.filterState.next, view));
-                        }, 10),
-                    ),
+                        }, 10)
+                    )
                 );
             }
             Promise.all(resF)
@@ -331,14 +327,13 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
                 .catch((err: unknown) => {
                     onPrError(err);
                 });
-        }
-        else {
+        } else {
             this.runSearch(
                 limit,
-                this.searchState.previous !== ''
-                && this.filterState.next.length === 0
-                && this.filterState.previous.length !== 0,
-                false,
+                this.searchState.previous !== '' &&
+                    this.filterState.next.length === 0 &&
+                    this.filterState.previous.length !== 0,
+                false
             );
         }
     }
@@ -376,7 +371,7 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
     protected get body(): (T | undefined)[] {
         const { page, view, window } = this.state;
         const start = (page - 1) * window;
-        return view.slice(start, start + window).map(index => this.data[index]);
+        return view.slice(start, start + window).map((index) => this.data[index]);
     }
 
     protected createSortElement(index: number, sort: boolean): JSX.Element | null {
@@ -471,7 +466,7 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
         if (!wind.includes(window)) {
             wind.push(window);
         }
-        wind = wind.sort((fir, sec) => fir - sec).filter(val => val < this.data.length);
+        wind = wind.sort((fir, sec) => fir - sec).filter((val) => val < this.data.length);
         if (wind.length < 2) {
             return null;
         }
@@ -572,17 +567,7 @@ abstract class TableCon<T, E extends TableProps<T>> extends Component<E, TableSt
         }
         return (
             <div className={Pad.lN10}>
-                Showing
-                {' '}
-                {start}
-                {' '}
-                to
-                {' '}
-                {end}
-                {' '}
-                of
-                {' '}
-                {view.length}
+                Showing {start} to {end} of {view.length}
             </div>
         );
     }

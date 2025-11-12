@@ -37,8 +37,8 @@ function initT(domains: string[]): void {
 function createUrl(mat: StatsT): string {
     let matPort = `:${mat.matomo.port}`;
     if (
-        (mat.matomo.protocol === 'https' && mat.matomo.port === 443)
-        || (mat.matomo.protocol === 'http' && mat.matomo.port === 80)
+        (mat.matomo.protocol === 'https' && mat.matomo.port === 443) ||
+        (mat.matomo.protocol === 'http' && mat.matomo.port === 80)
     ) {
         matPort = '';
     }
@@ -60,12 +60,10 @@ function setMatomoInterval(callback: () => void, onfail: () => void): void {
         if (typeof window.Matomo === 'object') {
             clearInterval(interval);
             callback();
-        }
-        else if (cnt > 3) {
+        } else if (cnt > 3) {
             clearInterval(interval);
             onfail();
-        }
-        else {
+        } else {
             cnt += 1;
         }
     }, 300);
@@ -89,14 +87,13 @@ function createDelayedTrack(callback: () => void): void {
 function matomoCallback(callback: () => void): void {
     if (window.matomoLoaded !== undefined) {
         createDelayedTrack(callback);
-    }
-    else if (checkFirstCookie()) {
+    } else if (checkFirstCookie()) {
         initMat(CONFIG.statistic);
         setMatomoInterval(
             () => createDelayedTrack(callback),
             () => {
                 console.warn('matomo not loaded');
-            },
+            }
         );
     }
 }

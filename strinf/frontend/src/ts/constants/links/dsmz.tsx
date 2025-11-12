@@ -21,10 +21,10 @@ const DSMZ_DET = {
     ].join(' '),
     address: {
         '@type': 'PostalAddress',
-        'addressCountry': 'DE',
-        'addressLocality': 'Braunschweig',
-        'postalCode': '38124',
-        'streetAddress': 'Inhoffenstraße 7B',
+        addressCountry: 'DE',
+        addressLocality: 'Braunschweig',
+        postalCode: '38124',
+        streetAddress: 'Inhoffenstraße 7B',
     },
     email: dsmz_mail(),
     telephone: '+49 531 2616 0',
@@ -56,25 +56,18 @@ function ImprintDsmzVD(): JSX.Element {
             <p>
                 {DSMZ_DET.address.streetAddress}
                 <br />
-                {DSMZ_DET.address.postalCode}
-                {' '}
-                {DSMZ_DET.address.addressLocality}
+                {DSMZ_DET.address.postalCode} {DSMZ_DET.address.addressLocality}
                 <br />
                 Science Campus Braunschweig-Süd
                 <br />
                 GERMANY
             </p>
             <p>
-                Phone:
-                {' '}
-                {DSMZ_DET.telephone}
+                Phone: {DSMZ_DET.telephone}
                 <br />
-                EMail:
-                {' '}
-                {dsmz}
+                EMail: {dsmz}
                 <br />
-                Internet:
-                {' '}
+                Internet:{' '}
                 <a target="_blank" href={createUrlStr(DSMZ_L, '')} rel="noopener">
                     www.dsmz.de
                 </a>

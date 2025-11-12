@@ -35,7 +35,7 @@ function ToolTipC({ res, loading, info }: ToolTipProps): JSX.Element {
         ...filteredTT,
         (val: EleT | JSX.Element) => {
             return parseVal2Html(val);
-        },
+        }
     );
     if (resDiv[1] === 1 || loading) {
         resDiv[0] = <div key={0}>Loading ...</div>;
@@ -44,7 +44,7 @@ function ToolTipC({ res, loading, info }: ToolTipProps): JSX.Element {
         <>
             {resDiv[0]}
             {info ?? null}
-        </>,
+        </>
     );
 }
 

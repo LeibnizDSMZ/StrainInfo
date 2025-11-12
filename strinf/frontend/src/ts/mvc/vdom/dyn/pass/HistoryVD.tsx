@@ -184,7 +184,7 @@ function hasXProperty(node: unknown): node is XYProp {
 }
 
 function getCoords(
-    node: d3Sankey.SankeyNode<NODE_T, LINK_T> | d3Sankey.SankeyLink<NODE_T, LINK_T>,
+    node: d3Sankey.SankeyNode<NODE_T, LINK_T> | d3Sankey.SankeyLink<NODE_T, LINK_T>
 ): [number, number, number, number] {
     if (hasXProperty(node)) {
         return [node.x0, node.y0 ?? 0, node.x1, node.y1 ?? 0];
@@ -194,7 +194,7 @@ function getCoords(
 
 function correctNodeXPos(
     node: d3Sankey.SankeyNode<NODE_T, LINK_T>,
-    originX: number,
+    originX: number
 ): void {
     let [x0, , x1] = getCoords(node);
     const depth = node.depth ?? 0;
@@ -220,7 +220,7 @@ interface GraphMap {
 function crNode(
     graph: d3Sankey.SankeyGraph<NODE_T, LINK_T>,
     selCuId: number,
-    { hooks, anc, ctx }: DEF_CON,
+    { hooks, anc, ctx }: DEF_CON
 ): JSX.Element {
     const hookF = (rel: d3Sankey.SankeyNode<NODE_T, LINK_T>) => {
         if (hooks.data !== undefined) {
@@ -238,7 +238,7 @@ function crNode(
                     () => {
                         hookF(rel);
                     },
-                    [500, 300],
+                    [500, 300]
                 );
                 return (
                     <rect
@@ -265,7 +265,7 @@ function crNode(
 
 function crLink(
     graph: d3Sankey.SankeyGraph<NODE_T, LINK_T>,
-    selCuId: number,
+    selCuId: number
 ): JSX.Element {
     const linkGen = d3Sankey.sankeyLinkHorizontal();
     return (
@@ -293,7 +293,7 @@ function crLink(
 
 function crLabel(
     graph: d3Sankey.SankeyGraph<NODE_T, LINK_T>,
-    selCuId: number,
+    selCuId: number
 ): JSX.Element {
     return (
         <g>
@@ -357,7 +357,7 @@ function crSankey(data: DATA_T): [d3Sankey.SankeyGraph<NODE_T, LINK_T>, number, 
             [DEF_H - 1, DEF_H - 13],
         ])
         .nodeAlign(d3Sankey.sankeyLeft);
-    const graph = sankey.nodeId(node => node.name)(data);
+    const graph = sankey.nodeId((node) => node.name)(data);
     const graphM = crGraphSizes(graph);
     for (const node of graph.nodes) {
         correctNodeXPos(node, graphM.oriX);
@@ -411,7 +411,7 @@ function hasCycle(
     key: number,
     graph: Map<number, Set<number>>,
     visited: Set<number>,
-    verified: Set<number>,
+    verified: Set<number>
 ): [boolean, Set<number>] {
     visited.add(key);
     const target = graph.get(key)?.values().next().value;
@@ -469,7 +469,7 @@ function HistoryVD({
     ctx?.inValSet('HistoryVD')((val: string) => {
         const valInt = Number.parseInt(
             val.replace(new RegExp(IdAcrTagCon.depId, 'i'), '').replace(/,.*/, ''),
-            10,
+            10
         );
         if (!Number.isNaN(valInt) && SR_CUL_ID.test(val)) {
             setSelSiCu(valInt);

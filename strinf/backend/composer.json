@@ -15,7 +15,8 @@
         "nyholm/psr7-server": "1.1.0",
         "thecodingmachine/safe": "3.3.0",
         "matomo/matomo-php-tracker": "3.3.2",
-        "spiral/roadrunner-http": "3.5.2",
+        "spiral/roadrunner-http": "3.6.0",
+        "spiral/roadrunner-jobs": "4.7.0",
         "spiral/roadrunner-worker": "3.6.2"
     },
     "require-dev": {

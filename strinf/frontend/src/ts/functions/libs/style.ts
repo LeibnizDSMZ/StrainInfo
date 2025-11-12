@@ -13,11 +13,10 @@ function customToggleSideBar(enable: boolean): void {
     if (document.documentElement.clientWidth > 992) {
         active = Boolean(
             Math.abs(
-                Number(!document.body.classList.contains(ClHtml.sideSM)) - Number(enable),
-            ),
+                Number(!document.body.classList.contains(ClHtml.sideSM)) - Number(enable)
+            )
         );
-    }
-    else {
+    } else {
         const [pgWr] = document.getElementsByClassName(ClHtml.pgWr);
         active = !(pgWr?.hasAttribute(SIDE_HIDDEN[0]) ?? false);
     }

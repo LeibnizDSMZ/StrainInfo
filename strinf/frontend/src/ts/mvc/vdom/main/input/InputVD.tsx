@@ -48,11 +48,11 @@ function clickEvent({ callB, upD, reset, location }: BtnProps) {
 }
 
 function seaEvent({ callB, upD, reset, location }: BtnProps, eve?: KeyEvent): void {
-    const called
-        = eve === undefined
-            || eve.key === 'Enter'
-            || eve.key === 'Accept'
-            || eve.key === 'Tab';
+    const called =
+        eve === undefined ||
+        eve.key === 'Enter' ||
+        eve.key === 'Accept' ||
+        eve.key === 'Tab';
     if (called) {
         clickEvent({ callB, upD, reset, location });
     }
@@ -62,14 +62,13 @@ function seaIndEvent(
     ctrl: SeaIndexCtrl,
     hooks: IndSeaSt,
     keyLen: number,
-    input: TargetedEvent<HTMLInputElement>,
+    input: TargetedEvent<HTMLInputElement>
 ): void {
     const val = input.currentTarget.value;
     const valLen = val.length >= keyLen || val.replaceAll(/[^A-Z]/gi, '').length >= 1;
     if (val.length < 40 && valLen && !val.includes(',')) {
         ctrl.init(hooks, encodeURIComponent(val.replaceAll('.', '_').replace('/', ':')));
-    }
-    else {
+    } else {
         hooks.tab({ match: [], exact: [] });
     }
 }
@@ -131,7 +130,7 @@ class InputVD extends Component<InProps, InState> {
         this.hooks = new IndSeaSt();
         this.state = { results: { match: [], exact: [] }, ctrl: undefined };
         this.hooks.tabSet((results: SeaIndJT): void => {
-            this.setState(prevSt => ({ ...prevSt, results }));
+            this.setState((prevSt) => ({ ...prevSt, results }));
         });
         this.input = null;
         this.memory = '';

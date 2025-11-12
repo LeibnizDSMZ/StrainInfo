@@ -23,7 +23,7 @@ const USER_PICS: [string, unknown][] = Object.entries(
         eager: true,
         query: '?url',
         import: 'default',
-    }),
+    })
 );
 
 function setPictureSrc(picName: string, setPicP: (src: string) => void): void {
@@ -40,8 +40,7 @@ function setPictureSrc(picName: string, setPicP: (src: string) => void): void {
                     }
                 })
                 .catch((err: unknown) => `${err}`);
-        }
-        else if (srcL.startsWith('data:image/webp')) {
+        } else if (srcL.startsWith('data:image/webp')) {
             setPicP(srcL);
         }
     }

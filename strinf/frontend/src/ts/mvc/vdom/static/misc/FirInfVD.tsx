@@ -25,7 +25,7 @@ function crBtn(setAgreed: (val: boolean) => void): JSX.Element {
 
 function createInfo(
     agreed: boolean,
-    setAgreed: (val: boolean) => void,
+    setAgreed: (val: boolean) => void
 ): JSX.Element | null {
     if (checkFirstCookie() || agreed) {
         return null;

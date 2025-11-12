@@ -25,7 +25,7 @@ function containsArrNoEmptyStr(val: unknown[], chI: number[]): boolean {
 function filterArrStr(
     head: string[],
     vals: (EleT | undefined)[],
-    repl_str?: string,
+    repl_str?: string
 ): [string[], EleT[]] {
     const resH = [];
     const resV = [];
@@ -47,15 +47,15 @@ function filterArrRowStr<T>(vals: T[], chI: number[]): T[] {
     return vals
         .slice()
         .filter(
-            elV =>
-                elV !== undefined && Array.isArray(elV) && containsArrNoEmptyStr(elV, chI),
+            (elV) =>
+                elV !== undefined && Array.isArray(elV) && containsArrNoEmptyStr(elV, chI)
         );
 }
 
 function filterRowStr<T>(vals: T[]): T[] {
     return vals
         .slice()
-        .filter(elV => elV !== undefined && typeof elV === 'string' && elV.length > 0);
+        .filter((elV) => elV !== undefined && typeof elV === 'string' && elV.length > 0);
 }
 
 export { filterArrRowStr, filterArrStr, filterRowStr };

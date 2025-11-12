@@ -62,7 +62,7 @@ class MainVD extends Component<
                 this.errCr = true;
                 this.onError(true);
             },
-            sig,
+            sig
         );
     }
 
@@ -71,12 +71,12 @@ class MainVD extends Component<
     }
 
     public onError(toPanic: boolean = false): void {
-        const alert
-            = this.glStateCon.errT !== undefined
-                && [ErrType.INWARN, ErrType.FEWARN, ErrType.E404].includes(
-                    this.glStateCon.errT,
-                )
-                && this.glStateCon.errS[1] !== this.lastAlert;
+        const alert =
+            this.glStateCon.errT !== undefined &&
+            [ErrType.INWARN, ErrType.FEWARN, ErrType.E404].includes(
+                this.glStateCon.errT
+            ) &&
+            this.glStateCon.errS[1] !== this.lastAlert;
         if (alert) {
             this.lastAlert = this.glStateCon.errS[1];
             crAlert(this.glStateCon.errT, this.glStateCon.errS[1]);
@@ -103,11 +103,9 @@ class MainVD extends Component<
                 this.glStateCon.errSSet(error.message, error.message);
                 if (status.maintenance.status) {
                     this.setMaintenance(status.maintenance);
-                }
-                else if (error instanceof KnownError) {
+                } else if (error instanceof KnownError) {
                     this.setServerError(error.message, error);
-                }
-                else {
+                } else {
                     this.glStateCon.errTSet(ErrType.E500);
                     this.errCr = true;
                 }
@@ -118,7 +116,7 @@ class MainVD extends Component<
                 this.errCr = true;
                 this.onError(true);
             },
-            { signal: AbortSignal.timeout(60000) },
+            { signal: AbortSignal.timeout(60000) }
         );
     }
 
@@ -128,7 +126,7 @@ class MainVD extends Component<
         const msg = Known503Error.formateMsg(
             'Under maintenance!',
             maintenance.duration,
-            maintenance.zone,
+            maintenance.zone
         );
         this.glStateCon.errSSet(msg, msg);
     }

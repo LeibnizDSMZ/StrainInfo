@@ -44,7 +44,7 @@ function PassWrVD({ id }: { id: string }): JSX.Element {
 const ABOUT_PVD = lazy(async () => import('@strinf/ts/mvc/vdom/static/AboutMainVD'));
 const TEAM_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/TeamVD'));
 const STR_REG_VD = lazy(
-    async () => import('@strinf/ts/mvc/vdom/static/StrainRegistryVD'),
+    async () => import('@strinf/ts/mvc/vdom/static/StrainRegistryVD')
 );
 const NEWS_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/NewsVD'));
 const IMP_VD = lazy(async () => import('@strinf/ts/mvc/vdom/static/ImprintVD'));
@@ -115,8 +115,7 @@ function crRoutesVD(blocked: boolean): JSX.Element[] {
 }
 
 function displayContainer(errorP: string, errorB: boolean, mainCon: boolean): string {
-    if (errorB || errorP !== '')
-        return mainCon ? Dis.dNone : '';
+    if (errorB || errorP !== '') return mainCon ? Dis.dNone : '';
     return mainCon ? '' : Dis.dNone;
 }
 
@@ -128,7 +127,7 @@ interface errStateT {
 function onError(
     panic: boolean,
     handleError: () => boolean,
-    errT: ErrType | undefined,
+    errT: ErrType | undefined
 ): errStateT {
     const newState = {
         errorP: '',

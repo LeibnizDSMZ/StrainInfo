@@ -18,7 +18,7 @@ function createApiStrainCall(str_id: string | number): string {
 
 function createStrainCultureCall(
     str_id: string | number,
-    cul_id: number | string,
+    cul_id: number | string
 ): string {
     return `${UIApiCon.strain}${str_id}?${IdAcrTagCon.depId}${cul_id}`;
 }

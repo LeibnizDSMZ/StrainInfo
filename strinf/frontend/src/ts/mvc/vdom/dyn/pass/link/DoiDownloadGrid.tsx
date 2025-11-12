@@ -71,8 +71,7 @@ function DoiDownloadGrid(props: DownloadT): JSX.Element {
                                     crAlert(null, 'DOI copied to your clipboard');
                                 })
                                 .catch(onPrError);
-                        }
-                        catch {
+                        } catch {
                             crAlert(ErrType.FEWARN, 'Clipboard not defined!');
                         }
                     }}

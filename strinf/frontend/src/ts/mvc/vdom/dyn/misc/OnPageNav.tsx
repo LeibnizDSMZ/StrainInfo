@@ -46,13 +46,13 @@ function createNavLinks(anc: AncT | undefined): JSX.Element[] {
     const res: JSX.Element[] = [];
     for (const key of Object.keys(anc)
         .sort()
-        .map(ele => Number(ele))) {
+        .map((ele) => Number(ele))) {
         const val = anc[key];
         if (val !== undefined) {
             res.push(
                 <a key={val[0]} href={`#${val[0]}`}>
                     {val[1]}
-                </a>,
+                </a>
             );
         }
     }

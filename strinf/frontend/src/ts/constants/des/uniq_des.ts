@@ -9,8 +9,7 @@ function cleanPre(pre: string): string {
     let last_char = '';
     const output = Array.from(pre).map((char: string) => {
         last_char = char;
-        if (SINGLE_WORD_CHAR.exec(char) !== null)
-            return char.toUpperCase();
+        if (SINGLE_WORD_CHAR.exec(char) !== null) return char.toUpperCase();
         if (last_char === STR_DEFINED_SEP) {
             return '';
         }

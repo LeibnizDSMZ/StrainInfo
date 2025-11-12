@@ -33,7 +33,7 @@ function crFormGr(
     explain: string,
     gId: string,
     InAttr: DefAttr,
-    labAttr: DefAttr,
+    labAttr: DefAttr
 ): JSX.Element {
     return (
         <div className={`${ClHtml.cCh} ${Pad.bN5}`}>
@@ -49,7 +49,7 @@ function applyAccChanges(
     event: TargetedEvent<HTMLFormElement>,
     container: RefObject<HTMLDivElement>,
     domain: string,
-    ctx: WrapperInt & CookieG,
+    ctx: WrapperInt & CookieG
 ): void {
     event.preventDefault();
     if (container.current !== null) {

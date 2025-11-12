@@ -95,10 +95,7 @@ const ID_LIST: [number, string, () => JSX.Element][] = [
 
 function AboutPP(): JSX.Element {
     return (
-        <>
-            {' '}
-            {ID_LIST.map(val => wrapSectionGen(genAnchor(val[0]), val[1], val[2]()))}
-        </>
+        <> {ID_LIST.map((val) => wrapSectionGen(genAnchor(val[0]), val[1], val[2]()))}</>
     );
 }
 

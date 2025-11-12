@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace straininfo\server;
 
 use Psr\Log\LoggerInterface;
+use function Safe\mb_internal_encoding;
 use Slim\App;
 use straininfo\server\configs\ConfigsCont;
+use function straininfo\server\exceptions\get_err_handler_boot_fun;
+use function straininfo\server\exceptions\get_err_handler_fun;
 use straininfo\server\exceptions\init_phase\KnownBootExc;
 use straininfo\server\interfaces\global\Stoppable;
 use straininfo\server\interfaces\mvvm\controller\CtrlIntBoot;
-use straininfo\server\shared\exc\KEAct;
-use straininfo\server\shared\logger\LogLevE;
-use straininfo\server\shared\state\RunState;
 
-use function Safe\mb_internal_encoding;
-use function straininfo\server\exceptions\get_err_handler_boot_fun;
-use function straininfo\server\exceptions\get_err_handler_fun;
 use function straininfo\server\logger\create_logger;
 use function straininfo\server\logger\create_new_log_channel;
 use function straininfo\server\mvvm\create_mvvm;
+use straininfo\server\shared\exc\KEAct;
+use straininfo\server\shared\logger\LogLevE;
+use straininfo\server\shared\state\RunState;
 
 final class Bootstrap implements Stoppable
 {
@@ -51,17 +51,17 @@ final class Bootstrap implements Stoppable
         set_exception_handler(get_err_handler_fun($this->logger_err, $this));
     }
 
+    public function __destruct()
+    {
+        $this->destruct();
+    }
+
     public static function getBootstrap(): self
     {
         if (is_null(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
-    }
-
-    public function __destruct()
-    {
-        $this->destruct();
     }
 
     public function stop(): void

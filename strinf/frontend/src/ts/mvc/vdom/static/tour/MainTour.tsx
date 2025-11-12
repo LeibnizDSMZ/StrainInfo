@@ -60,18 +60,10 @@ function crTour(driverTour: Driver, location: LocationHook): DriveStep[] {
                             <li>Sequence accession numbers</li>
                             <li>Strain designations</li>
                             <li>Culture collection acronyms</li>
-                            <li>
-                                StrainInfo strain IDs (
-                                {IdAcrTagCon.strId}
-                                )
-                            </li>
-                            <li>
-                                StrainInfo deposit IDs (
-                                {IdAcrTagCon.depId}
-                                )
-                            </li>
+                            <li>StrainInfo strain IDs ({IdAcrTagCon.strId})</li>
+                            <li>StrainInfo deposit IDs ({IdAcrTagCon.depId})</li>
                         </ul>,
-                        htmlDiv,
+                        htmlDiv
                     );
                     popover.description.appendChild(htmlDiv);
                 },

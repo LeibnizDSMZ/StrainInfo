@@ -58,8 +58,7 @@ class IndexVD extends Component<unknown, object> {
             if (this.iCtrl === undefined) {
                 this.iCtrl = new IndCtrl(ctx.version);
                 this.iCtrl.init(this.hooks);
-            }
-            else {
+            } else {
                 this.iCtrl.init(this.hooks);
             }
         }

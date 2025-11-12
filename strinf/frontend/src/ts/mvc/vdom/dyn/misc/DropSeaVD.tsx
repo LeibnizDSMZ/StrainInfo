@@ -19,7 +19,7 @@ function clickEvent(
     ctx: InValStInt | undefined,
     searchValue: string,
     searchApi: string,
-    location: LocationHook,
+    location: LocationHook
 ): void {
     const url = createKnownSeaCall(searchValue, searchApi);
     updateHrefVal(addTagToInput(searchValue, searchApi), ctx);
@@ -29,7 +29,7 @@ function clickEvent(
 function crRow(
     expE: [string, JSX.Element | string, string, string],
     ctx: InValStInt | undefined,
-    location: LocationHook,
+    location: LocationHook
 ): JSX.Element {
     const [key, displayValue, searchValue, searchApi] = expE;
     return (
@@ -75,14 +75,14 @@ function DropSeaVD({ results, input }: DropProps): JSX.Element | null {
     const height = `height: ${drHei}rem;`;
     let tit = 'Search examples';
     const location = useLocation();
-    let resCon = getDDExp().map(val => crRow([...val, ''], ctx, location));
+    let resCon = getDDExp().map((val) => crRow([...val, ''], ctx, location));
     if (input !== '' && (results.exact.length > 0 || results.match.length > 0)) {
         const exact = getDDRes(results.exact, 6);
         const match = getDDRes(results.match, Math.max(6 - exact.length, 0));
         tit = 'Match found';
         resCon = [
-            ...exact.map(valE => crRow(valE, ctx, location)),
-            ...match.map(valM => crRow(valM, ctx, location)),
+            ...exact.map((valE) => crRow(valE, ctx, location)),
+            ...match.map((valM) => crRow(valM, ctx, location)),
         ];
     }
     return (

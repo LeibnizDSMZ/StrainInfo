@@ -1,5 +1,8 @@
 version: "3"
 
+rpc:
+  listen: tcp://127.0.0.1:6001
+
 server:
   command: "php $SERVER_RR_PHP"
 
@@ -15,6 +18,23 @@ http:
     min_length: 1024
     content_types:
       - "application/json"
+
+jobs:
+  consume: ["matomo"]         
+  pool:
+    num_workers: 2             
+
+  pipeline:
+    matomo:
+      driver: redis            
+      config:
+        addr: "redis:6379"        
+        db: 5                    
+        prefetch: 10              
+        visibility_timeout: 30s   
+        pipeline_size: 100
+        max_retries: 2         
+
 logs:
   encoding: console 
   level: error 

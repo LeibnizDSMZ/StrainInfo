@@ -32,7 +32,7 @@ function createTiles(
     tiles: [JSX.Element, number][],
     hook: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>,
     addInd: number,
-    oriDes: string[],
+    oriDes: string[]
 ): JSX.Element[] {
     return tiles.map((til, ind: number) => (
         <TooltipWrapper
@@ -59,7 +59,7 @@ function AltStrains({ strH, alt, oriDes }: TProps): JSX.Element | null {
     const tilesStr = createRStrTiles(
         alt,
         (dat: number) => [dat, `${IdAcrTagCon.strId} ${dat}`],
-        ctx,
+        ctx
     );
     if (tilesStr.length === 0) {
         return null;

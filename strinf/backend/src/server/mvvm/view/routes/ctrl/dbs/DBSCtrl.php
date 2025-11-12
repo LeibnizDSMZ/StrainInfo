@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace straininfo\server\mvvm\view\routes\ctrl\dbs;
 
-use straininfo\server\shared\mvvm\view\StatArgs;
-use straininfo\server\shared\mvvm\view\HeadArgs;
-use function straininfo\server\shared\mvvm\view\domain_overlap;
-use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
-use function straininfo\server\shared\mvvm\view\add_default_headers;
-use function straininfo\server\exceptions\create_error_json;
-use function Safe\parse_url;
-use function Safe\curl_init;
-
-use Slim\Exception\HttpInternalServerErrorException;
-use Slim\Exception\HttpForbiddenException;
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use MatomoTracker;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use function Safe\parse_url;
+use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpInternalServerErrorException;
+use Spiral\Goridge\RPC\RPC;
+use Spiral\RoadRunner\Jobs\Jobs;
+use Spiral\RoadRunner\Jobs\QueueInterface;
+use function straininfo\server\exceptions\create_error_json;
+
+use function straininfo\server\shared\mvvm\view\add_default_headers;
+use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
+use function straininfo\server\shared\mvvm\view\domain_overlap;
+use straininfo\server\shared\mvvm\view\HeadArgs;
+use straininfo\server\shared\mvvm\view\StatArgs;
 
 abstract class DBSCtrl
 {
@@ -33,6 +35,8 @@ abstract class DBSCtrl
     private readonly StatArgs $stat_args;
 
     private readonly LoggerInterface $logger;
+
+    private readonly QueueInterface $queue;
 
     /**
      * @param array<string> $cors
@@ -50,6 +54,8 @@ abstract class DBSCtrl
         $this->cors = $cors;
         $this->private = $private;
         $this->stat_args = $stat_args;
+        $jobs = new Jobs(RPC::create('tcp://127.0.0.1:6001'));
+        $this->queue = $jobs->connect('matomo');
     }
 
     protected function checkPrivate(ServerRequestInterface $request, bool $private): void
@@ -104,15 +110,13 @@ abstract class DBSCtrl
         );
     }
 
-    private function sendMatomoNoAwait(string $url, string $agent, string|false $lang): void
+    private function sendMatomoNoAwait(string $url, string $agent, string $lang): void
     {
         $parsedUrl = parse_url($url);
         parse_str($parsedUrl['query'] ?? '', $queryParams);
-
-        if (!empty($this->stat_args->getToken())) {
+        if ($this->stat_args->getToken() !== '') {
             $queryParams['token_auth'] = $this->stat_args->getToken();
         }
-
         $queryString = http_build_query($queryParams);
 
         $fullUrl = (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '')
@@ -120,22 +124,14 @@ abstract class DBSCtrl
             . ($parsedUrl['path'] ?? '')
             . '?' . $queryString;
 
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL => $fullUrl,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT_MS => 500,
-            CURLOPT_CONNECTTIMEOUT_MS => 500,
-            CURLOPT_NOSIGNAL => true,
-            CURLOPT_USERAGENT => $agent,
-            CURLOPT_HEADER => true,
-            CURLOPT_HTTPHEADER => [
-                'Accept-Language: ' . $lang,
-            ],
-            CURLOPT_FOLLOWLOCATION => true,
-        ]);
-        curl_exec($ch);
-        curl_close($ch);
+        $payload = json_encode([
+            'url' => $fullUrl,
+            'agent' => $agent,
+            'lang' => $lang,
+        ], JSON_THROW_ON_ERROR, 512);
+
+        $task = $this->queue->create('MatomoPageView', $payload);
+        $this->queue->dispatch($task);
     }
 
     private function runMatomoTrack(ServerRequestInterface $request): void
@@ -161,7 +157,7 @@ abstract class DBSCtrl
         $this->sendMatomoNoAwait(
             $buf_stat->getUrlTrackPageView('API'),
             $request->getHeader('User-Agent')[0] ?? 'Unknown',
-            $request->getHeaderLine('Accept-Language') ?: false
+            $request->getHeaderLine('Accept-Language') ?: ''
         );
     }
 

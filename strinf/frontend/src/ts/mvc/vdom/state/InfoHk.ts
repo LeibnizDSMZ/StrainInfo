@@ -28,7 +28,7 @@ class ToolTipHook implements ToolTipHookInt<TT_GL_TYPE> {
     }
 
     public setTTSrc(
-        srcRef: [RefObject<HTMLDivElement>, RefObject<HTMLDivElement>],
+        srcRef: [RefObject<HTMLDivElement>, RefObject<HTMLDivElement>]
     ): void {
         this.ttSrcH = srcRef;
     }

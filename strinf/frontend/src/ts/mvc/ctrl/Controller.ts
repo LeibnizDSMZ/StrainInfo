@@ -17,8 +17,7 @@ abstract class Controller<T, E extends [...unknown[]]> {
     protected reloadWindowOrCb(version: string, callback: () => void): void {
         if (this.initVersion !== '' && version !== this.initVersion) {
             window.location.reload();
-        }
-        else {
+        } else {
             this.initVersion = version;
             callback();
         }

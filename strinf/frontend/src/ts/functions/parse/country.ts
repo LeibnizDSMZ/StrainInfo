@@ -3,8 +3,7 @@ const reNames = new Intl.DisplayNames(['en'], { type: 'region' });
 function parseCountryCode(code: string): string {
     try {
         return reNames.of(code) ?? code;
-    }
-    catch {
+    } catch {
         return code;
     }
 }

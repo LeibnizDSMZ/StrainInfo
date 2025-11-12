@@ -68,8 +68,7 @@ function DownloadBlobVD({
                                 if (linKRef.current !== null) {
                                     linKRef.current.click();
                                     clearInterval(int);
-                                }
-                                else if (counter > 2400) {
+                                } else if (counter > 2400) {
                                     clearInterval(int);
                                 }
                             }, 100);

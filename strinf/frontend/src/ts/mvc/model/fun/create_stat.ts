@@ -5,7 +5,7 @@ import { checkRespArr, fetchRetry } from '@strinf/ts/functions/http/http';
 
 async function crStat(call: string, name: string): Promise<DataCon<number>> {
     const res = fetchRetry(call)
-        .then(async resp => checkRespArr<number>(resp, num => Number(num)))
+        .then(async (resp) => checkRespArr<number>(resp, (num) => Number(num)))
         .then((json: number[]): DataCon<number> => {
             const [resNo] = json;
             if (resNo === undefined) {

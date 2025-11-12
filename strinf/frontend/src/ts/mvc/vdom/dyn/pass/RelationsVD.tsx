@@ -48,7 +48,7 @@ interface TProps {
 function createTiles(
     tiles: [JSX.Element, number][],
     hook: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>,
-    addInd: number,
+    addInd: number
 ): JSX.Element[] {
     return tiles.map((til, ind: number) => (
         <TooltipWrapper
@@ -68,7 +68,7 @@ function createTilesDes(
     tiles: [JSX.Element, number][],
     hook: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>,
     addInd: number,
-    desCon: string[],
+    desCon: string[]
 ): JSX.Element[] {
     const desLocCon = desCon;
 
@@ -84,7 +84,7 @@ function createTilesDes(
                         <div>
                             <b>{getInfoDesTuple()}</b>
                             {text}
-                        </div>,
+                        </div>
                     );
                 }
             }}
@@ -98,10 +98,10 @@ function Table({ detAnc, curId, culH, desH, des, rel }: TProps): JSX.Element | n
         rel,
         (dat: RelT) => [dat[0], dat[1], dat[3] === undefined, dat[4]],
         ctx,
-        [detAnc, curId],
+        [detAnc, curId]
     );
     const tilesDes = createSimpleTiles(des, (val: string) => [val, Tex.m]).map(
-        (val, ind): [JSX.Element, number] => [val, ind],
+        (val, ind): [JSX.Element, number] => [val, ind]
     );
     if (tilesCul.length === 0 && tilesDes.length === 0) {
         return null;
@@ -141,7 +141,7 @@ class RelationsVD extends PureComponent<ResProps, RelState> {
         ctx?.inValSet('RelationsVD')((val: string) => {
             const valInt = Number.parseInt(
                 val.replace(new RegExp(IdAcrTagCon.depId, 'i'), '').replace(/,.*/, ''),
-                10,
+                10
             );
             if (!Number.isNaN(valInt) && SR_CUL_ID.test(val)) {
                 this.setState({ selID: valInt });

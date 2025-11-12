@@ -14,7 +14,7 @@ function markErr(inF: HTMLInputElement | null): void {
 function addTagToInput(value: string, api: string): string {
     if (
         [QApiCon.seaCulStrId, QApiCon.strMin, QApiCon.strAvg, QApiCon.strMax].includes(
-            api,
+            api
         )
     ) {
         return `${IdAcrTagCon.strId} ${value}`;

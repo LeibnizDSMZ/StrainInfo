@@ -10,9 +10,7 @@ import { useState } from 'preact/hooks';
 function mapStats(sta: DataCon<number>): JSX.Element {
     return (
         <p key={sta.id} className={`${Mar.lN15} ${Mar.yN5}`}>
-            {sta.id}
-            :
-            {sta.data}
+            {sta.id}:{sta.data}
         </p>
     );
 }

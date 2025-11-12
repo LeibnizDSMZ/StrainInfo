@@ -82,9 +82,9 @@ class ArcTable extends TableCon<ArcT, TableProps<ArcT>> {
             }
             const [doi, title, date] = val;
             if (
-                doi.toLocaleLowerCase().includes(prepFilter)
-                || date.toLocaleLowerCase().includes(prepFilter)
-                || title.toLocaleLowerCase().includes(prepFilter)
+                doi.toLocaleLowerCase().includes(prepFilter) ||
+                date.toLocaleLowerCase().includes(prepFilter) ||
+                title.toLocaleLowerCase().includes(prepFilter)
             ) {
                 return true;
             }

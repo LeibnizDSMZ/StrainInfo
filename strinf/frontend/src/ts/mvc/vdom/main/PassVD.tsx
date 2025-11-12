@@ -42,7 +42,7 @@ const REG_ARG = new RegExp(`[?&]{1}${IdAcrTagCon.depId}\\s*(\\d+)`, 'gi');
 function buildStrainDesc(
     sid: number | undefined,
     tax: string | undefined,
-    ccno: string[],
+    ccno: string[]
 ): string {
     const lines: string[] = [
         'A strain passport from the microbial strain database StrainInfo,',
@@ -93,7 +93,7 @@ class PassVD extends Component<PassProps, PassState> {
                 `${tab.overview[0]}`,
                 1,
                 this.pView,
-                Date.now() - this.time,
+                Date.now() - this.time
             );
         });
         this.time = Date.now();
@@ -143,7 +143,7 @@ class PassVD extends Component<PassProps, PassState> {
                     desc={buildStrainDesc(
                         tab?.overview[0],
                         tab?.overview[2][0],
-                        tab?.relations.map(val => val[1]) ?? [],
+                        tab?.relations.map((val) => val[1]) ?? []
                     )}
                     title={`${tax} - ${sid}`}
                 />

@@ -27,7 +27,7 @@ function crAlert(errT: ErrType | null, msg: string): void {
             break;
         default:
             throw new Known500Error(
-                `alert only recognizes 404 and warnings, ${errT} given`,
+                `alert only recognizes 404 and warnings, ${errT} given`
             );
     }
 }

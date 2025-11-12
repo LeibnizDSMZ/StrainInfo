@@ -12,7 +12,7 @@ function formatCultureTT(
     cultures: [string, number][],
     [hookCul, hookInf]: [HOOK, HOOK],
     ctx: InValStInt,
-    tooltip: [(eve: Events) => void, Events],
+    tooltip: [(eve: Events) => void, Events]
 ): JSX.Element {
     const rowCh = cultures
         .slice(0, 2)
@@ -22,7 +22,7 @@ function formatCultureTT(
                 [cde[1].toString(), cde[0]],
                 ctx,
                 `${window.location.pathname}?${IdAcrTagCon.depId}${cde[1]}`,
-                anc,
+                anc
             ),
         ]);
 

@@ -19,7 +19,7 @@ class PassCon {
         cha: ViewChanInt,
         json: PassR[],
         args: string,
-        api: string,
+        api: string
     ): void {
         switch (json.length) {
             case 0:
@@ -29,7 +29,7 @@ class PassCon {
                 break;
             default:
                 throw new Known500Error(
-                    `found ${json.length} results but expected only one`,
+                    `found ${json.length} results but expected only one`
                 );
         }
     }
@@ -50,7 +50,7 @@ class PassCon {
         }
         const call = this.apiCall.createApiCall(`${api}${args}`);
         fetchRetry(call)
-            .then(async resp => checkRespArr<PassR>(resp, toArrPassRes))
+            .then(async (resp) => checkRespArr<PassR>(resp, toArrPassRes))
             .then((json: PassR[]) => {
                 PassCon.checkPass(cha, json, args, api);
             })
@@ -65,8 +65,7 @@ class PassCon {
     public initPass(cha: ViewChanInt, strainId: number): void {
         if (strainId > 0) {
             this.runPassApi(cha, QApiCon.strAvg, `${strainId}`);
-        }
-        else {
+        } else {
             onPrError(new Known500Error(`Negative strain id detected: ${strainId}`));
         }
     }

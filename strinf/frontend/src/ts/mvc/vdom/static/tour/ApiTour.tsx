@@ -195,16 +195,14 @@ function YouTubeB(): JSX.Element {
     return (
         <div>
             <p>
-                Watch our tutorial on
-                {' '}
+                Watch our tutorial on{' '}
                 <a
                     href="https://www.youtube.com/watch?v=utcq5G9xtbk&t=1s"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     YouTube
-                </a>
-                {' '}
+                </a>{' '}
                 or click on the YouTube button below to load the video here.
             </p>
             <p>Note: YouTube has a different privacy policy.</p>
