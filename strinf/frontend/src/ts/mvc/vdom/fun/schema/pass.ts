@@ -15,9 +15,9 @@ const logoI = new URL('@assets/logo/strinf.webp', import.meta.url).pathname;
 
 interface ID_T {
     '@type': string;
-    name: string;
-    propertyID: string;
-    value: number | string;
+    'name': string;
+    'propertyID': string;
+    'value': number | string;
 }
 
 function bacDiveID(pass: PassR): string[] {
@@ -34,9 +34,9 @@ function doiAsID(pass: PassR): ID_T[] {
     return [
         {
             '@type': 'PropertyValue',
-            name: 'DOI',
-            propertyID: DOI_P,
-            value: pass.overview[4],
+            'name': 'DOI',
+            'propertyID': DOI_P,
+            'value': pass.overview[4],
         },
     ];
 }
@@ -75,25 +75,25 @@ function createAbout(name: string, lpsn?: number, ncbi?: number): Record<string,
     return {
         about: {
             '@type': 'Taxon',
-            name: name,
-            identifier: [
+            'name': name,
+            'identifier': [
                 lpsn !== undefined
                     ? {
-                          '@type': 'PropertyValue',
-                          name: 'LPSN',
-                          propertyID: LPSN_P,
-                          value: lpsn,
-                      }
+                            '@type': 'PropertyValue',
+                            'name': 'LPSN',
+                            'propertyID': LPSN_P,
+                            'value': lpsn,
+                        }
                     : null,
                 ncbi !== undefined
                     ? {
-                          '@type': 'PropertyValue',
-                          name: 'NCBI',
-                          propertyID: NCBI_P,
-                          value: ncbi,
-                      }
+                            '@type': 'PropertyValue',
+                            'name': 'NCBI',
+                            'propertyID': NCBI_P,
+                            'value': ncbi,
+                        }
                     : null,
-            ].filter((about) => about != null),
+            ].filter(about => about != null),
         },
     };
 }
@@ -101,9 +101,9 @@ function createAbout(name: string, lpsn?: number, ncbi?: number): Record<string,
 function crCreator(strinf: ConfLinkT) {
     return {
         '@type': 'Organization',
-        name: 'StrainInfo',
-        url: createUrlStr(strinf, ''),
-        logo: createUrlStr(strinf, logoI),
+        'name': 'StrainInfo',
+        'url': createUrlStr(strinf, ''),
+        'logo': createUrlStr(strinf, logoI),
     };
 }
 
@@ -147,7 +147,7 @@ function createCVSchema(pass: PassR, cul_tax: string[]): string {
     return JSON.stringify({
         '@context': SCH_ORG,
         '@type': 'Dataset',
-        description: [
+        'description': [
             `StrainInfo dataset ${pass.overview[0]}`,
             `about a strain of ${defineTaxonName(pass.overview[2][0])}.`,
             'StrainInfo is a service developed to provide a',
@@ -156,42 +156,43 @@ function createCVSchema(pass: PassR, cul_tax: string[]): string {
             'and deposit-associated data. This work is part of the Strain-ID',
             'use case of the NFDI4Microbiota consortium.',
         ].join(' '),
-        identifier: [...doiAsID(pass)],
-        keywords: [
+        'identifier': [...doiAsID(pass)],
+        'keywords': [
             `${IdAcrTagCon.strId} ${pass.overview[0]}`,
             ...crTaxonNames(pass.overview[2][0], cul_tax),
             ...createAllSeqAcc(pass),
             ...pass.relations.map(([, ccno]) => ccno),
             ...bacDiveID(pass),
             ...KEY_WORDS,
+            ...(pass.overview[1] ? ['TypeStrain'] : []),
         ],
-        license: C_LIC_LIN,
-        name: `StrainInfo ${IdAcrTagCon.strId} ${pass.overview[0]}`,
-        url: createUrlStr(CONFIG.frontend, createStrainCall(pass.overview[0])),
-        creator: crCreator(CONFIG.frontend),
-        includedInDataCatalog: {
+        'license': C_LIC_LIN,
+        'name': `StrainInfo ${IdAcrTagCon.strId} ${pass.overview[0]}`,
+        'url': createUrlStr(CONFIG.frontend, createStrainCall(pass.overview[0])),
+        'creator': crCreator(CONFIG.frontend),
+        'includedInDataCatalog': {
             '@type': 'DataCatalog',
-            name: 'StrainInfo',
-            description: [
+            'name': 'StrainInfo',
+            'description': [
                 'StrainInfo is a service developed to provide',
                 'a resolution of microbial strain identifiers',
                 'by storing culture collection numbers, their relations,',
                 'and deposit-associated data.',
             ].join(' '),
-            url: createUrlStr(CONFIG.frontend, ''),
-            provider: crDSMZ(),
+            'url': createUrlStr(CONFIG.frontend, ''),
+            'provider': crDSMZ(),
         },
-        publisher: crCreator(CONFIG.frontend),
-        isAccessibleForFree: true,
-        sourceOrganization: crDSMZ(),
-        thumbnailUrl: createUrlStr(CONFIG.frontend, logoI),
-        distribution: [
+        'publisher': crCreator(CONFIG.frontend),
+        'isAccessibleForFree': true,
+        'sourceOrganization': crDSMZ(),
+        'thumbnailUrl': createUrlStr(CONFIG.frontend, logoI),
+        'distribution': [
             {
                 '@type': 'DataDownload',
-                encodingFormat: 'JSON',
-                contentUrl: createUrlStr(
+                'encodingFormat': 'JSON',
+                'contentUrl': createUrlStr(
                     CONFIG.backend,
-                    createApiStrainCall(pass.overview[0])
+                    createApiStrainCall(pass.overview[0]),
                 ),
             },
         ],

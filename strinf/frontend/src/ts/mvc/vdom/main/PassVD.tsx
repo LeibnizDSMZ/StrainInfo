@@ -42,7 +42,8 @@ const REG_ARG = new RegExp(`[?&]{1}${IdAcrTagCon.depId}\\s*(\\d+)`, 'gi');
 function buildStrainDesc(
     sid: number | undefined,
     tax: string | undefined,
-    ccno: string[]
+    ccno: string[],
+    type_strain: boolean,
 ): string {
     const lines: string[] = [
         'A strain passport from the microbial strain database StrainInfo,',
@@ -61,7 +62,17 @@ function buildStrainDesc(
         const displayed = ccno.slice(0, 3).join(', ');
         lines.push(`CCNo: ${displayed}.`);
     }
+    if (type_strain) {
+        lines.push(`This strain is also a TypeStrain.`);
+    }
     return lines.join(' ').trim();
+}
+
+function createTitle(tab: PassR | undefined): string {
+    const sid = `${IdAcrTagCon.strId} ${String(tab?.overview[0] ?? 'unknown')}`;
+    const tax = tab?.overview[2][0] ?? 'StrainInfo';
+    const title = `${tax} - ${sid}${tab?.overview[1] ? ' - TypeStrain' : ''}`;
+    return title;
 }
 
 class PassVD extends Component<PassProps, PassState> {
@@ -93,7 +104,7 @@ class PassVD extends Component<PassProps, PassState> {
                 `${tab.overview[0]}`,
                 1,
                 this.pView,
-                Date.now() - this.time
+                Date.now() - this.time,
             );
         });
         this.time = Date.now();
@@ -135,17 +146,17 @@ class PassVD extends Component<PassProps, PassState> {
                 actF(HeadT.PASS);
             }
         }
-        const sid = `${IdAcrTagCon.strId} ${String(tab?.overview[0] ?? 'unknown')}`;
-        const tax = tab?.overview[2][0] ?? 'StrainInfo';
+        const title = createTitle(tab);
         return (
             <>
                 <MetaH
                     desc={buildStrainDesc(
                         tab?.overview[0],
                         tab?.overview[2][0],
-                        tab?.relations.map((val) => val[1]) ?? []
+                        tab?.relations.map(val => val[1]) ?? [],
+                        tab?.overview[1] ?? false,
                     )}
-                    title={`${tax} - ${sid}`}
+                    title={title}
                 />
                 <CanonH href={getCurFullPath()} />
                 <OverviewVD res={tab?.overview} dCtrl={this.dCtrl} rel={tab?.relations} />
