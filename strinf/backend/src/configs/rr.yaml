@@ -20,20 +20,15 @@ http:
       - "application/json"
 
 jobs:
-  consume: ["matomo"]         
+  consume: [ "matomo" ]         
   pool:
-    num_workers: 2             
-
-  pipeline:
+    num_workers: 2
+  pipelines:
     matomo:
-      driver: redis            
+      driver: memory            
       config:
-        addr: "0.0.0.0:6379"        
-        db: 5                    
-        prefetch: 10              
-        visibility_timeout: 30s   
-        pipeline_size: 100
-        max_retries: 2         
+        priority: 10  
+        prefetch: 1000  
 
 logs:
   encoding: console 

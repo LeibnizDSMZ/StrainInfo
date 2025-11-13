@@ -135,7 +135,7 @@ abstract class DBSCtrl
             'lang' => $lang,
         ], JSON_THROW_ON_ERROR, 512);
 
-        $task = $this->queue->create('MatomoPageView', $payload);
+        $task = $this->queue->create('matomo', $payload);
         $this->queue->dispatch($task);
     }
 

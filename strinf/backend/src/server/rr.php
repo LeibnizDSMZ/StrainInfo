@@ -6,16 +6,16 @@ namespace straininfo\server;
 
 require_once dirname(__FILE__, 2) . '/vendor/autoload.php';
 
-use Nyholm\Psr7\Factory\Psr17Factory;
-use RuntimeException;
-use Spiral\RoadRunner;
-use Spiral\RoadRunner\Environment;
-use Spiral\RoadRunner\Environment\Mode;
-use Spiral\RoadRunner\Jobs\Consumer;
-
-use function Safe\curl_exec;
-use function Safe\curl_init;
 use function straininfo\server\shared\state\reboot;
+use function Safe\curl_init;
+use function Safe\curl_exec;
+use Spiral\RoadRunner\Jobs\Consumer;
+use Spiral\RoadRunner\Environment\Mode;
+use Spiral\RoadRunner\Environment;
+
+use Spiral\RoadRunner;
+use RuntimeException;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 $env = Environment::fromGlobals();
 $mode = $env->getMode();
@@ -52,18 +52,19 @@ if ($mode === Mode::MODE_HTTP) {
     while ($task = $consumer->waitTask()) {
         try {
             $queueName = $task->getQueue();
-            if ($queueName !== 'matomo') {
-                $task->nack(new RuntimeException("Unknown queue: {$queueName}"));
-                continue;
-            }
             $payload = json_decode($task->getPayload(), true, 512, JSON_THROW_ON_ERROR);
             if (!is_array($payload)) {
+                $task->nack(new RuntimeException(
+                    "{$queueName} - payload not an array {$payload}"
+                ));
                 continue;
             }
             $url = $payload['url'] ?? '';
             $agent = $payload['agent'] ?? 'Unknown';
             $lang = $payload['lang'] ?? '';
-            if (!is_string($url) || $url === '') {
+            if (!is_string($url) || $url === '') {$task->nack(new RuntimeException(
+                    "{$queueName} - url missing {$payload}"
+                ));
                 continue;
             }
             $ch = curl_init();
