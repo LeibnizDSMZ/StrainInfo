@@ -8,19 +8,19 @@ use MatomoTracker;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use function Safe\parse_url;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Spiral\Goridge\RPC\RPC;
 use Spiral\RoadRunner\Jobs\Jobs;
 use Spiral\RoadRunner\Jobs\QueueInterface;
-use function straininfo\server\exceptions\create_error_json;
+use straininfo\server\shared\mvvm\view\HeadArgs;
+use straininfo\server\shared\mvvm\view\StatArgs;
 
+use function Safe\parse_url;
+use function straininfo\server\exceptions\create_error_json;
 use function straininfo\server\shared\mvvm\view\add_default_headers;
 use function straininfo\server\shared\mvvm\view\api\get_do_not_track_arg;
 use function straininfo\server\shared\mvvm\view\domain_overlap;
-use straininfo\server\shared\mvvm\view\HeadArgs;
-use straininfo\server\shared\mvvm\view\StatArgs;
 
 abstract class DBSCtrl
 {
@@ -110,13 +110,18 @@ abstract class DBSCtrl
         );
     }
 
-    private function sendMatomoNoAwait(string $url, string $agent, string $lang): void
-    {
+    private function sendMatomoNoAwait(
+        string $url,
+        string $agent,
+        string $lang,
+        string $cip
+    ): void {
         $parsedUrl = parse_url($url);
         parse_str($parsedUrl['query'] ?? '', $queryParams);
         if ($this->stat_args->getToken() !== '') {
             $queryParams['token_auth'] = $this->stat_args->getToken();
         }
+        $queryParams['cip'] = $cip;
         $queryString = http_build_query($queryParams);
 
         $fullUrl = (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '')
@@ -141,23 +146,33 @@ abstract class DBSCtrl
             $this->stat_args->getMatomo()
         );
         $params = $request->getServerParams();
-        $cip = $params['HTTP_X_FORWARDED_FOR']
-            ?? $params['REMOTE_ADDR']
-            ?? $params['HTTP_CLIENT_IP']
-            ?? '127.0.0.1';
-        if (is_array($cip)) {
-            $cip = reset($cip);
+        $ipHeaders = [
+            'HTTP_CF_CONNECTING_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_REAL_IP',
+            'HTTP_CLIENT_IP',
+            'REMOTE_ADDR',
+        ];
+        $cip = '127.0.0.1';
+        foreach ($ipHeaders as $header) {
+            if (isset($params[$header]) && $params[$header] !== '') {
+                $cip_tmp = $params[$header];
+                if (is_array($cip_tmp)) {
+                    $cip_tmp = $params[$header][0];
+                }
+                if (is_string($cip_tmp)) {
+                    $cip = trim(explode(',', $cip_tmp)[0]);
+                    break;
+                }
+            }
         }
-        if (is_string($cip) && str_contains($cip, ',')) {
-            $cip = trim(explode(',', $cip)[0]);
-        }
-        $buf_stat->setIP($cip);
         $buf_stat->setUrl((string) $request->getUri());
         $buf_stat->setUrlReferrer($request->getHeader('Referer')[0] ?? '');
         $this->sendMatomoNoAwait(
             $buf_stat->getUrlTrackPageView('API'),
             $request->getHeader('User-Agent')[0] ?? 'Unknown',
-            $request->getHeaderLine('Accept-Language') ?: ''
+            $request->getHeaderLine('Accept-Language') ?: '',
+            $cip
         );
     }
 

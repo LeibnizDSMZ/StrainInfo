@@ -6,7 +6,7 @@ source "$ROOT/.env"
 echo "update"
 dnf -y update
 echo "installing requirements"
-dnf -y install zlib gzip vim git git-lfs make gcc-c++ findutils wget unzip procps-ng jq curl
+dnf -y --allowerasing install zlib gzip vim git git-lfs make gcc-c++ findutils wget unzip procps-ng jq curl
 echo "requirements installed"
 echo "install php"
 dnf -y install dnf-utils https://mirror.dogado.de/remi/enterprise/remi-release-9.rpm && dnf -y update
