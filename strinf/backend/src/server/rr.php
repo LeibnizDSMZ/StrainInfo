@@ -8,14 +8,14 @@ require_once dirname(__FILE__, 2) . '/vendor/autoload.php';
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use RuntimeException;
-use function Safe\curl_exec;
-use function Safe\curl_init;
-use function Safe\fwrite;
 use Spiral\RoadRunner;
-
 use Spiral\RoadRunner\Environment;
 use Spiral\RoadRunner\Environment\Mode;
 use Spiral\RoadRunner\Jobs\Consumer;
+
+use function Safe\curl_exec;
+use function Safe\curl_init;
+use function Safe\error_log;
 use function straininfo\server\shared\state\reboot;
 
 $env = Environment::fromGlobals();
@@ -32,7 +32,6 @@ if ($mode === Mode::MODE_HTTP) {
         $psr17Factory,
         $psr17Factory
     );
-
     while ($request = $psr7->waitRequest()) {
         try {
             $response = $boot->getApp()->handle($request);
@@ -51,12 +50,11 @@ if ($mode === Mode::MODE_HTTP) {
     }
 } elseif ($mode === Mode::MODE_JOBS) {
     $consumer = new Consumer();
-
     while ($task = $consumer->waitTask()) {
         try {
             $queueName = $task->getQueue();
             if ($queueName !== 'matomo') {
-                fwrite(STDERR, "[Consumer] Skipping task from queue '{$queueName}'\n");
+                error_log("[Consumer] Skipping task from queue '{$queueName}'\n");
                 $task->nack(new RuntimeException("Unknown queue: {$queueName}"));
                 continue;
             }
@@ -95,6 +93,6 @@ if ($mode === Mode::MODE_HTTP) {
         }
     }
 } else {
-    fwrite(STDERR, "[Worker] Unknown RR_MODE: {$mode}\n");
+    error_log("[Worker] Unknown RR_MODE: {$mode}\n");
     exit(1);
 }
