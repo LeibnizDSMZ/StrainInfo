@@ -15,7 +15,6 @@ use Spiral\RoadRunner\Jobs\Consumer;
 
 use function Safe\curl_exec;
 use function Safe\curl_init;
-use function Safe\error_log;
 use function straininfo\server\shared\state\reboot;
 
 $env = Environment::fromGlobals();
@@ -54,7 +53,6 @@ if ($mode === Mode::MODE_HTTP) {
         try {
             $queueName = $task->getQueue();
             if ($queueName !== 'matomo') {
-                error_log("[Consumer] Skipping task from queue '{$queueName}'\n");
                 $task->nack(new RuntimeException("Unknown queue: {$queueName}"));
                 continue;
             }
@@ -93,6 +91,5 @@ if ($mode === Mode::MODE_HTTP) {
         }
     }
 } else {
-    error_log("[Worker] Unknown RR_MODE: {$mode}\n");
     exit(1);
 }
