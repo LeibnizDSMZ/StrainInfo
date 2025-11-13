@@ -28,7 +28,7 @@ jobs:
     matomo:
       driver: redis            
       config:
-        addr: "redis:6379"        
+        addr: "0.0.0.0:6379"        
         db: 5                    
         prefetch: 10              
         visibility_timeout: 30s   
