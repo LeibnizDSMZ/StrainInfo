@@ -93,7 +93,7 @@ function createHistEl(
     ctx: InValStInt | undefined,
     ele: [number, string][],
     idInf: [number, boolean, number],
-    hooks: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>
+    hooks: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>,
 ): JSX.Element[] {
     if (ele.length === 0) {
         return [];
@@ -103,7 +103,7 @@ function createHistEl(
         ele,
         (dat: [number, string]) => [dat[0], dat[1], false, false],
         ctx,
-        [ID, curId]
+        [ID, curId],
     );
     const tilesEl = tiles.map((til, ind: number) => (
         <TooltipWrapper
@@ -133,7 +133,7 @@ function crShallowHist(
     ctx: InValStInt | undefined,
     curId: number,
     rel: RelT[],
-    hooks: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>
+    hooks: TTSrcTVInt & DatIdTVInt<TT_GL_TYPE>,
 ): [string, JSX.Element | EleT, number] {
     const parent = getRelStrain(getCurParentId(curId, rel), rel);
     const res = [];
@@ -181,7 +181,7 @@ function modTaxName(
     head: string[],
     filH: string[],
     filD: (EleT | JSX.Element)[],
-    taxInf: [string, number | undefined, number | undefined]
+    taxInf: [string, number | undefined, number | undefined],
 ): void {
     const [name, lpsn, ncbi] = taxInf;
     const hid = filH.indexOf(head[7] ?? '');
@@ -287,11 +287,11 @@ function IncDep({
                         <br />
                         The culture collection number could not be verified, possibly due
                         to typos or similar input errors.
-                    </p>
+                    </p>,
                 );
             }
         },
-        [50, 50]
+        [50, 50],
     );
     return (
         <span ref={ref}>
@@ -306,7 +306,7 @@ function modCatalog(
     filH: string[],
     filD: (EleT | JSX.Element)[],
     cat: [string, string, string, string, string, string, boolean],
-    err: JSX.Element | null
+    err: JSX.Element | null,
 ): void {
     const catInd = filH.indexOf(head[0] ?? '');
     const brcInd = filH.indexOf(head[1] ?? '');
@@ -316,14 +316,15 @@ function modCatalog(
     brc_link = cat_link === '' ? brc_link : '';
     if (err !== null) {
         filD.splice(catInd, 1, err);
-    } else if (code !== '') {
+    }
+    else if (code !== '') {
         filD.splice(catInd, 1, <CatalogLinkVD text={code} link={cat_link} bold />);
     }
     if (name !== '') {
         filD.splice(
             brcInd,
             1,
-            <ROCIDCatVD ror={ror} orcid="" name={name} brc_link={brc_link} />
+            <ROCIDCatVD ror={ror} orcid="" name={name} brc_link={brc_link} />,
         );
     }
     if (country !== '') {
@@ -335,7 +336,7 @@ function modSiCu(
     head: string[],
     filH: string[],
     filD: (EleT | JSX.Element)[],
-    siCu: number
+    siCu: number,
 ): void {
     const hid = filH.indexOf(head[4] ?? '');
     if (siCu > 0) {
@@ -347,7 +348,7 @@ function modSampleSource(
     head: string[],
     filH: string[],
     filD: (EleT | JSX.Element)[],
-    src: string
+    src: string,
 ): void {
     const hid = filH.indexOf(head[15] ?? '');
     if (src !== '') {
@@ -359,7 +360,7 @@ function modDates(
     filH: string[],
     filD: (EleT | JSX.Element)[],
     tid: string,
-    date: string
+    date: string,
 ): void {
     const hid = filH.indexOf(tid);
     if (date !== '') {
@@ -376,7 +377,7 @@ function modSampleDate(
     head: string[],
     filH: string[],
     filD: (EleT | JSX.Element)[],
-    date: string
+    date: string,
 ): void {
     const hid = filH.indexOf(head[14] ?? '');
     if (date !== '') {
@@ -391,9 +392,10 @@ function modOrcid(filH: string[], filD: (EleT | JSX.Element)[], tid: string): vo
         filD.splice(
             hid,
             1,
-            <ROCIDSpanVD orcid={field[1] ?? ''} ror="" text={field[0]} />
+            <ROCIDSpanVD orcid={field[1] ?? ''} ror="" text={field[0]} />,
         );
-    } else {
+    }
+    else {
         filD.splice(hid, 1, <span>-</span>);
     }
 }
@@ -405,9 +407,10 @@ function modRor(filH: string[], filD: (EleT | JSX.Element)[], tid: string): void
         filD.splice(
             hid,
             1,
-            <ROCIDSpanVD ror={field[1] ?? ''} orcid="" text={field[0]} />
+            <ROCIDSpanVD ror={field[1] ?? ''} orcid="" text={field[0]} />,
         );
-    } else {
+    }
+    else {
         filD.splice(hid, 1, <span>-</span>);
     }
 }
@@ -451,7 +454,7 @@ function DetailsTiles({
             <col key={3} span={1} style={crW(20)} />,
             <col key={4} span={1} style={crW(10)} />,
             <col key={5} span={1} style={crW(10)} />,
-        ]
+        ],
     )[0];
 }
 
@@ -495,16 +498,17 @@ function Details({ ctx, data, cid, rel, hookCul, hookInf, ccno }: ResProps): JSX
                     <p>
                         <b>StrainRegistry</b>
                         {text}
-                    </p>
+                    </p>,
                 );
             }
         },
-        [50, 50]
+        [50, 50],
     );
     return (
         <div id={IdHtmlTour.passDet}>
             <h3 className={ClHtml.titSec}>
-                {TIT}:
+                {TIT}
+                :
                 <span
                     className={Tex.w}
                     style={{
@@ -519,13 +523,15 @@ function Details({ ctx, data, cid, rel, hookCul, hookInf, ccno }: ResProps): JSX
                 >
                     {ccno}
                 </span>
-                {localData[3] ? (
-                    <span className={`${icoSty.tc} ${Tex.s}`}>
-                        <span ref={ref}>
-                            <i className={ClHtml.strRegT} />
-                        </span>
-                    </span>
-                ) : null}
+                {localData[3]
+                    ? (
+                            <span className={`${icoSty.tc} ${Tex.s}`}>
+                                <span ref={ref}>
+                                    <i className={ClHtml.strRegT} />
+                                </span>
+                            </span>
+                        )
+                    : null}
                 <span id={ID} />
             </h3>
             <section>
@@ -589,7 +595,7 @@ class DetailsVD extends Component<DetailsProps, DetailsState> {
                     `${mRes[2]}`,
                     1,
                     false,
-                    Date.now() - this.time
+                    Date.now() - this.time,
                 );
             }
         });
@@ -625,7 +631,7 @@ class DetailsVD extends Component<DetailsProps, DetailsState> {
         if (Number.isNaN(culId) || !SR_CUL_ID.test(siCu)) {
             return false;
         }
-        if (!rel.some((ele) => ele[0] === culId)) {
+        if (!rel.some(ele => ele[0] === culId)) {
             return false;
         }
         const { res } = this.state;
@@ -640,7 +646,7 @@ class DetailsVD extends Component<DetailsProps, DetailsState> {
             const { rel } = this.props;
             const culId = Number.parseInt(
                 val.replace(new RegExp(IdAcrTagCon.depId, 'i'), '').replace(/,.*/, ''),
-                10
+                10,
             );
             if (this.didCulIdChange(culId, val, rel)) {
                 this.initCtrl(culId);

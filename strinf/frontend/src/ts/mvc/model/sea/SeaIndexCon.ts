@@ -27,10 +27,9 @@ class SeaIndexCon {
         setTimeout(
             () =>
                 void fetchRetry(call)
-                    .then(async (resp) =>
+                    .then(async resp =>
                         checkRespTyp<SeaIndJT>(resp, toArrIndSeaIndRes, () =>
-                            toArrIndSeaIndRes({ match: [], exact: [] })
-                        )
+                            toArrIndSeaIndRes({ match: [], exact: [] })),
                     )
                     .then((json: SeaIndJT): void => {
                         cha.tab(json);
@@ -46,7 +45,7 @@ class SeaIndexCon {
                             onPrError(err);
                         }
                     }),
-            200
+            200,
         );
     }
 

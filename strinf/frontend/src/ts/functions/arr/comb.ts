@@ -9,7 +9,8 @@ function recSelect(prefix: string, stack: string[], resCon: string[]): void {
             }
             recSelect(newPre, arrCop, resCon);
         });
-    } else {
+    }
+    else {
         resCon.push(prefix);
     }
 }
@@ -18,7 +19,7 @@ function createComb(cont: string[], desc: string): [string, string][] {
     return cont.flatMap((_ele, _ind, arr): [string, string][] => {
         const resCon: string[] = [];
         recSelect('', arr, resCon);
-        return resCon.map((comb) => [comb, desc]);
+        return resCon.map(comb => [comb, desc]);
     });
 }
 

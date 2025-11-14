@@ -2,7 +2,7 @@ import { Cookie, CookieValue } from '@strinf/ts/constants/style/Acc';
 
 const CONTRAST = new RegExp(`.*\\s?${Cookie.contrast}=${CookieValue.contrast};?.*`);
 const TRANSITION = new RegExp(
-    `.*\\s?${Cookie.transitions}=${CookieValue.transitions};?.*`
+    `.*\\s?${Cookie.transitions}=${CookieValue.transitions};?.*`,
 );
 const DYSLEXIA = new RegExp(`.*\\s?${Cookie.dyslexia}=${CookieValue.dyslexia};?.*`);
 
@@ -21,9 +21,9 @@ function isDyslexiaSet(): boolean {
 function setCookie(name: string, value: string, domain: string): void {
     const expTime = new Date();
     expTime.setTime(expTime.getTime() + 100 * 24 * 3600 * 1000);
-    const cookStr =
-        `${name}=${value};Secure;SameSite=Strict;` +
-        `domain=${domain};expires=${expTime};`;
+    const cookStr
+        = `${name}=${value};Secure;SameSite=Strict;`
+            + `domain=${domain};expires=${expTime};`;
     document.cookie = cookStr;
 }
 

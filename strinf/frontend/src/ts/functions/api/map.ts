@@ -62,7 +62,7 @@ const SEA_INPUT_COMB: SeaInputCombEl[] = [
         },
         getArgs: (input: string): string =>
             encodeURIComponent(
-                input.trim().replace(/\s+/g, ' ').replace(SR_CUL_ID, '$1')
+                input.trim().replace(/\s+/g, ' ').replace(SR_CUL_ID, '$1'),
             ),
         api: QApiCon.seaStrCulId,
     },
@@ -75,7 +75,7 @@ const SEA_INPUT_COMB: SeaInputCombEl[] = [
         },
         getArgs: (input: string): string =>
             encodeURIComponent(
-                input.trim().replace(/\s+/g, ' ').replace(SR_STR_ID, '$1')
+                input.trim().replace(/\s+/g, ' ').replace(SR_STR_ID, '$1'),
             ),
         api: QApiCon.seaCulStrId,
     },
@@ -103,8 +103,8 @@ const SEA_INPUT_COMB: SeaInputCombEl[] = [
                     .replace(/\s+/g, ' ')
                     .replace(/\s*,\s*/g, ',')
                     .split(',')
-                    .filter((arg) => arg.length >= 2)
-                    .join(',')
+                    .filter(arg => arg.length >= 2)
+                    .join(','),
             ),
         api: QApiCon.seaStrTaxName,
     },
@@ -122,8 +122,8 @@ const SEA_INPUT_COMB: SeaInputCombEl[] = [
                     .replace(/\s+/g, ' ')
                     .replace(/\s*,\s*/g, ',')
                     .split(',')
-                    .filter((arg) => arg.length >= 2)
-                    .join(',')
+                    .filter(arg => arg.length >= 2)
+                    .join(','),
             ),
         api: QApiCon.seaStrBrc,
     },
@@ -141,8 +141,8 @@ const SEA_INPUT_COMB: SeaInputCombEl[] = [
                     .replace(/\s+/g, ' ')
                     .replace(/\s*,\s*/g, ',')
                     .split(',')
-                    .filter((arg) => arg.length >= 2)
-                    .join(',')
+                    .filter(arg => arg.length >= 2)
+                    .join(','),
             ),
         api: `${QApiCon.seaStrTaxName},${QApiCon.seaStrStrDes}`,
     },
@@ -243,10 +243,10 @@ function detConExtra(data: DetailsJT): DetET {
         .map((ent): [string, string] => [ent.name ?? '', ent.orcid ?? ''])
         .filter(([nam]) => nam !== '');
     const dep_ins = Array.from(
-        new Set(dep_con.map((ent) => ent.institute ?? '').filter((val) => val !== ''))
+        new Set(dep_con.map(ent => ent.institute ?? '').filter(val => val !== '')),
     ).join(', ');
     const dep_ror = Array.from(
-        new Set(dep_con.map((ent) => ent.ror ?? '').filter((val) => val !== ''))
+        new Set(dep_con.map(ent => ent.ror ?? '').filter(val => val !== '')),
     ).join(', ');
     return [
         [dep.map(([nam]) => nam).join(', '), dep.map(([, orcid]) => orcid).join(', ')],
@@ -299,7 +299,7 @@ type EleT = number | boolean | string | string[];
 function createTriplet(
     key: string | undefined,
     val: EleT | JSX.Element | undefined,
-    spanN: number
+    spanN: number,
 ): [string, EleT | JSX.Element, number] {
     const inVal = val;
     return [key ?? '', inVal ?? '/', spanN];
@@ -333,7 +333,7 @@ function createRegDep(data_keys: string[], data_values: (EleT | JSX.Element)[]) 
 
 function wrapDetValues(
     data_keys: string[],
-    data_values: (EleT | JSX.Element)[]
+    data_values: (EleT | JSX.Element)[],
 ): [string, EleT | JSX.Element, number][][] {
     return [
         [
@@ -424,7 +424,7 @@ function createSeqCon(data: PassJT): SeqT[] {
         }
         const toPush: SeqT = [
             seqEl.accessionNumber,
-            seqEl.deposit.map((cul) => [cul.designation, cul.siDP]),
+            seqEl.deposit.map(cul => [cul.designation, cul.siDP]),
             seqEl.description ?? '',
             seqEl.type,
             seqEl.length ?? type_ass,
@@ -451,7 +451,7 @@ function createPubCon(data: PassJT): PubT[] {
         const toPush: PubT = [
             pubEl.doi ?? '',
             pubEl.title,
-            pubEl.deposit.map((cul) => [cul.designation, cul.siDP]),
+            pubEl.deposit.map(cul => [cul.designation, cul.siDP]),
             pubEl.author ?? '',
             pubEl.publisher ?? '',
             pubEl.year,
@@ -555,8 +555,8 @@ function toArrInfoDepRes(data: unknown): InfoR {
         data.deposit.siDP,
         data.deposit.designation,
         data.deposit.taxon?.name ?? '',
-        data.deposit.status === DepositStatus.err ||
-            (data.deposit.cultureCollection?.deprecated ?? false),
+        data.deposit.status === DepositStatus.err
+        || (data.deposit.cultureCollection?.deprecated ?? false),
     ];
 }
 function isInfoSJ(data: unknown): data is InfoSJT {
@@ -570,17 +570,17 @@ function toArrInfoStrRes(data: unknown, oriDes: string[]): InfoS {
     if (!isInfoSJ(data)) {
         throw new Known500Error('Wrong data type received!');
     }
-    const oriInd = new Set(oriDes.map((des) => getSynEqStruct(des)));
+    const oriInd = new Set(oriDes.map(des => getSynEqStruct(des)));
     const designations = [
-        ...data.strain.relation.deposit.map((des) => des.designation),
+        ...data.strain.relation.deposit.map(des => des.designation),
         ...(data.strain.relation.designation ?? []),
     ];
     return [
         data.strain.siID,
         data.strain.taxon?.name ?? 'UNKNOWN',
-        data.strain.relation.deposit.map((dat) => dat.designation).join(','),
+        data.strain.relation.deposit.map(dat => dat.designation).join(','),
         designations
-            .map((des) => [getSynEqStruct(des), des])
+            .map(des => [getSynEqStruct(des), des])
             .filter(([ind]) => ind != null && oriInd.has(ind))
             .map(([, des]) => des)
             .join(','),
@@ -648,7 +648,7 @@ function toArrSerSeaRes(data: unknown): SeaR {
 }
 
 function toArrSerSeaResSim(dataCon: SerSeaAllJT): SeaR[] {
-    return dataCon.data.map((val) => toSeaResEle(val));
+    return dataCon.data.map(val => toSeaResEle(val));
 }
 
 export {

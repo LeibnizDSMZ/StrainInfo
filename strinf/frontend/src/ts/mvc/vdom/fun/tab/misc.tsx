@@ -68,7 +68,7 @@ function createPassCulHref(
     val: [string | undefined, string],
     ctx: InValStInt | undefined,
     href: string,
-    anc: string
+    anc: string,
 ): JSX.Element {
     const [cul, strain] = val;
     if (cul === undefined) {
@@ -96,10 +96,10 @@ function createPassCulHref(
 function createPassLinkStrain(
     strain: string,
     cul: string | undefined,
-    ctx: InValStInt | undefined
+    ctx: InValStInt | undefined,
 ): JSX.Element {
-    const href =
-        cul !== undefined
+    const href
+        = cul !== undefined
             ? createStrainCultureCall(strain, cul)
             : createStrainCall(strain);
 
@@ -126,14 +126,15 @@ function createSimpleTile(key: number, name: string, exCl: string): JSX.Element 
     return (
         <span key={key} className={clV}>
             {' '}
-            {name}{' '}
+            {name}
+            {' '}
         </span>
     );
 }
 
 function createSimpleTiles<T>(
     values: T[],
-    parser: (val: T) => [string, string]
+    parser: (val: T) => [string, string],
 ): JSX.Element[] {
     const tiles: JSX.Element[] = [];
     for (let ind = 0; ind < values.length; ind += 1) {
@@ -152,7 +153,7 @@ function createLinkedTile(
     key: number,
     name: string,
     cal: () => boolean,
-    exCl: string
+    exCl: string,
 ): JSX.Element {
     const clV = `${exCl} ${tilSty.tiletext} ${ClHtml.til} ${ClHtml.tLin} ${Tex.tr}`;
     return (
@@ -172,7 +173,7 @@ function createDepositTile(
     anc: string,
     val: [number, number, string],
     ctx: InValStInt | undefined,
-    exCl: string
+    exCl: string,
 ): JSX.Element {
     const [key, depId, name] = val;
     const culCl = () => {
@@ -187,7 +188,7 @@ function createDepositTile(
         key,
         name,
         culCl,
-        exCl
+        exCl,
     );
 }
 
@@ -195,7 +196,7 @@ function createStrainTile(
     _anc: string,
     val: [number, number, string],
     ctx: InValStInt | undefined,
-    exCl: string
+    exCl: string,
 ): JSX.Element {
     const [key, strId, name] = val;
     const strCl = () => {
@@ -287,7 +288,7 @@ function parseVal2Html(value: unknown): JSX.Element | null {
 function create2ColDiv<T>(
     keys: string[],
     values: T[],
-    parser: (val: T, key: string) => JSX.Element | null
+    parser: (val: T, key: string) => JSX.Element | null,
 ): [JSX.Element, number] {
     const rows = [];
     for (let ind = 0; ind < values.length; ind += 1) {
@@ -295,7 +296,7 @@ function create2ColDiv<T>(
         const side = keys[ind];
         if (val === undefined || side === undefined) {
             throw new Known500Error(
-                `keys [${keys}] and values [${values}] are mismatched!`
+                `keys [${keys}] and values [${values}] are mismatched!`,
             );
         }
         const sep = ': ';
@@ -304,7 +305,7 @@ function create2ColDiv<T>(
                 <b>{side}</b>
                 {sep}
                 {parser(val, side)}
-            </div>
+            </div>,
         );
     }
     return [<Fragment key={0}>{rows}</Fragment>, rows.length];
@@ -334,7 +335,7 @@ function RowWTT({ chiEl, hooks, stEv }: RowChildProps): JSX.Element {
                     hooks.data(chiEl[0]);
                 }
             },
-            stEv
+            stEv,
         );
     }, [chiEl, hooks, stEv]);
     return (
@@ -380,11 +381,11 @@ function DotTT({ head, data, hook }: DotTTProps): JSX.Element | null {
                     <p>
                         <b>{head}</b>
                         {text}
-                    </p>
+                    </p>,
                 );
             }
         },
-        [50, 50]
+        [50, 50],
     );
     return <span ref={ref}>...</span>;
 }

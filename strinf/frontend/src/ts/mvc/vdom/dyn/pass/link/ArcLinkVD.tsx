@@ -60,7 +60,7 @@ function ArcLinkVD(props: ArcLink): JSX.Element | null {
                 hook.data(<p>Click on the icon to copy the DOI URL</p>);
             }
         },
-        [50, 50]
+        [50, 50],
     );
     return (
         <span className={claD} id={IdHtmlTour.doiHead}>
@@ -77,7 +77,8 @@ function ArcLinkVD(props: ArcLink): JSX.Element | null {
                                 crAlert(null, 'DOI copied to your clipboard');
                             })
                             .catch(onPrError);
-                    } catch {
+                    }
+                    catch {
                         crAlert(ErrType.FEWARN, 'Clipboard not defined!');
                     }
                 }}

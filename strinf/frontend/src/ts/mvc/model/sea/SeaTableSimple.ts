@@ -54,7 +54,8 @@ class SeaTable {
                 ind = range;
                 argsStr += `,${curId}-${rangeId}`;
                 added += rangeId - curId + 1;
-            } else {
+            }
+            else {
                 argsStr += `,${curId}`;
                 added += 1;
             }
@@ -70,7 +71,7 @@ class SeaTable {
         const res_con: SeaR[] = [];
         while (cnt < jsonId.length) {
             const [argsS, addedN] = SeaTable.createArgs(
-                sortedJson.slice(cnt, cnt + SeaTable.packSize)
+                sortedJson.slice(cnt, cnt + SeaTable.packSize),
             );
             cnt += addedN;
             const call = this.apiCall.createApiCall(`${QApiCon.seaStrIds}${argsS}`);
@@ -79,8 +80,8 @@ class SeaTable {
                 new Promise((res) => {
                     setTimeout(() => {
                         fetchRetry(call)
-                            .then(async (resp) =>
-                                checkRespArr<SeaR>(resp, toArrSerSeaRes)
+                            .then(async resp =>
+                                checkRespArr<SeaR>(resp, toArrSerSeaRes),
                             )
                             .then((json: SeaR[]): void => {
                                 this.fetchedCnt += json.length;
@@ -91,7 +92,7 @@ class SeaTable {
                                 throw err;
                             });
                     }, timeOut);
-                })
+                }),
             );
             cntEl += 1;
         }
@@ -105,8 +106,8 @@ class SeaTable {
                     onPrError(
                         new KnownLostWarnError(
                             `missing results ${this.foundCnt - this.fetchedCnt}, 
-                        consider reloading`
-                        )
+                        consider reloading`,
+                        ),
                     );
                 }
                 SeaTable.onStop(cha);
@@ -127,13 +128,13 @@ class SeaTable {
         cha: ViewChanInt,
         api: string,
         args: string,
-        omitIds: number[]
+        omitIds: number[],
     ): void {
         const call = this.apiCall.createApiCall(`${api}${args}`);
         fetchRetry(call)
-            .then(async (resp) => checkRespArr<number>(resp, (num) => Number(num)))
+            .then(async resp => checkRespArr<number>(resp, num => Number(num)))
             .then((json: number[]): void => {
-                const res = json.filter((siId) => !omitIds.includes(siId));
+                const res = json.filter(siId => !omitIds.includes(siId));
                 this.foundCnt = res.length;
                 for (const ele of cha.load) {
                     ele(LoadT.FET);

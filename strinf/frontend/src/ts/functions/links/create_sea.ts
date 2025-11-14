@@ -20,14 +20,15 @@ function checkSeaTags(sea: string): SeaInputMap {
         try {
             taEl.check(sea);
             return { qApi: taEl.api, qArg: taEl.getArgs(sea) };
-        } catch (err) {
+        }
+        catch (err) {
             if (err instanceof KnownInWarnError) {
                 throw err;
             }
         }
     }
     throw new KnownInWarnError(
-        `${sea} could not been matched to any searchable elements`
+        `${sea} could not been matched to any searchable elements`,
     );
 }
 
@@ -48,8 +49,8 @@ function createSeaInCall(api: string, args: string): string {
         case QApiCon.culMin:
         case QApiCon.culAvg:
             throw new Known500Error(
-                `${QApiCon.culMin} or ${QApiCon.culAvg} api [${api}] ` +
-                    'given in a search pass environment'
+                `${QApiCon.culMin} or ${QApiCon.culAvg} api [${api}] `
+                + 'given in a search pass environment',
             );
         default:
             return parseToPath(api, args);

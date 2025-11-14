@@ -42,7 +42,7 @@ function MainCon(): JSX.Element {
         </button>
     );
     const WR = Imprint as (
-        props: Record<'mailSI' | 'privacy', JSX.Element>
+        props: Record<'mailSI' | 'privacy', JSX.Element>,
     ) => JSX.Element;
     return (
         <WR

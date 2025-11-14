@@ -45,7 +45,8 @@ function createBuffer(data: MOD_SEA_T[]): void {
 onmessage = (eve: MessageEvent<Init | Request>) => {
     if (eve.data.type === 'init') {
         createBuffer(eve.data.data);
-    } else {
+    }
+    else {
         const csv = createCSV(eve.data.data);
         postMessage(csv);
     }

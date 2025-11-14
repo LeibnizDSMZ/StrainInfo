@@ -98,11 +98,11 @@ class PubTable extends TableCon<MOD_PUB_T, PubProps> {
     private crCul(row: MOD_PUB_T | undefined, ctx: InValStInt | undefined) {
         const { hookCul, hookInf } = this.props;
         if (
-            row === undefined ||
-            ctx === undefined ||
-            this.tooltip === undefined ||
-            hookCul === undefined ||
-            hookInf === undefined
+            row === undefined
+            || ctx === undefined
+            || this.tooltip === undefined
+            || hookCul === undefined
+            || hookInf === undefined
         ) {
             return null;
         }
@@ -133,10 +133,10 @@ class PubTable extends TableCon<MOD_PUB_T, PubProps> {
             }
             const [, title, desC, aut, pub, year] = val;
             if (
-                title.toLocaleLowerCase().includes(prepFilter) ||
-                aut.toLocaleLowerCase().includes(prepFilter) ||
-                year.toLocaleLowerCase().includes(prepFilter) ||
-                pub.toLocaleLowerCase().includes(prepFilter)
+                title.toLocaleLowerCase().includes(prepFilter)
+                || aut.toLocaleLowerCase().includes(prepFilter)
+                || year.toLocaleLowerCase().includes(prepFilter)
+                || pub.toLocaleLowerCase().includes(prepFilter)
             ) {
                 return true;
             }
@@ -228,7 +228,7 @@ class PubVD extends Component<TProps, object> {
                     <PubTable
                         events={this.events}
                         res={res.map(
-                            (val) => [...val.slice(0, 5), `${val[5]}`] as MOD_PUB_T
+                            val => [...val.slice(0, 5), `${val[5]}`] as MOD_PUB_T,
                         )}
                         anc={detAnc}
                         cul={true}

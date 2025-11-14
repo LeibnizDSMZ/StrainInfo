@@ -107,9 +107,9 @@ function StrHierWr({ children }: StrainT): JSX.Element | null {
     let parseEle: string | JSX.Element[] | JSX.Element = children;
     let wrapped: (string | JSX.Element[] | JSX.Element)[] = [];
     if (
-        Array.isArray(children) &&
-        children.length > 0 &&
-        typeof children[0] === 'string'
+        Array.isArray(children)
+        && children.length > 0
+        && typeof children[0] === 'string'
     ) {
         [parseEle, ...wrapped] = children;
     }
@@ -167,7 +167,8 @@ function AnchorWr({ href, children }: AncT): JSX.Element {
     return (
         <a href={href} target="_blank" rel="noopener">
             {' '}
-            {children}{' '}
+            {children}
+            {' '}
         </a>
     );
 }
@@ -177,7 +178,7 @@ interface NewsT {
 }
 
 function factoryNewsDateWr(
-    main: (props: NewsT) => JSX.Element
+    main: (props: NewsT) => JSX.Element,
 ): (props: NewsT) => JSX.Element {
     const MainCon = main;
     return function NewsDateWr({ children }: NewsT): JSX.Element {

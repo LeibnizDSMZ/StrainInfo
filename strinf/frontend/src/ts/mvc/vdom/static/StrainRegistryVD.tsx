@@ -22,7 +22,8 @@ function StrRegM(): JSX.Element {
         <>
             <MetaH title="StrainRegistry" desc="StrainRegistry" />
             <CanonH href={getCurFullPath()} />
-            <StrainRegistry />{' '}
+            <StrainRegistry />
+            {' '}
         </>
     );
 }

@@ -19,7 +19,7 @@ class SeaSimpleCtrl extends Controller<ViewChanInt, [string, string, number[]]> 
         cha: ViewChanInt,
         args: string,
         api: string,
-        omitIds: number[]
+        omitIds: number[],
     ): void {
         const errC = new Known500Error('Internal server error!');
         const dataReq = (status: ServerStatusJT): void => {

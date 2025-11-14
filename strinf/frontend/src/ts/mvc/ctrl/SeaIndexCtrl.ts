@@ -44,7 +44,8 @@ class SeaIndexCtrl extends Controller<ViewChanInt, [string]> {
         const cache = this.memory.get(cacheKey);
         if (cache !== undefined) {
             cha.tab(cache);
-        } else {
+        }
+        else {
             const errC = new Known500Error('Internal server error!');
             const dataReq = (status: ServerStatusJT): void => {
                 this.reloadWindowOrCb(status.version, () => {

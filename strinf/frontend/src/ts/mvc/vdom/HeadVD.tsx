@@ -56,7 +56,8 @@ function NavBar(): JSX.Element {
                 onClick={() => {
                     toggleSideBar(btnRef.current ?? undefined);
                 }}
-            ></button>
+            >
+            </button>
             <MainNavVD />
             <AccVD />
             <SeaInVD
@@ -74,9 +75,8 @@ function ToolTipCon(): JSX.Element {
             <ToolTipInfoVD
                 hookName={TT_ID_DEP}
                 createCtrl={(ver: string) =>
-                    new InfoCtrl(ver, toArrInfoDepRes, QApiCon.culMin)
-                }
-                createTT={(prpos) => <ToolTipDepCM {...prpos} />}
+                    new InfoCtrl(ver, toArrInfoDepRes, QApiCon.culMin)}
+                createTT={prpos => <ToolTipDepCM {...prpos} />}
             />
             <ToolTipInfoVD
                 hookName={TT_ID_STR}
@@ -84,10 +84,9 @@ function ToolTipCon(): JSX.Element {
                     new InfoCtrl(
                         ver,
                         (data: unknown) => toArrInfoStrRes(data, des),
-                        QApiCon.strMin
-                    )
-                }
-                createTT={(prpos) => <ToolTipStrCM {...prpos} />}
+                        QApiCon.strMin,
+                    )}
+                createTT={prpos => <ToolTipStrCM {...prpos} />}
             />
             <TTSimVD />
         </div>
@@ -106,7 +105,8 @@ function HeadVD(): JSX.Element {
                 onClick={() => {
                     toggleSideBar();
                 }}
-            ></button>
+            >
+            </button>
             <div className={`${ClHtml.navB} ${ClHtml.navBt}`}>
                 <Logos />
             </div>

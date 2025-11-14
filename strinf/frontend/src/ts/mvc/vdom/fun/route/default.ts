@@ -9,7 +9,8 @@ function defaultRouteBeh(): void {
     }
     if (anchor === '') {
         window.scroll({ top: 0, left: 0, behavior: 'instant' });
-    } else {
+    }
+    else {
         window.location.hash = anchor;
     }
 }

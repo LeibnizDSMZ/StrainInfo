@@ -62,7 +62,7 @@ interface SeqProps extends TableProps<MOD_SEQ_T> {
 
 function prepareData(res: SeqT[]): [MOD_SEQ_T[], [number, string, boolean][]] {
     const fDat: MOD_SEQ_T[] = res.map(
-        (val) => [...val.slice(0, 4), `${val[4]}`, `${val[5] ?? ''}`] as MOD_SEQ_T
+        val => [...val.slice(0, 4), `${val[4]}`, `${val[5] ?? ''}`] as MOD_SEQ_T,
     );
     let off = 0;
     const head = getSeqTuple(true).map((val, index): [number, string, boolean] => {
@@ -103,7 +103,7 @@ function crYear(row: MOD_SEQ_T | undefined): JSX.Element | null {
 }
 
 function selectActive(data: MOD_SEQ_T[]): SeqType {
-    const exist = new Set(data.map((val) => val[3]));
+    const exist = new Set(data.map(val => val[3]));
     for (const seqT of SEQ_TYPE_ORDER) {
         if (exist.has(seqT)) {
             return seqT;
@@ -179,10 +179,10 @@ class SeqTable extends TableCon<MOD_SEQ_T, SeqProps> {
             }
             const [acc, desC, desc, , len, year] = val;
             if (
-                acc.toLocaleLowerCase().includes(prepFilter) ||
-                len.toLocaleLowerCase().includes(prepFilter) ||
-                year.toLocaleLowerCase().includes(prepFilter) ||
-                desc.toLocaleLowerCase().includes(prepFilter)
+                acc.toLocaleLowerCase().includes(prepFilter)
+                || len.toLocaleLowerCase().includes(prepFilter)
+                || year.toLocaleLowerCase().includes(prepFilter)
+                || desc.toLocaleLowerCase().includes(prepFilter)
             ) {
                 return true;
             }
@@ -361,7 +361,7 @@ class SeqTypeFilter extends Component<SeqTFilProps, object> {
                     }}
                 >
                     {data
-                        .filter((val) => this.exist.has(val))
+                        .filter(val => this.exist.has(val))
                         .map((val, ind) => {
                             let attr = {};
                             const label = SEQ_THESAURUS[val];

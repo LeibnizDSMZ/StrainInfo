@@ -128,9 +128,9 @@ function comCode(value: ELE_T, comp: string | number | Uint8Array): boolean {
 
 function comString(value: ELE_T, comp: string | number | Uint8Array): boolean {
     return (
-        typeof value === 'string' &&
-        typeof comp === 'string' &&
-        value.toLowerCase().startsWith(comp)
+        typeof value === 'string'
+        && typeof comp === 'string'
+        && value.toLowerCase().startsWith(comp)
     );
 }
 
@@ -147,7 +147,7 @@ function comNum(value: ELE_T, comp: string | number | Uint8Array): boolean {
 function compare(
     index: number,
     value: ELE_T,
-    comp: string | number | Uint8Array
+    comp: string | number | Uint8Array,
 ): boolean {
     switch (index) {
         case 1:
@@ -170,8 +170,8 @@ const ENC = new TextEncoder();
 
 function add2Set<T, E>(data: Set<E>, newV: T, parser: (val: T) => E): void {
     if (
-        data.size <= ITEM_LIMIT &&
-        !(newV === '' || newV === -1 || (newV instanceof Uint8Array && newV.length === 0))
+        data.size <= ITEM_LIMIT
+        && !(newV === '' || newV === -1 || (newV instanceof Uint8Array && newV.length === 0))
     ) {
         data.add(parser(newV));
     }
@@ -193,14 +193,14 @@ function createFilter(data: MOD_SEA_T[]): [FILTER_CON, FILTER_STATE] {
         new Set<number>(),
     ];
     for (const [, desC, name, typStr, src, status] of data) {
-        add2Set(typ, typStr ? 1 : 0, (val) => val);
-        add2Set(sta, status, (val) => val);
-        add2Set(sam, src, (val) => parseCountryCode(DEC.decode(val)));
+        add2Set(typ, typStr ? 1 : 0, val => val);
+        add2Set(sta, status, val => val);
+        add2Set(sam, src, val => parseCountryCode(DEC.decode(val)));
         const [, rootName] = NAME.exec(name)?.values() ?? [''];
-        add2Set(tax, rootName ?? '', (val) => val);
+        add2Set(tax, rootName ?? '', val => val);
         for (const ccno of desC) {
             const [, res] = ACR.exec(ccno)?.values() ?? [''];
-            add2Set(acr, res ?? '', (val) => val);
+            add2Set(acr, res ?? '', val => val);
         }
     }
     return [
@@ -253,7 +253,7 @@ function crDefaultDrDown(
     sel: string | number,
     empty: string | number,
     title: string,
-    onChange: (val: string) => void
+    onChange: (val: string) => void,
 ): JSX.Element {
     const tid = `${title}-filter`;
     const datCon = Array.from(data.values());
@@ -395,7 +395,7 @@ function checkEmptyFilter(filOpt: FILTER_CON): boolean {
 async function createCSV(
     worker: Worker,
     indices: number[],
-    term: string
+    term: string,
 ): Promise<[string, string]> {
     const workerP = new Promise<[string, string]>((resolve) => {
         let jsonBlob: Blob;
@@ -407,11 +407,12 @@ async function createCSV(
                 });
                 trackDownload(
                     getCurFullPathWithArgs(
-                        `view=${indices.length}&results=${eve.data.length}`
+                        `view=${indices.length}&results=${eve.data.length}`,
                     ),
-                    jsonBlob.size
+                    jsonBlob.size,
                 );
-            } else {
+            }
+            else {
                 jsonBlob = new Blob([''], { type: 'text/plain;charset=utf-8' });
             }
             resolve([URL.createObjectURL(jsonBlob), `${term}.csv`]);
@@ -423,7 +424,7 @@ async function createCSV(
 function activeLink(
     worker: Worker,
     index: number[],
-    term: string
+    term: string,
 ): (eve: Event) => Promise<[string, string]> {
     const name = term === '' ? 'StrainInfo' : term;
     const callback = async (eve: Event) => {
@@ -530,7 +531,7 @@ function SearchFilter({
 
 function crStrain(
     row: MOD_SEA_T | undefined,
-    ctx: InValStInt | undefined
+    ctx: InValStInt | undefined,
 ): JSX.Element | null {
     if (row === undefined) {
         return null;
@@ -541,7 +542,7 @@ function crStrain(
 
 function crDesignation(
     row: MOD_SEA_T | undefined,
-    ttH: ToolTipHookInt<TT_GL_TYPE> | undefined
+    ttH: ToolTipHookInt<TT_GL_TYPE> | undefined,
 ): JSX.Element | null {
     if (row === undefined || ttH === undefined) {
         return null;
@@ -550,7 +551,7 @@ function crDesignation(
     if (row[1].length < 3) {
         return <span className={Font.norm}>{main}</span>;
     }
-    const data = row[1].slice(2).map((ele) => ele);
+    const data = row[1].slice(2).map(ele => ele);
     if (data.length === 0) {
         return null;
     }
@@ -579,7 +580,7 @@ function crTypeStrain(row: MOD_SEA_T | undefined): JSX.Element | null {
 
 function crStrainStatus(
     row: MOD_SEA_T | undefined,
-    ttH: ToolTipHookInt<TT_GL_TYPE>
+    ttH: ToolTipHookInt<TT_GL_TYPE>,
 ): JSX.Element | null {
     if (row === undefined) {
         return null;
@@ -616,7 +617,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
         const { res } = props;
         this.worker = new Worker(
             new URL('@strinf/ts/functions/files/worker_si_csv', import.meta.url),
-            { type: 'module' }
+            { type: 'module' },
         );
         this.worker.postMessage({ type: 'init', data: res });
         const uCodes = new Set<string>();
@@ -653,7 +654,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
 
     protected override filter(
         value: [string | number, number][],
-        limit: number[]
+        limit: number[],
     ): number[] {
         const filteredRes: number[] = Array.from({ length: limit.length });
         for (const ind of limit) {
@@ -679,7 +680,7 @@ class SeaTable extends TableCon<MOD_SEA_T, SeaTableProps> {
                 filteredRes[ind] = ind;
             }
         }
-        return filteredRes.filter((val) => val >= 0);
+        return filteredRes.filter(val => val >= 0);
     }
 
     protected override search(_filter: string, limit: number[]): number[] {
@@ -765,7 +766,9 @@ function SeaTVD({ res, sea, hook }: SeaTProps): JSX.Element | null {
         >
             <DefaultGradientVD />
             <h1 className={`${Tex.w} ${ClHtml.titSec}`}>
-                {seaCat} {seaVal}
+                {seaCat}
+                {' '}
+                {seaVal}
             </h1>
             <div className={`${ClHtml.box} ${Pad.N15}`} id={IdHtmlTour.seaTab}>
                 <SeaTable
@@ -776,10 +779,10 @@ function SeaTVD({ res, sea, hook }: SeaTProps): JSX.Element | null {
                     head={getSeaResTuple(false).map((val, index) => [
                         index,
                         val,
-                        index !== 1 &&
-                            index !== 3 &&
-                            index !== 4 &&
-                            (index !== 2 || res.length <= 400000),
+                        index !== 1
+                        && index !== 3
+                        && index !== 4
+                        && (index !== 2 || res.length <= 400000),
                     ])}
                 />
             </div>

@@ -19,7 +19,7 @@ const TAB_GEN = `${ClHtml.tab} ${ClHtml.sm} ${ClHtml.hov}`;
 function createDefTable(
     header: JSX.Element | null,
     rows: JSX.Element[],
-    colGr: JSX.Element[]
+    colGr: JSX.Element[],
 ): JSX.Element {
     return (
         <table className={TAB_GEN}>
@@ -33,7 +33,7 @@ function createDefTable(
 function appendTitleRow(
     header: string | JSX.Element,
     value: unknown,
-    exCl: string
+    exCl: string,
 ): JSX.Element {
     return (
         <div key={header} className={`${ClHtml.row} ${exCl}`}>
@@ -46,7 +46,7 @@ function appendTitleRow(
 function createStrainTitleBar(
     headers: (string | JSX.Element)[],
     values: unknown[],
-    exCl: string[]
+    exCl: string[],
 ): JSX.Element[] {
     const con = [];
     for (let ind = 0; ind < values.length; ind += 1) {
@@ -55,7 +55,7 @@ function createStrainTitleBar(
         const cla = exCl[ind];
         if (val === undefined || head === undefined || cla === undefined) {
             throw new Known500Error(
-                `headers [${JSON.stringify(headers)}] and values [${values}] are mismatched!`
+                `headers [${JSON.stringify(headers)}] and values [${values}] are mismatched!`,
             );
         }
         con.push(appendTitleRow(head, val, cla));
@@ -66,7 +66,7 @@ function createStrainTitleBar(
 function createXColTable<T>(
     values: [string, T, number][][],
     parser: (val: T, key: string) => JSX.Element | null,
-    colGr: JSX.Element[]
+    colGr: JSX.Element[],
 ): [JSX.Element, number] {
     const rows = [];
     for (let row = 0; row < values.length; row += 1) {
@@ -77,7 +77,7 @@ function createXColTable<T>(
                 <td colSpan={spanN}>
                     <span className={ClHtml.key}>{key}</span>
                     {parser(val, key)}
-                </td>
+                </td>,
             );
         }
         rows.push(<tr key={row}>{columns}</tr>);
@@ -133,7 +133,7 @@ function useTooltipForRef<T extends Element>(
     ref: RefObject<T>,
     srcH: TTSrcTVInt,
     upD: () => void,
-    timeout: [number, number]
+    timeout: [number, number],
 ): void {
     const events = useRef<EventsSt>([]);
     const storeEv = (eve: EventsSt) => {
@@ -153,7 +153,7 @@ type TILE = (
     anc: string,
     val: [number, number, string],
     ctx: InValStInt | undefined,
-    exCl: string
+    exCl: string,
 ) => JSX.Element;
 
 function createTiles<T>(
@@ -161,7 +161,7 @@ function createTiles<T>(
     parser: (val: T) => [number, string, boolean, boolean],
     ctx: InValStInt | undefined,
     props: [string, number],
-    tile: TILE
+    tile: TILE,
 ): [JSX.Element, number][] {
     const tiles: [JSX.Element, number][] = [];
     const [anc, curId] = props;
@@ -176,7 +176,7 @@ function createTiles<T>(
                 anc === '' ? '' : `#${anc}`,
                 [ind, tid, name],
                 ctx,
-                tileClass(curId, tid, bold, mark)
+                tileClass(curId, tid, bold, mark),
             ),
             tid,
         ]);
@@ -188,7 +188,7 @@ function createRDepTiles<T>(
     values: T[],
     parser: (val: T) => [number, string, boolean, boolean],
     ctx: InValStInt | undefined,
-    props: [string, number]
+    props: [string, number],
 ): [JSX.Element, number][] {
     return createTiles(values, parser, ctx, props, createDepositTile);
 }
@@ -196,14 +196,14 @@ function createRDepTiles<T>(
 function createRStrTiles(
     values: number[],
     parser: (val: number) => [number, string],
-    ctx: InValStInt | undefined
+    ctx: InValStInt | undefined,
 ): [JSX.Element, number][] {
     return createTiles(
         values,
-        (val) => [...parser(val), false, false],
+        val => [...parser(val), false, false],
         ctx,
         ['', -1],
-        createStrainTile
+        createStrainTile,
     );
 }
 

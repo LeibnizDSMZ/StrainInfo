@@ -10,13 +10,13 @@ function callPass(
     strain: string,
     culture: string,
     replace: string,
-    location: LocationHook
+    location: LocationHook,
 ): void {
     if (strain === '') {
         throw new Known500Error(`empty strain detected ${strain}`);
     }
-    const routeS =
-        culture === ''
+    const routeS
+        = culture === ''
             ? createStrainCall(strain)
             : createStrainCultureCall(strain, culture);
     routeUri(routeS, replace, location);

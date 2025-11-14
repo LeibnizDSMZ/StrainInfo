@@ -18,11 +18,12 @@ class DetailsCon {
         cha: ViewChanInt,
         json: DetailsR[],
         args: number[],
-        api: string
+        api: string,
     ): void {
         if (json.length > 0) {
             cha.res(json);
-        } else {
+        }
+        else {
             throw new Known404Error(getApiToStr(api), `${args}`);
         }
     }
@@ -30,7 +31,7 @@ class DetailsCon {
     private runDetApi(cha: ViewChanInt, api: string, args: number[]): void {
         const call = this.apiCall.createApiCall(`${api}${args.join(',')}`);
         fetchRetry(call)
-            .then(async (resp) => checkRespArr<DetailsR>(resp, toArrDetailsRes))
+            .then(async resp => checkRespArr<DetailsR>(resp, toArrDetailsRes))
             .then((json: DetailsR[]) => {
                 DetailsCon.checkDetails(cha, json, args, api);
             })
@@ -43,7 +44,8 @@ class DetailsCon {
         const cApi = api as unknown as QApiCon;
         if (QApiCon.culAvg === cApi) {
             this.runDetApi(cha, api, args);
-        } else {
+        }
+        else {
             onPrError(new Known500Error(`Unknown arguments detected: ${cApi}`));
         }
     }

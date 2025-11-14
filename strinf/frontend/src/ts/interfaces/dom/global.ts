@@ -68,20 +68,20 @@ interface CookieG {
     get cookieActive(): CookieFS[];
 }
 
-type GlStInt<T> = ErrSet &
-    ErrStCon &
-    LoadSet &
-    LoadStMInt &
-    CookieS &
-    CookieG &
-    InValInt &
-    BreadCrumbsS &
-    BreadCrumbsG &
-    TTHookG<T> &
-    TTHookS<T> &
-    WrapperInt &
-    GlobVersionGet &
-    GlobVersionSet;
+type GlStInt<T> = ErrSet
+    & ErrStCon
+    & LoadSet
+    & LoadStMInt
+    & CookieS
+    & CookieG
+    & InValInt
+    & BreadCrumbsS
+    & BreadCrumbsG
+    & TTHookG<T>
+    & TTHookS<T>
+    & WrapperInt
+    & GlobVersionGet
+    & GlobVersionSet;
 
 interface DataCon<T> {
     id: string | number;

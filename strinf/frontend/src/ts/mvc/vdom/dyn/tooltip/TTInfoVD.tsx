@@ -83,7 +83,8 @@ class ToolTipInfoVD<I extends InfoS | InfoR> extends Component<
             const { createCtrl } = this.props;
             this.ctrl = createCtrl(ctx.version, this.extra);
             this.ctrl.init(this.modelH, [...this.buffer.values()]);
-        } else {
+        }
+        else {
             this.ctrl.init(this.modelH, [...this.buffer.values()]);
         }
     }
@@ -101,12 +102,13 @@ class ToolTipInfoVD<I extends InfoS | InfoR> extends Component<
             if (Array.isArray(info_extra)) {
                 this.extra = info_extra;
                 this.ctrl = undefined;
-            } else {
+            }
+            else {
                 this.info = info_extra;
             }
             if (typeof selId !== 'number') {
                 throw new Known500Error(
-                    `deposit tooltips accept only numbers [${typeof curIdH}]`
+                    `deposit tooltips accept only numbers [${typeof curIdH}]`,
                 );
             }
             const { res } = this.state;
@@ -132,10 +134,10 @@ class ToolTipInfoVD<I extends InfoS | InfoR> extends Component<
                 {selId === 0 || res === undefined
                     ? null
                     : createTT({
-                          loading: this.loading,
-                          info: this.info,
-                          res,
-                      })}
+                            loading: this.loading,
+                            info: this.info,
+                            res,
+                        })}
                 <div ref={this.arrRef} className={tooSty.arrow} {...TT_ARR} />
             </div>
         );
