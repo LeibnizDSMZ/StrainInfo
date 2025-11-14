@@ -23,7 +23,7 @@ function setCookie(name: string, value: string, domain: string): void {
     expTime.setTime(expTime.getTime() + 100 * 24 * 3600 * 1000);
     const cookStr
         = `${name}=${value};Secure;SameSite=Strict;`
-            + `domain=${domain};expires=${expTime};`;
+            + `domain=${domain};expires=${expTime};Path=/;`;
     document.cookie = cookStr;
 }
 
