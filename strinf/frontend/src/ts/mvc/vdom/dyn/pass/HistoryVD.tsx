@@ -26,7 +26,7 @@ import updateHrefVal from '@strinf/ts/functions/links/update_href';
 import { useTooltipForRef } from '@strinf/ts/mvc/vdom/fun/tab/pass';
 import { MainConGl } from '@strinf/ts/mvc/vdom/state/GlobSt';
 import * as d3Sankey from 'd3-sankey';
-import { useContext as use, useRef, useState } from 'preact/hooks';
+import { useContext as use, useEffect, useRef, useState } from 'preact/hooks';
 
 const M_TOP = 10;
 const M_LEFT = 10;
@@ -37,8 +37,6 @@ const N_HEI = 42;
 const R_BUF = 180;
 const B_BUF = 20;
 const DEF_H = 800;
-
-const FILTER_ID_L = 'filter_label';
 
 const COLORS = new Map<string, string>([
     ['DSM', '#006EB7'],
@@ -184,7 +182,7 @@ function hasXProperty(node: unknown): node is XYProp {
 }
 
 function getCoords(
-    node: d3Sankey.SankeyNode<NODE_T, LINK_T> | d3Sankey.SankeyLink<NODE_T, LINK_T>
+    node: d3Sankey.SankeyNode<NODE_T, LINK_T> | d3Sankey.SankeyLink<NODE_T, LINK_T>,
 ): [number, number, number, number] {
     if (hasXProperty(node)) {
         return [node.x0, node.y0 ?? 0, node.x1, node.y1 ?? 0];
@@ -194,7 +192,7 @@ function getCoords(
 
 function correctNodeXPos(
     node: d3Sankey.SankeyNode<NODE_T, LINK_T>,
-    originX: number
+    originX: number,
 ): void {
     let [x0, , x1] = getCoords(node);
     const depth = node.depth ?? 0;
@@ -220,7 +218,7 @@ interface GraphMap {
 function crNode(
     graph: d3Sankey.SankeyGraph<NODE_T, LINK_T>,
     selCuId: number,
-    { hooks, anc, ctx }: DEF_CON
+    { hooks, anc, ctx }: DEF_CON,
 ): JSX.Element {
     const hookF = (rel: d3Sankey.SankeyNode<NODE_T, LINK_T>) => {
         if (hooks.data !== undefined) {
@@ -238,7 +236,7 @@ function crNode(
                     () => {
                         hookF(rel);
                     },
-                    [500, 300]
+                    [500, 300],
                 );
                 return (
                     <rect
@@ -265,7 +263,7 @@ function crNode(
 
 function crLink(
     graph: d3Sankey.SankeyGraph<NODE_T, LINK_T>,
-    selCuId: number
+    selCuId: number,
 ): JSX.Element {
     const linkGen = d3Sankey.sankeyLinkHorizontal();
     return (
@@ -291,29 +289,66 @@ function crLink(
     );
 }
 
+function LabelWithBackground(props: {
+    x: number;
+    y: number;
+    text: string;
+    bold: boolean;
+}): JSX.Element {
+    const { x, y, text, bold } = props;
+    const textRef = useRef<SVGTextElement | null>(null);
+    const [bbox, setBBox] = useState<DOMRect | null>(null);
+    const paddingX = 3;
+    const paddingY = 2;
+    useEffect(() => {
+        if (textRef.current !== null) {
+            setBBox(textRef.current.getBBox());
+        }
+    }, [text, bold]);
+    return (
+        <g className={svgSty.mul}>
+            <rect
+                x={(bbox?.x ?? 0) - paddingX}
+                y={(bbox?.y ?? 0) - paddingY}
+                width={(bbox?.width ?? 0) + paddingX * 2}
+                height={(bbox?.height ?? 0) + paddingY * 2}
+                fill="white"
+                fillOpacity={0.8}
+                rx={2}
+            />
+            <text
+                x={x}
+                y={y}
+                dy="8px"
+                textAnchor="start"
+                fontWeight={bold ? 'bold' : 'normal'}
+                fontSize="20px"
+                ref={textRef}
+            >
+                {text}
+            </text>
+        </g>
+    );
+}
+
 function crLabel(
     graph: d3Sankey.SankeyGraph<NODE_T, LINK_T>,
-    selCuId: number
+    selCuId: number,
 ): JSX.Element {
     return (
         <g>
             {graph.nodes.map((rel, index) => {
                 const [, y0, x1, y1] = getCoords(rel);
+                const x = x1 + 6;
+                const y = (y1 + y0) / 2;
                 return (
-                    <g key={index} className={svgSty.mul}>
-                        <text
-                            key={`l_${index}`}
-                            x={x1 + 6}
-                            y={(y1 + y0) / 2}
-                            dy="8px"
-                            textAnchor="start"
-                            fontWeight={selCuId === rel.siCu ? 'bold' : 'normal'}
-                            filter={`url(#${FILTER_ID_L})`}
-                            fontSize="20px"
-                        >
-                            {rel.name}
-                        </text>
-                    </g>
+                    <LabelWithBackground
+                        key={`l_${index}`}
+                        x={x}
+                        y={y}
+                        text={rel.name}
+                        bold={selCuId === rel.siCu}
+                    />
                 );
             })}
         </g>
@@ -357,7 +392,7 @@ function crSankey(data: DATA_T): [d3Sankey.SankeyGraph<NODE_T, LINK_T>, number, 
             [DEF_H - 1, DEF_H - 13],
         ])
         .nodeAlign(d3Sankey.sankeyLeft);
-    const graph = sankey.nodeId((node) => node.name)(data);
+    const graph = sankey.nodeId(node => node.name)(data);
     const graphM = crGraphSizes(graph);
     for (const node of graph.nodes) {
         correctNodeXPos(node, graphM.oriX);
@@ -387,12 +422,6 @@ function HistoryStrain({ data, hooks, detAnc, selCuId, ctx }: HStrainProps): JSX
                 width={width + R_BUF}
                 height={height + B_BUF}
             >
-                <defs>
-                    <filter x="-2%" y="0" width="104%" height="100%" id={FILTER_ID_L}>
-                        <feFlood floodColor="white" result="LABEL" floodOpacity={0.8} />
-                        <feComposite operator="over" in2="LABEL" in="SourceGraphic" />
-                    </filter>
-                </defs>
                 <g transform={`translate(${M_LEFT}, ${M_TOP})`}>
                     {crLink(graph, selCuId)}
                     {crNode(graph, selCuId, {
@@ -411,7 +440,7 @@ function hasCycle(
     key: number,
     graph: Map<number, Set<number>>,
     visited: Set<number>,
-    verified: Set<number>
+    verified: Set<number>,
 ): [boolean, Set<number>] {
     visited.add(key);
     const target = graph.get(key)?.values().next().value;
@@ -469,7 +498,7 @@ function HistoryVD({
     ctx?.inValSet('HistoryVD')((val: string) => {
         const valInt = Number.parseInt(
             val.replace(new RegExp(IdAcrTagCon.depId, 'i'), '').replace(/,.*/, ''),
-            10
+            10,
         );
         if (!Number.isNaN(valInt) && SR_CUL_ID.test(val)) {
             setSelSiCu(valInt);
