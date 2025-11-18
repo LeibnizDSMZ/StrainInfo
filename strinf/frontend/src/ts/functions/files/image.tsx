@@ -9,13 +9,13 @@ const bgI400 = new URL('@assets/bg/main_400.jpg', import.meta.url).href;
 
 function selectBannerImage(): string {
     const width = window.innerWidth;
-    if (width > 1280) {
+    if (width >= 1920) {
         return bgI1920;
     }
-    if (width > 800) {
+    if (width >= 1280) {
         return bgI1280;
     }
-    if (width > 400) {
+    if (width >= 800) {
         return bgI800;
     }
     return bgI400;
