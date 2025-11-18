@@ -1,8 +1,8 @@
 function isSlimScreen(): boolean {
-    return document.body.clientWidth < 800;
+    return window.innerWidth < 800;
 }
 function isSmallScreen(): boolean {
-    return document.body.clientHeight < 600 || isSlimScreen();
+    return window.innerHeight < 600 || isSlimScreen();
 }
 
 export { isSlimScreen, isSmallScreen };

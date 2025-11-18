@@ -8,7 +8,7 @@ const bgI800 = new URL('@assets/bg/main_800.webp', import.meta.url).href;
 const bgI400 = new URL('@assets/bg/main_400.webp', import.meta.url).href;
 
 function selectBannerImage(): string {
-    const width = document.body.clientWidth;
+    const width = window.innerWidth;
     if (width > 1280) {
         return bgI1920;
     }

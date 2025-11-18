@@ -10,7 +10,7 @@ const SIDE_ID = 'side_bar_status_id';
 function customToggleSideBar(enable: boolean): void {
     const sideBar = document.getElementById(SIDE_ID);
     let active = false;
-    if (document.documentElement.clientWidth > 992) {
+    if (window.innerWidth > 992) {
         active = Boolean(
             Math.abs(
                 Number(!document.body.classList.contains(ClHtml.sideSM)) - Number(enable),

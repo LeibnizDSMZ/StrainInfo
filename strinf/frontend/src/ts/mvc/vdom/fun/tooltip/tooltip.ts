@@ -14,15 +14,18 @@ const PLA: { [key: string]: string } = {
 
 function ttShow(src: Element, tooltip: HTMLElement, aro: HTMLElement): void {
     tooltip.removeAttribute(HIDE);
+    const h = 'offsetHeight' in src ? (src as HTMLElement).offsetHeight : 1;
+    const needsDisplay = h > 0;
     computePosition(src, tooltip, {
         placement: 'right-start',
         middleware: [autoPlacement(), offset(8), shift(), arrow({ element: aro })],
     })
         .then(({ x, y, placement, middlewareData }) => {
-            if (
-                !('offsetHeight' in src)
-                || (typeof src.offsetHeight === 'number' && src.offsetHeight > 0)
-            ) {
+            if (!needsDisplay) {
+                tooltip.setAttribute(HIDE, '');
+                return;
+            }
+            requestAnimationFrame(() => {
                 Object.assign(tooltip.style, { left: `${x}px`, top: `${y}px` });
                 const [aroX, aroY] = [middlewareData.arrow?.x, middlewareData.arrow?.y];
                 const pla = placement.split('-')[0] ?? 'right';
@@ -34,10 +37,7 @@ function ttShow(src: Element, tooltip: HTMLElement, aro: HTMLElement): void {
                     bottom: '',
                     [stSi]: '-4px',
                 });
-            }
-            else {
-                tooltip.setAttribute(HIDE, '');
-            }
+            });
         })
         .catch(onPrError);
 }
