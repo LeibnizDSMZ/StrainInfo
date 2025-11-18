@@ -1,5 +1,6 @@
 import type { JSX } from 'preact';
-import logoI from '@assets/logo/strinf.webp';
+
+const logoI = new URL('@assets/logo/strinf.webp', import.meta.url).pathname;
 
 function LogoStrainInfoVD(): JSX.Element {
     return <img fetchPriority="high" height="100" src={logoI} alt="StrainInfo" />;

@@ -1,5 +1,6 @@
 import type { JSX } from 'preact';
-import GrAb from '@assets/dia/gr_ab.webp';
+
+const GrAb = new URL('@assets/dia/gr_ab.jpg', import.meta.url).pathname;
 
 function AboutIluVD(): JSX.Element {
     /** not loading="lazy" because of cls */

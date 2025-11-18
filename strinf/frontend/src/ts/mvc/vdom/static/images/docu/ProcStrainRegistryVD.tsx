@@ -1,12 +1,13 @@
 import type { JSX } from 'preact';
-import logoI from '@assets/dia/streg_proc.webp';
+
+const Prog = new URL('@assets/dia/streg_proc.jpg', import.meta.url).pathname;
 
 function ProcStrainRegistryVD(): JSX.Element {
     return (
         <img
             loading="lazy"
             width="560"
-            src={logoI}
+            src={Prog}
             alt="StrainRegistry registrationprocedure"
         />
     );
