@@ -88,6 +88,7 @@ createBuild: cleanBuild
 	[ 'true' = "$(STAGE)" ] && bash $(ROOT_MAKEFILE)/$(BIN_BACKEND_CHANGE_PORT) "stage" || echo "NOT STAGE"
 	mkdir -p $(ROOT_MAKEFILE)/$(APP_STRINF)
 	[ -d $(ROOT_MAKEFILE)/$(EXTRA_STYLE) ] && $(BUN) run build || $(shell echo "FAILED" && exit 1)
+	find $(ROOT_MAKEFILE)/$(APP_STRINF_PUB) -type f -not -name "*.gz" -not -name "index.html" -size +1k -exec gzip -9 -k {} \;
 
 runBuild: build createBuild	
 
