@@ -1213,16 +1213,16 @@
         },
         {
             "name": "spiral/roadrunner",
-            "version": "v2025.1.4",
+            "version": "v2025.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roadrunner-server/roadrunner.git",
-                "reference": "ff25363b72dd6ab2bd642d741db13b30d52d254f"
+                "reference": "d68bee29eb689c5310f8ede935c95a13bd7cc153"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/roadrunner-server/roadrunner/zipball/ff25363b72dd6ab2bd642d741db13b30d52d254f",
-                "reference": "ff25363b72dd6ab2bd642d741db13b30d52d254f",
+                "url": "https://api.github.com/repos/roadrunner-server/roadrunner/zipball/d68bee29eb689c5310f8ede935c95a13bd7cc153",
+                "reference": "d68bee29eb689c5310f8ede935c95a13bd7cc153",
                 "shasum": ""
             },
             "type": "metapackage",
@@ -1248,10 +1248,9 @@
             "homepage": "https://roadrunner.dev/",
             "support": {
                 "chat": "https://discord.gg/V6EK4he",
-                "docs": "https://roadrunner.dev/docs",
-                "forum": "https://forum.roadrunner.dev/",
+                "docs": "https://docs.roadrunner.dev/",
                 "issues": "https://github.com/roadrunner-server/roadrunner/issues",
-                "source": "https://github.com/roadrunner-server/roadrunner/tree/v2025.1.4"
+                "source": "https://github.com/roadrunner-server/roadrunner/tree/v2025.1.5"
             },
             "funding": [
                 {
@@ -1259,7 +1258,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-02T16:43:06+00:00"
+            "time": "2025-11-13T17:24:29+00:00"
         },
         {
             "name": "spiral/roadrunner-http",
@@ -3505,16 +3504,16 @@
         },
         {
             "name": "react/event-loop",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "bbe0bd8c51ffc05ee43f1729087ed3bdf7d53354"
+                "reference": "ba276bda6083df7e0050fd9b33f66ad7a4ac747a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/bbe0bd8c51ffc05ee43f1729087ed3bdf7d53354",
-                "reference": "bbe0bd8c51ffc05ee43f1729087ed3bdf7d53354",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/ba276bda6083df7e0050fd9b33f66ad7a4ac747a",
+                "reference": "ba276bda6083df7e0050fd9b33f66ad7a4ac747a",
                 "shasum": ""
             },
             "require": {
@@ -3565,7 +3564,7 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/event-loop/issues",
-                "source": "https://github.com/reactphp/event-loop/tree/v1.5.0"
+                "source": "https://github.com/reactphp/event-loop/tree/v1.6.0"
             },
             "funding": [
                 {
@@ -3573,7 +3572,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-11-13T13:48:05+00:00"
+            "time": "2025-11-17T20:46:25+00:00"
         },
         {
             "name": "react/promise",
